@@ -1,5 +1,5 @@
 #include "msp430.h"   
-#include  "lcd.h"
+#include  "../header_files/lcd.h"
         ORG     0FFFEh
         DC16    init                    ; set reset vector to 'init' label
 
@@ -15,7 +15,7 @@ main:   NOP                             ; main program
         mov.b   #0x0FF, P8DIR           ; Set P8 as output for P8.5 and P8.6 ENABLE and RS lines
         
         call     #INIT_LCD               ; Initialize LCD
-       
+        mov.w    #ToWrite, STR
         call     #WRITESTR               ; Write first string
         mov.w    #0x0C0, COM_ARGS        ; Type in new line
         call     #WRITECOM               
