@@ -145,27 +145,26 @@ FORMNUM nop
 
 MOD10:  nop
         mov.b   #10,DIVISOR     ; Initialize divisor in 10
-        push.b  DIVISOR
-        sub.w   RANDVAL,DIVISOR ; Check if divisor is larger than randval
-        jge     endDv1          ; Place result as 0
-        cmp.b   0x0FF,RANDVAL
-        jz      endDv3
+        push.b  RANDVAL
+        sub.w   DIVISOR,RANDVAL ; Check if divisor is larger than randval
+        jlo     endDv1          ; Place result as 0
+        ;cmp.b   0x0FF,RANDVAL
+        ;jz      endDv3
         
-        pop.b   DIVISOR
+        pop.b   RANDVAL
 dvStrt: add.b   #10,DIVISOR     ; Multiply divisor
-        push.b  DIVISOR
-        sub.w   RANDVAL,DIVISOR ; Check if RANDVAL > DIVISOR
-        jge     endDv           ; If not, end division and return residue
-        pop.b   DIVISOR
-        jlo     dvStrt          ; Else, continue multiplying
+        push.b  RANDVAL
+        sub.w   DIVISOR,RANDVAL ; Check if RANDVAL > DIVISOR
+        jlo     endDv           ; If not, end division and return residue
+        pop.b   RANDVAL
+        jge     dvStrt          ; Else, continue multiplying
 
-endDv3: mov.w   #1,RANDVAL      ; Special case of RANDVAL been 0xFF
-        jmp     endDv2
+;endDv3: mov.w   #1,RANDVAL      ; Special case of RANDVAL been 0xFF
+;        jmp     endDv2
 endDv1: mov.w   #0,RANDVAL      ; Put 0 residue on RANDVAL
         jmp     endDv2          ; Return           
                 
-endDv:  pop.b   DIVISOR
-        sub.w   #0x000A,DIVISOR ; Subtract 10 from divisor
+endDv:  sub.w   #0x000A,DIVISOR ; Subtract 10 from divisor
         sub.w   DIVISOR,RANDVAL ; Get residue
 endDv2: ret
 

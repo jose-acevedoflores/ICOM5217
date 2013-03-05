@@ -2,29 +2,33 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>1587092691</fileChecksum>
+  <fileChecksum>3650428399</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
-      <file>$PROJ_DIR$\Debug\Obj\part3-old.r43</file>
-      <file>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</file>
       <file>$PROJ_DIR$\..\header files\lcd.h</file>
-      <file>$PROJ_DIR$\..\header files\game.h</file>
-      <file>$PROJ_DIR$\Debug\Obj\part3b.r43</file>
-      <file>$PROJ_DIR$\Debug\Obj\part3.r43</file>
-      <file>$PROJ_DIR$\part3.asm</file>
-      <file>$PROJ_DIR$\asm.s43</file>
-      <file>$PROJ_DIR$\part3-old.asm</file>
-      <file>$PROJ_DIR$\Debug\Exe\part3.d43</file>
+      <file>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</file>
       <file>$PROJ_DIR$\part3b.asm</file>
+      <file>$PROJ_DIR$\Debug\Obj\part3b.r43</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F5438.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\msp430f5438.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
+      <file>$PROJ_DIR$\..\header files\game.h</file>
+      <file>$PROJ_DIR$\part3-old.asm</file>
+      <file>$PROJ_DIR$\asm.s43</file>
+      <file>$PROJ_DIR$\part3.asm</file>
+      <file>$PROJ_DIR$\Debug\Obj\part3.r43</file>
+      <file>$PROJ_DIR$\Debug\Obj\part3-old.r43</file>
+      <file>$PROJ_DIR$\Debug\Exe\part3.d43</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
       <outputs>
         <tool>
           <name>XLINK</name>
-          <file> 9</file>
+          <file> 15</file>
         </tool>
       </outputs>
     </file>
@@ -33,34 +37,7 @@
       <outputs>
         <tool>
           <name>XLINK</name>
-          <file> 9</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\part3.asm</name>
-      <outputs>
-        <tool>
-          <name>A430</name>
-          <file> 5</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\asm.s43</name>
-      <outputs>
-        <tool>
-          <name>A430</name>
-          <file> 11</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\part3-old.asm</name>
-      <outputs>
-        <tool>
-          <name>A430</name>
-          <file> 0</file>
+          <file> 15</file>
         </tool>
       </outputs>
     </file>
@@ -69,17 +46,52 @@
       <outputs>
         <tool>
           <name>A430</name>
-          <file> 4</file>
+          <file> 3</file>
         </tool>
       </outputs>
     </file>
-    <forcedrebuild>
-      <name>[MULTI_TOOL]</name>
-      <tool>XLINK</tool>
-    </forcedrebuild>
-    <forcedrebuild>
-      <name>[REBUILD_ALL]</name>
-    </forcedrebuild>
+    <file>
+      <name>$PROJ_DIR$\part3-old.asm</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 14</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\asm.s43</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 8</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\part3.asm</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 13</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>A430</name>
+          <file> 6 5</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\part3.d43</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 4 7 13</file>
+        </tool>
+      </inputs>
+    </file>
   </configuration>
   <configuration>
     <name>Release</name>

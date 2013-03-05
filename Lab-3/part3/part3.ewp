@@ -1969,7 +1969,7 @@
     <name>$PROJ_DIR$\..\header files\lcd.h</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\part3b.asm</name>
+    <name>$PROJ_DIR$\part3.asm</name>
   </file>
 </project>
 
