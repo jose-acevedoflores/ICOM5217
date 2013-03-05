@@ -1,4 +1,5 @@
-#include "msp430.h"   
+#include "msp430.h"
+
 E_HIGH  EQU     00100000b               ; Used with bis.b to Set bit 5 of port 8 (P8.5) to 1. This is done to call E_LOW and trigger the falling edge 
 E_LOW   EQU     00100000b               ; Used with bic.b to set bit 5 of port 8 (P8.5) to 0. 
 COMMAND EQU     01000000b               ; Used with bic.b to set bit 6 of port 8 (P8.6) to 0. This tells the LCD controller that a command will be sent
@@ -148,23 +149,21 @@ MOD10:  nop
         push.b  RANDVAL
         sub.w   DIVISOR,RANDVAL ; Check if divisor is larger than randval
         jlo     endDv1          ; Place result as 0
-        ;cmp.b   0x0FF,RANDVAL
-        ;jz      endDv3
         
         pop.b   RANDVAL
-dvStrt: add.b   #10,DIVISOR     ; Multiply divisor
+dvStrt: add.w   #10,DIVISOR     ; Multiply divisor
         push.b  RANDVAL
         sub.w   DIVISOR,RANDVAL ; Check if RANDVAL > DIVISOR
         jlo     endDv           ; If not, end division and return residue
         pop.b   RANDVAL
         jge     dvStrt          ; Else, continue multiplying
 
-;endDv3: mov.w   #1,RANDVAL      ; Special case of RANDVAL been 0xFF
-;        jmp     endDv2
 endDv1: mov.w   #0,RANDVAL      ; Put 0 residue on RANDVAL
         jmp     endDv2          ; Return           
-                
-endDv:  sub.w   #0x000A,DIVISOR ; Subtract 10 from divisor
+        
+endDv:  pop     RANDVAL
+        bic.w   #0x0FF00,RANDVAL
+        sub.w   #0x000A,DIVISOR ; Subtract 10 from divisor
         sub.w   DIVISOR,RANDVAL ; Get residue
 endDv2: ret
 
