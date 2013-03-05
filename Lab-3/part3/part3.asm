@@ -69,7 +69,8 @@ FORMNUM nop
 
         mov.b   #0x01, COM_ARGS         ; Clear LCD command 
         call    #WRITECOM               ; Clear LCD
-        call    #WRITESTR               ; Write the String at ToWrite
+        mov.w   #ToWrite, STR
+        call    #WRITESTR               ; Write the String at STR
         bic.w   #0x0ff00,RANDVAL        ; Discard the 8 most significant bits 
         call    #MOD10                  ; Obtain residue of RANDVAL
         
