@@ -105,11 +105,11 @@
         </option>
         <option>
           <name>GStackSize2</name>
-          <state>80</state>
+          <state>160</state>
         </option>
         <option>
           <name>GHeapSize2</name>
-          <state>80</state>
+          <state>160</state>
         </option>
         <option>
           <name>RadioDataModelType</name>
@@ -718,7 +718,7 @@
         </option>
         <option>
           <name>XclFile</name>
-          <state>$TOOLKIT_DIR$\CONFIG\lnk430F149.xcl</state>
+          <state>$TOOLKIT_DIR$\CONFIG\lnk430F5438.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
@@ -846,7 +846,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>templproj.a43</state>
+          <state>part3.a43</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
@@ -1963,13 +1963,16 @@
     </settings>
   </configuration>
   <file>
-    <name>$PROJ_DIR$\..\header files\game.h</name>
+    <name>$PROJ_DIR$\..\header_files\game.h</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\..\header files\lcd.h</name>
+    <name>$PROJ_DIR$\..\header_files\lcd.h</name>
   </file>
   <file>
     <name>$PROJ_DIR$\part3.asm</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\header_files\util.h</name>
   </file>
 </project>
 

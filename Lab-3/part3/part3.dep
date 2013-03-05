@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>3650428399</fileChecksum>
+  <fileChecksum>1968101525</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -18,17 +18,20 @@
       <file>$PROJ_DIR$\Debug\Obj\part3.r43</file>
       <file>$PROJ_DIR$\asm.s43</file>
       <file>$PROJ_DIR$\..\header files\game.h</file>
+      <file>$PROJ_DIR$\..\header_files\game.h</file>
+      <file>$PROJ_DIR$\..\header_files\lcd.h</file>
       <file>$PROJ_DIR$\part3-old.asm</file>
       <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
       <file>$TOOLKIT_DIR$\inc\msp430.h</file>
       <file>$PROJ_DIR$\part3.asm</file>
+      <file>$PROJ_DIR$\..\header_files\util.h</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\Debug\Exe\part3.d43</name>
       <inputs>
         <tool>
           <name>XLINK</name>
-          <file> 2 13 9</file>
+          <file> 2 15 9</file>
         </tool>
       </inputs>
     </file>
@@ -88,7 +91,7 @@
       <inputs>
         <tool>
           <name>A430</name>
-          <file> 14 3</file>
+          <file> 16 3 13 18</file>
         </tool>
       </inputs>
     </file>

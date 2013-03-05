@@ -48,8 +48,7 @@ WRITECHAR   nop
             ret
             
 WRITESTR    nop
-           ; mov.w  ToWrite,STR   ; Use STR as pointer to String to print
-NextChar    mov.b  @STR+, DATA_ARGS
+NextChar    mov.b  @STR+, DATA_ARGS     ; Use STR as pointer to String to print
             cmp.b  #'^', DATA_ARGS
             jz     endWS     
             call   #WRITECHAR

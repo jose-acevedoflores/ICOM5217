@@ -1966,7 +1966,7 @@
     <name>$PROJ_DIR$\headertest.asm</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\..\header files\lcd.h</name>
+    <name>$PROJ_DIR$\..\header_files\lcd.h</name>
   </file>
 </project>
 

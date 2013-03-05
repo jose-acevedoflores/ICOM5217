@@ -36,20 +36,25 @@ ActionState=1
 Enabled=0
 ShowSource=1
 [DebugChecksum]
-Checksum=-1501480706
+Checksum=-1483354609
 [State Storage]
-Control Register=-1
+Control Register=0
 [EEM State Storage]
-Buffer=BAAAAAAADAAAAAAAAAAAAAAA
+Buffer=BAAAAAAAAAAAAAAAAAAAAAAA
 [Sequencer]
-Control Register=-1
-NextState0=-1
-NextState1=-1
+Control Register=0
+NextState0=0
+NextState1=0
 [Action Register]
-Break=-1
-State Storage=-1
+Break=0
+State Storage=0
+[CallStack]
+ShowArgs=0
+[Disassembly]
+MixedMode=1
 [Breakpoints]
-Count=0
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\part3.asm}.68.1" 1 0 0 0 "" 0 ""
+Count=1
 [FET]
 Clock mode=14
 Extended Clock mode=-1
@@ -80,10 +85,6 @@ LogFile=_ ""
 [Aliases]
 Count=0
 SuppressDialog=0
-[CallStack]
-ShowArgs=0
-[Disassembly]
-MixedMode=1
 [CallStackLog]
 Enabled=0
 [DriverProfiling]
