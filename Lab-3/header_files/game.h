@@ -36,20 +36,32 @@ UpdateCount nop
         ret
           
 WaitForStart nop
-        push.w    R5            ; Save R5
+        push.w  R5            ; Save R5
 Temp    mov.b   P2IN,R5         ; Temporarily store P2IN in R5
         bic.b   #00111111b,R5   ; Save only the status of P2.6 and P2.7
-        cmp.b   #11000000b,R5   ; Check if both buttons are pressed
+        cmp.b   #0,R5           ; Check if both buttons are pressed (pull up resistor means they are normally high)
         jz      TwoPres         ; If they are pressed, then they are equal and the result of compare is zero
         jmp     Temp            ; If they are not equal then one of the buttons was not pressed, keep checking       
 TwoPres pop     R5              ; Recuperate R5 
         ret
 
-          
+UserMove nop
+        mov.b   #0x0f00,R14          ; Loop 5 times to allow the user to press the two buttons
+CkAgain mov.b   P2IN,R5         ; Temporarily store P2IN in R5
+        bic.b   #00111111b,R5   ; Save only the status of P2.6 and P2.7
+        cmp.b   #0,R5           ; Check if both buttons are pressed (pull up resistor means they are normally high)
+        jz      Accept          ; If they are pressed, then they are equal and the result of compare is zero
+        dec.b   R14             ; Decrease counter
+        jnz     CkAgain         ; If it's not zero check another time 
+        mov.b   #0,R5           ; If they are not equal after 0x0f00 polls then one of the buttons was not pressed
+        ret                     ; retrun 0       
+Accept  mov.w   #1,R5           ; If they are equal set R5 to 1 to notify main
+        ret
+         
 Rand    DB      'User guess ^'          
 Guess   DB      'Press the two^'
 Guess2  DB      'buttons^'
-TurnNum  DB     'Turn number ^'
+TurnNum DB      'Turn number ^'
 
 
 
