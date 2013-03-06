@@ -26,6 +26,8 @@
       <file>$TOOLKIT_DIR$\inc\msp430.h</file>
       <file>$PROJ_DIR$\part3.asm</file>
       <file>$PROJ_DIR$\..\header_files\util.h</file>
+      <file>$PROJ_DIR$\..\HomeWork\timer.h</file>
+      <file>$PROJ_DIR$\..\HomeWork\digitalTach.asm</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\Debug\Exe\part3.d43</name>

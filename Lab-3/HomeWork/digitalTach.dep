@@ -2,21 +2,46 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>2778963421</fileChecksum>
+  <fileChecksum>3656989350</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
       <file>$PROJ_DIR$\Debug\Exe\digitalTach.d43</file>
       <file>$PROJ_DIR$\Debug\Obj\digitalTach.r43</file>
+      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$PROJ_DIR$\wheel.asm</file>
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
       <file>$PROJ_DIR$\..\header_files\lcd.h</file>
       <file>$PROJ_DIR$\..\header_files\game.h</file>
       <file>$PROJ_DIR$\digitalTach.asm</file>
       <file>$PROJ_DIR$\asm.s43</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F5438.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\msp430f5438.h</file>
+      <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
+      <file>$PROJ_DIR$\Debug\Obj\wheel.r43</file>
       <file>$PROJ_DIR$\..\part2\part2.asm</file>
       <file>$PROJ_DIR$\timer.h</file>
       <file>$PROJ_DIR$\..\part3\part3b.asm</file>
+      <file>$PROJ_DIR$\..\header_files\util.h</file>
     </outputs>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\digitalTach.d43</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 9 11 1</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\wheel.asm</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 12</file>
+        </tool>
+      </outputs>
+    </file>
     <file>
       <name>$PROJ_DIR$\digitalTach.asm</name>
       <outputs>
@@ -25,13 +50,19 @@
           <file> 1</file>
         </tool>
       </outputs>
+      <inputs>
+        <tool>
+          <name>A430</name>
+          <file> 2 10 5 14</file>
+        </tool>
+      </inputs>
     </file>
     <file>
       <name>$PROJ_DIR$\asm.s43</name>
       <outputs>
         <tool>
           <name>A430</name>
-          <file> 2</file>
+          <file> 4</file>
         </tool>
       </outputs>
     </file>
@@ -44,10 +75,6 @@
         </tool>
       </outputs>
     </file>
-    <forcedrebuild>
-      <name>[MULTI_TOOL]</name>
-      <tool>XLINK</tool>
-    </forcedrebuild>
   </configuration>
   <configuration>
     <name>Release</name>

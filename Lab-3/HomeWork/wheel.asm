@@ -197,15 +197,11 @@ SETL2HIGH       jnc      WriteToLCD
 
 ;Light received interrupt    
 BPIR    push.w    R5                      ; Save R5 to use it as a temp variable
-        ;mov.b   P1IN, R5
-        ;push.w    R5
         bit.b   #BIT7,P1IFG 	        ; check if 1.7  generated the flag
-     ;   jnz     TrakB                 	; Button 1.7 was pressed if bit test returns 1
         jnz     TOG7
         bit.b   #BIT6,P1IFG 	        ; check if 1.6 generated the flag
-      ;  jnz     TrakA                	; Button 1.6 was pressed if bit test returns 1
         jnz     TOG6
-        ;jmp     GOBACK          	; Something else generated the interrupt
+        jmp     GOBACK          	; Something else generated the interrupt
         
 TOG7    xor.b   #BIT7,P1IES  
         jmp     TrakB
@@ -216,13 +212,9 @@ TrakB   nop
         rla.b   R5
         rla.b   R5                      ; Rotate Bnew to Bold position
         bic.b   #11111011b,R5           ; set all bits to zero except Bold
-        ;bic.b   #00000100b, STATUS      ; Clear Bold in STATUS 
         bic.b   #00000100b, STATUS      ; Clear Bold in STATUS
         add.b   R5,STATUS               ; Move Bnew to Bold
-        ;pop     R5                      ; Save PIN in R5
-        ;mov.b   P1IES,R5
         mov.b   P1IN,R5
-        ;xor.b   #BIT7, R5
         bic.b   #01111111b,R5           ; Clear all PINs except PIN1.7
         rla.b   R5
         rlc.b   R5                      ; x0000000 -> 0000000x move PIN1.7 to Bnew position
@@ -235,13 +227,9 @@ TrakA   nop
         rla.b   R5
         rla.b   R5                      ; Rotate Anew to Aold position
         bic.b   #11110111b,R5           ; set all bits to zero except Aold
-        ;bic.b   #00001000b, STATUS      ; Clear Aold in STATUS 
         bic.b   #00001000b, STATUS      ; Clear Aold in STATUS 
         add.b   R5,STATUS               ; Move Anew to Aold
-        ;pop     R5                      ; Save PIN in R5
-        ;mov.b   P1IES,R5
         mov.b   P1IN,R5
-        ;xor.b   #BIT6, R5
         bic.b   #10111111b,R5           ; Clear all PINs except PIN1.6
         rla.b   R5                      ; 0x000000 -> x0000000 move PIN1.6 to Anew position
         rla.b   R5
