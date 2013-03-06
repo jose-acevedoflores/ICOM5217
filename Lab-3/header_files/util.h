@@ -1,6 +1,10 @@
 #define DIVISOR     R5
 #define DIVCNT      R9
 #define RANDVAL     R7
+#define Dividend    R9
+#define Divisor     R10
+#define Result      R11
+#define Remainder   R12
   ORG   06800h
   DW    MOD10
     
@@ -35,3 +39,27 @@ endDv:  pop     RANDVAL
         sub.w   #0x000A,DIVISOR ; Subtract 10 from divisor
         sub.w   DIVISOR,RANDVAL ; Get residue
 endDv2: ret
+
+;------------------------------------------------------------------------------
+;          Division Subroutine
+;               
+;------------------------------------------------------------------------------
+DIV1       mov.w #016, R5               ;Store 8 for loop
+           CLR  Remainder               ;Clear register for remainder
+           CLR  Result                  ;Clear register for result
+           
+DIVLOOP    RLC.w Dividend               ;Shift to the left through carry
+           RLC.w Remainder              ;
+           PUSH.W Remainder             ;Push temporary remainder
+           SUB.w Divisor, Remainder
+           JN  NEGATIVE
+POSITIVE   SETC                         ;Set carry
+           POP R14                      ;Trash bin
+           JMP CONT
+NEGATIVE   POP Remainder                ;Pop previous remainder
+           CLRC                         ;Clear carry  
+CONT       RLC.w Result                 ;Shift result
+           
+           DEC R5
+           JNZ DIVLOOP
+           ret
