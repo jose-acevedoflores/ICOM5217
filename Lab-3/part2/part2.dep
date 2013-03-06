@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>2092853970</fileChecksum>
+  <fileChecksum>3323305995</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -12,6 +12,13 @@
       <file>$PROJ_DIR$\Debug\Exe\part2.d43</file>
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
       <file>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F5438.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$TOOLKIT_DIR$\inc\msp430f5438.h</file>
+      <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
+      <file>$PROJ_DIR$\BuzzerInt.asm</file>
+      <file>$PROJ_DIR$\Debug\Obj\BuzzerInt.r43</file>
+      <file>$PROJ_DIR$\..\part1\part1.asm</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
@@ -30,6 +37,12 @@
           <file> 1</file>
         </tool>
       </outputs>
+      <inputs>
+        <tool>
+          <name>A430</name>
+          <file> 7 8</file>
+        </tool>
+      </inputs>
     </file>
     <file>
       <name>$PROJ_DIR$\asm.s43</name>
@@ -41,6 +54,15 @@
       </outputs>
     </file>
     <file>
+      <name>$PROJ_DIR$\Debug\Exe\part2.d43</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 6 9 1</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
       <outputs>
         <tool>
@@ -49,13 +71,21 @@
         </tool>
       </outputs>
     </file>
-    <forcedrebuild>
-      <name>[MULTI_TOOL]</name>
-      <tool>XLINK</tool>
-    </forcedrebuild>
-    <forcedrebuild>
-      <name>[REBUILD_ALL]</name>
-    </forcedrebuild>
+    <file>
+      <name>$PROJ_DIR$\BuzzerInt.asm</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 11</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>A430</name>
+          <file> 7 8</file>
+        </tool>
+      </inputs>
+    </file>
   </configuration>
   <configuration>
     <name>Release</name>

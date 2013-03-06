@@ -22,15 +22,18 @@ main:   NOP                             ; main program
         bis.b   #BIT0,P1DIR             ; Set P1.0 as output for LED
         bis.b   #BIT0,P1OUT             ; Turn LED on
         
-        mov.w   #SELA_2+SELS_2,&UCSCTL4       ; Set SMCLK source to REFOCLOCK
+        mov.w   #SELA_2,&UCSCTL4       ; Set ACLK source to REFOCLOCK
         
-        bis.w   #TASSEL_1 + MC_1 + ID_3,&TA0CTL ; Set timer, SMCLK source, Up count operation and divide input signal by 4
-        mov.w   #0001h, &TA0CCR0                ; Count up to FFFF
+        bis.w   #TASSEL_1 + MC_1 + ID_0,&TA0CTL ; Set timer, SMCLK source, Up count operation and divide input signal by 4
+        mov.w   #0x0FFFF, &TA0CCR0                ; Count up to FFFF
         ;bis.w   #CAP, &TA0CCTL0
-        mov.w   #TAIDEX_2, &TA0EX0              ; Divide input signal by 4
+       mov.w   #TAIDEX_7, &TA0EX0              ; Divide input signal by 4
         
-poll:   bit.w   #CCIFG, &TA0CCTL0         ; Check if overflow ocurred
-        jnc     poll
+poll:   ;mov.w   #8, R12
+        ;sub.w   TA0R,R12
+        bit.w   #CCIFG, &TA0CCTL0         ; Check if overflow ocurred
+        jnz     poll
+        ;jnc     poll
 toggle: xor.b   #BIT5,P8OUT
         bic.w   #CCIFG, &TA0CCTL0
         jmp     poll

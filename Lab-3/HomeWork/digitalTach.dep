@@ -23,6 +23,10 @@
       <file>$PROJ_DIR$\timer.h</file>
       <file>$PROJ_DIR$\..\part3\part3b.asm</file>
       <file>$PROJ_DIR$\..\header_files\util.h</file>
+      <file>$PROJ_DIR$\..\part2\BuzzerInt.asm</file>
+      <file>$PROJ_DIR$\..\test\headertest.asm</file>
+      <file>$PROJ_DIR$\..\part3\part3.asm</file>
+      <file>$PROJ_DIR$\..\part1\part1.asm</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\Debug\Exe\digitalTach.d43</name>

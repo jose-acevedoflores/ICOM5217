@@ -63,25 +63,27 @@ RPMCODE mov.w   #2560,Dividend         ; CalculateRPM
         
         mov.w   #RPMLabel, STR
         call    #WRITESTR
+        clr     STATUS
+        bic.b   #BIT7+BIT6, P1IFG       ; Clear Interrupt flag
         jmp     loop
 
 FORWARD cmp.b   #1, DIR
-        jz      loop
+        jz      J
         mov.b   #1, DIR
         mov.b   #0xC0,COM_ARGS		; New Line
         call    #WRITECOM		; 
         mov.w   #ForwardLabel, STR
         call    #WRITESTR
-        jmp     RPMCODE
+J       jmp     RPMCODE
         
 BACKWARD cmp.b  #0,DIR
-         jz     loop 
+         jz     J2 
          mov.b  #0,DIR
          mov.b  #0xC0,COM_ARGS		; New Line
          call   #WRITECOM		; 
          mov.w  #BackwardLabel,STR
          call   #WRITESTR
-         jmp    RPMCODE
+J2       jmp    RPMCODE
 ///////////////////////////////////////////////////////////////////////////////
 //Light Interrupt Service Routine
 ///////////////////////////////////////////////////////////////////////////////        
@@ -97,7 +99,7 @@ Some    bit.b   #BIT7,P1IFG 	        ; check if 1.7  generated the flag
         jnz     TOG7
         bit.b   #BIT6,P1IFG 	        ; check if 1.6 generated the flag
         jnz     TOG6
-        jmp     GOBACK          	; Something else generated the interrupt
+        reti                        	; Something else generated the interrupt
 
 SaveTim mov.w   TA0R,REVTIME            ; Save First value of the timer
         inc.b   INTID                   ; Increment Interrupt ID 
@@ -128,7 +130,6 @@ Rotate  push.b  P1IN
         
 GOBACK  mov.w   #LookUPT, 2(SP)   	; Modify the new return address
         bic.b   #GIE, 0(SP)             ; Disale interrupts 
-        clr     STATUS
         reti        
 
 NOUP8   reti
