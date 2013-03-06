@@ -17,14 +17,15 @@ init:   MOV     #SFE(CSTACK), SP        ; set up stack
 
 main:   NOP                             ; main program
         MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
-        
-        clr     USRCOUNT
-        clr     NUMTRIES
+       
         
         call    #InitPort
         call    #InitTimer
         call    #INIT_LCD               ; Initialize LCD
-        
+      
+Restart clr     USRCOUNT
+        clr     NUMTRIES 
+        bic.b   #0FFh, P2IFG    ; Clear the flags that might generate an interrupt
         call    #WelcomeMsg
         call    #WaitForStart           ; Poll buttons for two simultaneous button presses
         
@@ -39,9 +40,25 @@ Stay    eint
 UP8LCD  call    #UpdateCount  
         bic.b   #BIT7+BIT6, P2IFG            ;Clear flag after delay to eliminate bouncing
         jmp     Stay
-USRTRY  nop
+        
+USRTRY  bic.b   #00110000b,USRCOUNT             ; Eliminate the ASCII code formatting 
+        cmp.b   USRCOUNT,RANDVAL             ; Compare random value with the user guessed value
+        jz      Win             ; If the user guessed the value display a win message
+        inc.b   NUMTRIES        ; Increment number of tries
+        cmp.b   #0x33,NUMTRIES     ; Check if the user reached the max number of guesses (3) 33 comes from the 0011 of the ASCII code
+        jz      GOver
+        clr     USRCOUNT                ; Clear user guessed number
+        bic.b   #BIT7+BIT6, P2IFG            ;Clear flags to eliminate any pending interrupt 
+        call    #StartGame              ; Display the reset USRCOUNT and NUMTRIES values
         jmp     Stay        
-       
+
+GOver   call    #GameOver       ; Display Game over message
+        call    #WaitForStart   ; Wait for the two buttons to be pressed again
+        jmp     Restart
+        
+Win     call    #UserWon                ; Display user win message
+        call    #WaitForStart   ; Wait for the two buttons to be pressed again
+        jmp     Restart                 ; Restart game
 ///////////////////////////////////////////////////////////////////////////////////////
 //Functions Section
 /////////////////////////////////////////////////////////////////////////////////////    
