@@ -10,8 +10,6 @@
         ORG     0FFFEh
         DC16    init                    ; set reset vector to 'init' label
         
-        ORG     0x0FFEC                 
-        DC16    timer                   ; Set timer ISR
         
         ORG     0x0FFDE
         DW      BPIR                    ; Init interrupt vector for button (P1.6 Track A and P1.7 Track B)
@@ -31,7 +29,6 @@ main:   NOP                             ; main program
         call    #INIT_LCD               ; Initialize LCD
         clr     STATUS
         clr     DIR
-        clr     R14
         
 loop    eint                             ; Infinite loop for waiting interrupt
         jmp loop
@@ -45,18 +42,18 @@ LookUPT mov.w   #JMPTABL, R5
         jz      BACKWARD                ; CW
         jmp     loop
 
-FORWARD cmp.b   #1, R14
+FORWARD cmp.b   #1, DIR
         jz      loop
-        mov.b   #1, R14
+        mov.b   #1, DIR
         mov.b   #0xC0,COM_ARGS		; New Line
         call    #WRITECOM		; 
         mov.w   #ForwardLabel, STR
         call    #WRITESTR
         jmp     loop
         
-BACKWARD cmp.b  #0,R14
+BACKWARD cmp.b  #0,DIR
          jz     loop 
-         mov.b  #0,R14
+         mov.b  #0,DIR
          mov.b  #0xC0,COM_ARGS		; New Line
          call   #WRITECOM		; 
          mov.w  #BackwardLabel,STR
@@ -113,4 +110,6 @@ InitPort nop
 JMPTABL DB      0,1,2,0,2,0,0,1,1,0,0,2,0,2,1,0 
 ForwardLabel  DB     'Forward ^'
 BackwardLabel DB     'Backward ^'
+SpeedLabel    DB     'Speed =^'
+RPMLabel      DB     ' RPM^'     
         END
