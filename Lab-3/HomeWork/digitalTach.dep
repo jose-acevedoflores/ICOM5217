@@ -2,20 +2,36 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>2572168058</fileChecksum>
+  <fileChecksum>2778963421</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
       <file>$PROJ_DIR$\Debug\Exe\digitalTach.d43</file>
+      <file>$PROJ_DIR$\Debug\Obj\digitalTach.r43</file>
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
+      <file>$PROJ_DIR$\..\header_files\lcd.h</file>
+      <file>$PROJ_DIR$\..\header_files\game.h</file>
+      <file>$PROJ_DIR$\digitalTach.asm</file>
       <file>$PROJ_DIR$\asm.s43</file>
+      <file>$PROJ_DIR$\..\part2\part2.asm</file>
+      <file>$PROJ_DIR$\timer.h</file>
+      <file>$PROJ_DIR$\..\part3\part3b.asm</file>
     </outputs>
+    <file>
+      <name>$PROJ_DIR$\digitalTach.asm</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 1</file>
+        </tool>
+      </outputs>
+    </file>
     <file>
       <name>$PROJ_DIR$\asm.s43</name>
       <outputs>
         <tool>
           <name>A430</name>
-          <file> 1</file>
+          <file> 2</file>
         </tool>
       </outputs>
     </file>

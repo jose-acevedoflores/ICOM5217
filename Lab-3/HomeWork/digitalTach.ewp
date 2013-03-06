@@ -1962,6 +1962,15 @@
       <data/>
     </settings>
   </configuration>
+  <file>
+    <name>$PROJ_DIR$\digitalTach.asm</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\header_files\lcd.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\timer.h</name>
+  </file>
 </project>
 
 

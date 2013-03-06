@@ -2,6 +2,9 @@
 
 <workspace>
   <project>
+    <path>$WS_DIR$\HomeWork\digitalTach.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\part1\part1.ewp</path>
   </project>
   <project>

@@ -1,4 +1,6 @@
 #include "msp430.h"                     ; #define controlled include file
+#include "../header_files/lcd.h"
+#include  "timer.h"
 #define DELAY_ARGS      R5
 
 
