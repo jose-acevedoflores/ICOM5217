@@ -51,7 +51,7 @@ LookUPT mov.w   #JMPTABL, R5
         cmp.b   #00000010b, R5          ; check if the look up table returned 2
         jz      BACKWARD                ; CW
         
-        mov.w   #2560,Dividend         ; CalculateRPM
+RPMCODE mov.w   #2560,Dividend         ; CalculateRPM
         mov.w   REVTIME, Divisor
         call    #DIV1
         mov.w   Result,REVTIME
@@ -72,7 +72,7 @@ FORWARD cmp.b   #1, DIR
         call    #WRITECOM		; 
         mov.w   #ForwardLabel, STR
         call    #WRITESTR
-        jmp     loop
+        jmp     RPMCODE
         
 BACKWARD cmp.b  #0,DIR
          jz     loop 
@@ -81,7 +81,7 @@ BACKWARD cmp.b  #0,DIR
          call   #WRITECOM		; 
          mov.w  #BackwardLabel,STR
          call   #WRITESTR
-         jmp    loop
+         jmp    RPMCODE
 ///////////////////////////////////////////////////////////////////////////////
 //Light Interrupt Service Routine
 ///////////////////////////////////////////////////////////////////////////////        
@@ -93,7 +93,7 @@ BPIR    push.w  R5                      ; Save R5 to use it as a temp variable
         mov.w   R5, REVTIME             ; Move the result of the subtraction to REVTIME 
         clr.b   INTID                   ; Clear interrupt id
         
-        bit.b   #BIT7,P1IFG 	        ; check if 1.7  generated the flag
+Some    bit.b   #BIT7,P1IFG 	        ; check if 1.7  generated the flag
         jnz     TOG7
         bit.b   #BIT6,P1IFG 	        ; check if 1.6 generated the flag
         jnz     TOG6
@@ -101,9 +101,7 @@ BPIR    push.w  R5                      ; Save R5 to use it as a temp variable
 
 SaveTim mov.w   TA0R,REVTIME            ; Save First value of the timer
         inc.b   INTID                   ; Increment Interrupt ID 
-        pop     R5
-        bic.b   #BIT7+BIT6, P1IFG            ; Clear Interrupt flag
-        reti                            ; Go to loop
+        jmp     Some
         
 TOG7    xor.b   #BIT7,P1IES  
         jmp     Rotate
@@ -123,13 +121,17 @@ Rotate  push.b  P1IN
         rlc.b   R5                      ; xx000000 -> 000000xx move PIN1.7 to Bnew position
         bic.b   #00000011b,STATUS       ; Clear Bnew and Anew in status
         add.b   R5,STATUS               ; Save P1.7 IN in Anew and P1.6 in Bnew 
-        bic.b   #BIT7+BIT6, P1IFG            ; Clear Interrupt flag
+        bic.b   #BIT7+BIT6, P1IFG       ; Clear Interrupt flag
+        pop     R5                      ; Recuperate R5 contents
+        cmp.b   #1,INTID
+        jz      NOUP8  
         
-GOBACK  pop     R5                      ; Recuperate R5 contents
-        mov.w   #LookUPT, 2(SP)   	; Modify the new return address
+GOBACK  mov.w   #LookUPT, 2(SP)   	; Modify the new return address
         bic.b   #GIE, 0(SP)             ; Disale interrupts 
+        clr     STATUS
         reti        
 
+NOUP8   reti
 
 ///////////////////////////////////////////////////////////////////////////////
 // Initialize port functions 
