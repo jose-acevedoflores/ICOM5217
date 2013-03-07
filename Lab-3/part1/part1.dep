@@ -6,40 +6,32 @@
   <configuration>
     <name>Debug</name>
     <outputs>
-      <file>$PROJ_DIR$\part1.asm</file>
+      <file>$TOOLKIT_DIR$\inc\msp430f5438.h</file>
+      <file>$TOOLKIT_DIR$\config\lnk430F5438.xcl</file>
+      <file>$PROJ_DIR$\Debug\Obj\part1.r43</file>
+      <file>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</file>
+      <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
+      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
       <file>$PROJ_DIR$\asm.s43</file>
       <file>$PROJ_DIR$\Debug\Exe\part1.d43</file>
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
-      <file>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</file>
-      <file>$PROJ_DIR$\Debug\Obj\part1.r43</file>
-      <file>$TOOLKIT_DIR$\inc\msp430f5438.h</file>
-      <file>$TOOLKIT_DIR$\config\lnk430F5438.xcl</file>
-      <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
-      <file>$PROJ_DIR$\..\part2\BuzzerInt.asm</file>
-      <file>$TOOLKIT_DIR$\inc\msp430.h</file>
-      <file>$PROJ_DIR$\..\part2\part2.asm</file>
+      <file>$PROJ_DIR$\part1.asm</file>
     </outputs>
     <file>
-      <name>$PROJ_DIR$\part1.asm</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
       <outputs>
         <tool>
-          <name>A430</name>
-          <file> 5</file>
+          <name>XLINK</name>
+          <file> 7</file>
         </tool>
       </outputs>
-      <inputs>
-        <tool>
-          <name>A430</name>
-          <file> 10 6</file>
-        </tool>
-      </inputs>
     </file>
     <file>
       <name>$PROJ_DIR$\asm.s43</name>
       <outputs>
         <tool>
           <name>A430</name>
-          <file> 3</file>
+          <file> 8</file>
         </tool>
       </outputs>
     </file>
@@ -48,7 +40,22 @@
       <inputs>
         <tool>
           <name>XLINK</name>
-          <file> 7 8 5</file>
+          <file> 1 4 2</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\part1.asm</name>
+      <outputs>
+        <tool>
+          <name>A430</name>
+          <file> 2</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>A430</name>
+          <file> 5 0</file>
         </tool>
       </inputs>
     </file>
@@ -57,16 +64,7 @@
       <outputs>
         <tool>
           <name>XLINK</name>
-          <file> 2</file>
-        </tool>
-      </outputs>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
-      <outputs>
-        <tool>
-          <name>XLINK</name>
-          <file> 2</file>
+          <file> 7</file>
         </tool>
       </outputs>
     </file>
