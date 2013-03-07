@@ -12,13 +12,19 @@
       <file>$PROJ_DIR$\Debug\Exe\part2.d43</file>
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
       <file>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</file>
+      <file>$PROJ_DIR$\..\part3\part3.asm</file>
       <file>$TOOLKIT_DIR$\config\lnk430F5438.xcl</file>
       <file>$TOOLKIT_DIR$\inc\msp430.h</file>
+      <file>$PROJ_DIR$\..\part3\part3b.asm</file>
       <file>$TOOLKIT_DIR$\inc\msp430f5438.h</file>
       <file>$TOOLKIT_DIR$\config\multiplier32_loc2.xcl</file>
+      <file>$PROJ_DIR$\..\test\headertest.asm</file>
       <file>$PROJ_DIR$\BuzzerInt.asm</file>
+      <file>$PROJ_DIR$\..\HomeWork\digitalTach.asm</file>
       <file>$PROJ_DIR$\Debug\Obj\BuzzerInt.r43</file>
+      <file>$PROJ_DIR$\..\header_files\game.h</file>
       <file>$PROJ_DIR$\..\part1\part1.asm</file>
+      <file>$PROJ_DIR$\..\header_files\util.h</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
@@ -40,7 +46,7 @@
       <inputs>
         <tool>
           <name>A430</name>
-          <file> 7 8</file>
+          <file> 8 10</file>
         </tool>
       </inputs>
     </file>
@@ -58,7 +64,7 @@
       <inputs>
         <tool>
           <name>XLINK</name>
-          <file> 6 9 1</file>
+          <file> 7 11 1</file>
         </tool>
       </inputs>
     </file>
@@ -76,13 +82,13 @@
       <outputs>
         <tool>
           <name>A430</name>
-          <file> 11</file>
+          <file> 15</file>
         </tool>
       </outputs>
       <inputs>
         <tool>
           <name>A430</name>
-          <file> 7 8</file>
+          <file> 8 10</file>
         </tool>
       </inputs>
     </file>
