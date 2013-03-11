@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>OGChipSelectMenu</name>
-          <state>MSP430F149	MSP430F149</state>
+          <state>MSP430F5438	MSP430F5438</state>
         </option>
         <option>
           <name>GStackHeapOverride</name>
@@ -652,7 +652,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>templproj.d43</state>
+          <state>part2.d43</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -1963,7 +1963,10 @@
     </settings>
   </configuration>
   <file>
-    <name>$PROJ_DIR$\asm.s43</name>
+    <name>$PROJ_DIR$\7seg.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\part2_7seg.asm</name>
   </file>
 </project>
 
