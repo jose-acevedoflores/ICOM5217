@@ -7,6 +7,9 @@
   <project>
     <path>$WS_DIR$\part2\part2.ewp</path>
   </project>
+  <project>
+    <path>$WS_DIR$\part3\part3.ewp</path>
+  </project>
   <batchBuild/>
 </workspace>
 

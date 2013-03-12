@@ -105,11 +105,11 @@
         </option>
         <option>
           <name>GStackSize2</name>
-          <state>160</state>
+          <state>80</state>
         </option>
         <option>
           <name>GHeapSize2</name>
-          <state>160</state>
+          <state>80</state>
         </option>
         <option>
           <name>RadioDataModelType</name>
@@ -652,7 +652,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>part2.d43</state>
+          <state>part3.d43</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -718,7 +718,7 @@
         </option>
         <option>
           <name>XclFile</name>
-          <state>$TOOLKIT_DIR$\CONFIG\lnk430F5438.xcl</state>
+          <state>$TOOLKIT_DIR$\CONFIG\lnk430F149.xcl</state>
         </option>
         <option>
           <name>XclFileSlave</name>
@@ -846,7 +846,7 @@
         </option>
         <option>
           <name>ExtraOutputFile</name>
-          <state>part2.a43</state>
+          <state>templproj.a43</state>
         </option>
         <option>
           <name>ExtraOutputFormat</name>
@@ -1966,7 +1966,7 @@
     <name>$PROJ_DIR$\..\header_files\7seg.h</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\part2_7seg.asm</name>
+    <name>$PROJ_DIR$\part3_7seg.asm</name>
   </file>
 </project>
 

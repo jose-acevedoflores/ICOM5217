@@ -20,13 +20,14 @@ main:   NOP                             ; main program
         
         
         
-        bis.b   #BIT6,P8DIR
-        bis.b   #BIT6,P8OUT
+        bis.b   #BIT6+BIT5,P8DIR
+        bis.b   #BIT6+BIT5,P8OUT
         mov.b   #0x0ff, P10DIR  ; Set p10 as output
         call    #INIT_TIMER
         clr     NUMA
-        
+        clr     NUMB
         bic.b   #BIT6,P8OUT             ; Enable Digit 1
+        bis.b   #BIT5,P8OUT             ; Disable Digit 2
         eint
         jmp     $
         
@@ -39,12 +40,18 @@ INIT_TIMER nop
         ret
 ;ISR for timer         
 TIMER_IR nop 
+        xor.b   #BIT5+BIT6,P8OUT
         cmp     #16,NUMA
         jz      Clear
+        cmp     #16,NUMB
+        jz      Clear2
 Cont    call    #ChNumA
+        call    #ChNumB
         inc.b   NUMA
+        inc.b   NUMB
         reti
 Clear   clr     NUMA
         jmp     Cont
-        
+Clear2  clr     NUMB
+        jmp     Cont
         END
