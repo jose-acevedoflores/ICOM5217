@@ -1,5 +1,6 @@
 #include "msp430.h"                     ; #define controlled include file
 #include "../header_files/KeyPad.h"
+#include "../header_files/7seg.h"
         NAME    main                    ; module name
 
         PUBLIC  main                    ; make the main label vissible
@@ -21,7 +22,10 @@ init:   MOV     #SFE(CSTACK), SP        ; set up stack
 main:   NOP                             ; main program
         MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
         
-        
+        bis.b   #BIT6+BIT5,P8DIR
+        mov.b   #0x0ff, P10DIR  ; Set p10 as output
+        bic.b   #BIT6,P8OUT             ; Enable Digit 1
+        bis.b   #BIT5,P8OUT             ; Disable Digit 2
         call    #KeyPad_INIT
         
         

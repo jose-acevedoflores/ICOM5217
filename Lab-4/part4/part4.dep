@@ -2,7 +2,7 @@
 
 <project>
   <fileVersion>2</fileVersion>
-  <fileChecksum>3495346932</fileChecksum>
+  <fileChecksum>2783650311</fileChecksum>
   <configuration>
     <name>Debug</name>
     <outputs>
@@ -15,6 +15,7 @@
       <file>$PROJ_DIR$\Debug\Obj\asm.r43</file>
       <file>$PROJ_DIR$\Debug\Obj\keypad.r43</file>
       <file>$PROJ_DIR$\Debug\Exe\part4.d43</file>
+      <file>$PROJ_DIR$\..\header_files\7seg.h</file>
       <file>$PROJ_DIR$\..\part3\part3_7seg.asm</file>
       <file>$TOOLKIT_DIR$\inc\msp430.h</file>
     </outputs>
@@ -29,7 +30,7 @@
       <inputs>
         <tool>
           <name>A430</name>
-          <file> 10 3 2</file>
+          <file> 11 3 2 9</file>
         </tool>
       </inputs>
     </file>
