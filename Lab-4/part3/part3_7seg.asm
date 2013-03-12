@@ -10,6 +10,9 @@
         ORG     0FFECh
         DW      TIMER_IR
         
+        ORG     0FFEAh
+        DW      TOG_TIMER
+        
         RSEG    CSTACK                  ; pre-declaration of segment
         RSEG    CODE                    ; place program in 'CODE' segment
 
@@ -21,13 +24,17 @@ main:   NOP                             ; main program
         
         
         bis.b   #BIT6+BIT5,P8DIR
-        bis.b   #BIT6+BIT5,P8OUT
+        bis.b   #BIT6,P8OUT             ; Disable Digit 1
+        bic.b   #BIT5,P8OUT             ; Enable Digit 2        
+        
         mov.b   #0x0ff, P10DIR  ; Set p10 as output
+        
         call    #INIT_TIMER
+        call    #INIT_TIMER2
+        
         clr     NUMA
         clr     NUMB
-        bic.b   #BIT6,P8OUT             ; Enable Digit 1
-        bis.b   #BIT5,P8OUT             ; Disable Digit 2
+
         eint
         jmp     $
         
@@ -38,20 +45,38 @@ INIT_TIMER nop
         bis.w   #511, &TA0CCR0                  ; Count up to FFFF
         bis.w   #TAIDEX_7, &TA0EX0              ; Divide input signal by 2
         ret
+INIT_TIMER2 nop
+        ;bis.w   #TASSEL_1 + MC_1 + ID_3,&TA0CTL ; Set timer, AMCLK source, Up count operation and divide input signal by 8
+        bis.w   #CCIE, &TA0CCTL1                ; Disable interrupt on compare
+        bis.w   #255, &TA0CCR1                  ; Count up to FFFF
+       ; bis.w   #TAIDEX_7, &TA0EX0 
+       ret
+/////////////////////////////////////////////////////////////////////////////       
 ;ISR for timer         
-TIMER_IR nop 
-        xor.b   #BIT5+BIT6,P8OUT
-        cmp     #16,NUMA
-        jz      Clear
-        cmp     #16,NUMB
-        jz      Clear2
-Cont    call    #ChNumA
-        call    #ChNumB
-        inc.b   NUMA
+//////////////////////////////////////////////////////////////////////////////             
+TIMER_IR nop     
+        ;eint    ;Enable interrupts in this routine
         inc.b   NUMB
+        cmp     #16,NUMB
+        jz      ClearB
+Cont    reti
+  
+ClearB  clr     NUMB
+        inc.b   NUMA
+        cmp     #16, NUMA
+        jz      ClearA   
+        jmp     Cont
+        
+ClearA  clr     NUMA
+        jmp     Cont
+ //////////////////////////////////////////////////////////////////////////////       
+; Toggles         
+//////////////////////////////////////////////////////////////////////////////
+TOG_TIMER  bis.b  #BIT5+BIT6, P8OUT  ; Disable digit B and A
+        call    #ChNumB                 
+        bic.b   #BIT5, P8OUT    ; Enable Digit B (2)
+        bis.b   #BIT5,P8OUT     ; Disable Digit b (2)  
+        call    #ChNumA
+        bic.b   #BIT6,P8OUT           ; Enable Digit A (1)
         reti
-Clear   clr     NUMA
-        jmp     Cont
-Clear2  clr     NUMB
-        jmp     Cont
         END
