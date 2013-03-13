@@ -1,6 +1,4 @@
 #include "msp430.h"                     ; #define controlled include file
-#define DELAY_ARGS      R5
-
 
         NAME    main                    ; module name
 
@@ -20,14 +18,13 @@ init:   MOV     #SFE(CSTACK), SP        ; set up stack
 main:   NOP                             ; main program
         MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
 
+        bis.b   #BIT5,P8DIR             ; Set P8.5 as output for buzzer
+        bis.b   #BIT5,P8OUT             ; Send high signal to buzzer
         
-        bis.w   #SELA_2,&UCSCTL4       ; Set AMCLK source to REFOCLOCK
-        
-        bis.w   #TASSEL_1 + MC_1 + ID_3,&TA0CTL ; Set timer, AMCLK source, Up count operation and divide input signal by 8
-        bis.w   #CCIE, &TA0CCTL0                ; Enable interrupt on compare
-        bis.w   #1, &TA0CCR0                ; Count up to FFFF
-        bis.w   #TAIDEX_2, &TA0EX0              ; Divide input signal by 2
-        eint
+        bis.w   #TASSEL_1 + MC_1 + ID_3,&TA0CTL ; AMCLK source (8KHz), Up count operation and divide input signal by 8
+        bis.w   #CCIE, &TA0CCTL0                ; Enable interrupt for timer on compare
+        bis.w   #1, &TA0CCR0                    ; Count up to 1 (because frequency is already 1024Hz)
+        eint                                    ; Enable interrupts
         
 loop:   nop                             ; Infinite loop for waiting interrupt
         jmp loop
@@ -37,7 +34,7 @@ loop:   nop                             ; Infinite loop for waiting interrupt
 ///////////////////////////////////////////////////////////////////////////////
 
 timer:  nop
-        
+        xor.b   #BIT5,P8OUT             ; Switch bit for the square signal being output to buzzer
         bic.w   #BIT0,TA0CTL            ; Clear interrupt flag
         reti
                                                 
