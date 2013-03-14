@@ -22,8 +22,10 @@ init:   MOV     #SFE(CSTACK), SP        ; set up stack
 main:   NOP                             ; main program
         MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
         
+        mov.w   #1,DISDIGIT             
+        
         bis.b   #BIT6+BIT5,P8DIR
-        mov.b   #0x0ff, P10DIR  ; Set p10 as output
+        mov.b   #0x0ff, P10DIR          ; Set p10 as output
         bic.b   #BIT6,P8OUT             ; Enable Digit 1
         bis.b   #BIT5,P8OUT             ; Disable Digit 2
         call    #KeyPad_INIT
@@ -36,6 +38,7 @@ KScan   call    #SendScanCode           ; Cycle through the scan codes
         jmp     KScan                   ; Keep sending scan codes
         
 Display call    #DisplayNum        
+        call    #ChNumA
         jmp     KScan                   ; Keep sending scan codes
         nop     
         END
