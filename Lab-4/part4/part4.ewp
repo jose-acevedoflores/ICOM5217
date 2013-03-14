@@ -1966,7 +1966,10 @@
     <name>$PROJ_DIR$\..\header_files\7seg.h</name>
   </file>
   <file>
-    <name>$PROJ_DIR$\keypad.asm</name>
+    <name>$PROJ_DIR$\keypad-part2.asm</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\..\header_files\KeyPad.h</name>
   </file>
 </project>
 

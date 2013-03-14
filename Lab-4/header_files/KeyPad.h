@@ -1,6 +1,11 @@
 #define  SCAN   P3OUT
 #define  RETURN R8
 #define  CurrentCode  R9
+
+// Additions to be able to write two digits
+
+#define DISDIGIT  R13   ; Digit to display on 7seg: 1 is digit a, 2 is digit b
+
       ORG       0x06200
       DW        KeyPad_INIT
         
@@ -26,7 +31,7 @@ Circular    mov.w       #ScanCodes,CurrentCode  ; Load the first scan code
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 DisplayNum  push.w        R5
-            rla.b       RETURN  ; xxx00000 -> xx000000 C = x
+            rla.b       RETURN  ; xxx00000 -> xx000000  C = x
             rlc.b       RETURN  ; xx000000 -> x000000x  C = x
             rlc.b       RETURN  ; x000000x -> 000000xx  C = x
             rlc.b       RETURN  ; 000000xx -> 00000xxx  
@@ -40,10 +45,18 @@ DisplayNum  push.w        R5
             cmp         #8, R5
             jz          Ro4
                           
-EndDisp     add.w       RETURN,R5       ; Use number in RETURN as the offset 
-            mov.b       @R5, R6;NUMA
-            call        #ChNumA         ; Display the number in the 7 seg
-            pop         R5
+EndDisp     add.w       RETURN,R5       ; Use number in RETURN as the offset               
+
+            cmp.w       #1,DISDIGIT
+            jz          DispA
+            cmp.w       #2,DISDIGIT
+            jz          DispB
+              
+DispA:      mov.b       @R5,R6         ; NUMA
+            jmp         EndSub
+DispB:      mov.b       @R5,R7          ; NUMB
+
+EndSub      pop         R5
             ret
 
 Ro1         mov.w       #Row1,R5        ; Use R5 as data pointer
@@ -54,7 +67,9 @@ Ro3         mov.w       #Row3,R5        ; Use R5 as data pointer
             jmp         EndDisp                
 Ro4         mov.w       #Row4,R5        ; Use R5 as data pointer
             jmp         EndDisp                
-              
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 ScanCodes       DB      0x08, 0x04,0x02,0x01, 0x00              
 
 Row1            DB      0x0A,3,2,0x0A,1
