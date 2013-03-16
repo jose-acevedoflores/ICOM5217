@@ -652,7 +652,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state>templproj.d43</state>
+          <state>part2.d43</state>
         </option>
         <option>
           <name>OutputFormat</name>
@@ -1962,9 +1962,6 @@
       <data/>
     </settings>
   </configuration>
-  <file>
-    <name>$PROJ_DIR$\asm.s43</name>
-  </file>
 </project>
 
 
