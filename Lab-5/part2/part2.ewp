@@ -97,7 +97,7 @@
         </option>
         <option>
           <name>OGChipSelectMenu</name>
-          <state>MSP430F149	MSP430F149</state>
+          <state>MSP430F5528	MSP430F5528</state>
         </option>
         <option>
           <name>GStackHeapOverride</name>
@@ -1962,6 +1962,12 @@
       <data/>
     </settings>
   </configuration>
+  <file>
+    <name>$PROJ_DIR$\..\header_files\lcdOyola.h</name>
+  </file>
+  <file>
+    <name>$PROJ_DIR$\part2.asm</name>
+  </file>
 </project>
 
 

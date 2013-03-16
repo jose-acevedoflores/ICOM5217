@@ -15,7 +15,9 @@
       <file>$TOOLKIT_DIR$\config\lnk430F5528.xcl</file>
       <file>$TOOLKIT_DIR$\inc\msp430.h</file>
       <file>$TOOLKIT_DIR$\inc\msp430f5528.h</file>
+      <file>$PROJ_DIR$\..\part2\part2.asm</file>
       <file>$PROJ_DIR$\..\header_files\uartAsync.h</file>
+      <file>$PROJ_DIR$\..\header_files\lcdOyola.h</file>
     </outputs>
     <file>
       <name>$PROJ_DIR$\..\..\..\..\..\..\..\[ROOT_NODE]</name>
@@ -37,7 +39,7 @@
       <inputs>
         <tool>
           <name>A430</name>
-          <file> 7 8 9</file>
+          <file> 7 8 10</file>
         </tool>
       </inputs>
     </file>

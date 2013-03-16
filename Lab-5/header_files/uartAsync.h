@@ -9,7 +9,7 @@ INIT_UART bis.b #BIT4+BIT3 , P3SEL      ; Configure P3.3 and P3.4 to use module 
           
           bis.b #UCSWRST, UCA0CTL1      ; Reset UART module state
           bis.b #UCSSEL_2, UCA0CTL1    ; Select SMCLK for BRCLK
-    ;      bic.b #UCPEN+UC7BIT+UCSYNC, UCA0CTL0        ; Parity disable, transmit 8 bit data in ASYNC mode
+          bic.b #UCPEN+UC7BIT+UCSYNC, UCA0CTL0        ; Parity disable, transmit 8 bit data in ASYNC mode
           bis.b #UCMODE_0, UCA0CTL0    ; Set UART mode
           
           bis.b #UCBRF_0+UCBRS_2, UCA0MCTL    ; Set baud rate parameters
