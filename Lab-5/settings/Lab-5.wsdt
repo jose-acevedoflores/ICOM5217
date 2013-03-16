@@ -74,20 +74,8 @@
           <SelEnd>0</SelEnd>
           <XPos2>0</XPos2>
           <YPos2>0</YPos2>
-          <SelStart2>0</SelStart2>
-          <SelEnd2>1057</SelEnd2>
-        </Tab>
-        <Tab>
-          <Factory>TextEditor</Factory>
-          <Filename>$WS_DIR$\header_files\uartAsync.h</Filename>
-          <XPos>0</XPos>
-          <YPos>0</YPos>
-          <SelStart>0</SelStart>
-          <SelEnd>0</SelEnd>
-          <XPos2>0</XPos2>
-          <YPos2>15</YPos2>
-          <SelStart2>2385</SelStart2>
-          <SelEnd2>2434</SelEnd2>
+          <SelStart2>479</SelStart2>
+          <SelEnd2>479</SelEnd2>
         </Tab>
         <Tab>
           <Factory>TextEditor</Factory>
@@ -103,15 +91,27 @@
         </Tab>
         <Tab>
           <Factory>TextEditor</Factory>
+          <Filename>$WS_DIR$\header_files\uartAsync.h</Filename>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+          <SelStart>0</SelStart>
+          <SelEnd>0</SelEnd>
+          <XPos2>0</XPos2>
+          <YPos2>24</YPos2>
+          <SelStart2>1877</SelStart2>
+          <SelEnd2>1877</SelEnd2>
+        </Tab>
+        <Tab>
+          <Factory>TextEditor</Factory>
           <Filename>$WS_DIR$\part2\part2.asm</Filename>
           <XPos>0</XPos>
           <YPos>0</YPos>
           <SelStart>0</SelStart>
           <SelEnd>0</SelEnd>
           <XPos2>0</XPos2>
-          <YPos2>4</YPos2>
-          <SelStart2>1590</SelStart2>
-          <SelEnd2>1590</SelEnd2>
+          <YPos2>20</YPos2>
+          <SelStart2>838</SelStart2>
+          <SelEnd2>838</SelEnd2>
         </Tab>
         <ActiveTab>4</ActiveTab>
       </Pane>
@@ -493,6 +493,78 @@
         <Row120>
           <Sizes/>
         </Row120>
+        <Row121>
+          <Sizes/>
+        </Row121>
+        <Row122>
+          <Sizes/>
+        </Row122>
+        <Row123>
+          <Sizes/>
+        </Row123>
+        <Row124>
+          <Sizes/>
+        </Row124>
+        <Row125>
+          <Sizes/>
+        </Row125>
+        <Row126>
+          <Sizes/>
+        </Row126>
+        <Row127>
+          <Sizes/>
+        </Row127>
+        <Row128>
+          <Sizes/>
+        </Row128>
+        <Row129>
+          <Sizes/>
+        </Row129>
+        <Row130>
+          <Sizes/>
+        </Row130>
+        <Row131>
+          <Sizes/>
+        </Row131>
+        <Row132>
+          <Sizes/>
+        </Row132>
+        <Row133>
+          <Sizes/>
+        </Row133>
+        <Row134>
+          <Sizes/>
+        </Row134>
+        <Row135>
+          <Sizes/>
+        </Row135>
+        <Row136>
+          <Sizes/>
+        </Row136>
+        <Row137>
+          <Sizes/>
+        </Row137>
+        <Row138>
+          <Sizes/>
+        </Row138>
+        <Row139>
+          <Sizes/>
+        </Row139>
+        <Row140>
+          <Sizes/>
+        </Row140>
+        <Row141>
+          <Sizes/>
+        </Row141>
+        <Row142>
+          <Sizes/>
+        </Row142>
+        <Row143>
+          <Sizes/>
+        </Row143>
+        <Row144>
+          <Sizes/>
+        </Row144>
       </Top>
       <Left>
         <Row0>

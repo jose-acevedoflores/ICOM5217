@@ -3,7 +3,7 @@
 #include "../header_files/lcdOyola.h"
 
 #define RxPtr   R11
-
+#define TxPtr   R13
         NAME    main                    ; module name
 
         PUBLIC  main                    ; make the main label vissible
@@ -16,7 +16,8 @@
         
         ORG     0x02c00
 Rx      DS8     16          
-        
+Tx      DS8     16
+
         RSEG    CSTACK                  ; pre-declaration of segment
         RSEG    CODE                    ; place program in 'CODE' segment
 
@@ -32,9 +33,23 @@ main:   NOP                             ; main program
         eint
  
         
-        jmp     $
+Loop    jmp     $
         nop
-
+ToUpper mov.w   #Tx, TxPtr
+        push.w  R5
+Cont    mov.b   @RxPtr+, R5
+        cmp     #'`', R5
+        jz      endU
+        bic.b   #BIT5, R5
+        mov.b   R5,0(TxPtr)
+        inc     TxPtr
+        jmp     Cont
+endU    pop R5
+        mov.w   #Tx, STR
+        mov.w   #'`', 0(TxPtr)
+        call    #PrintLine
+        mov.w   #Rx,RxPtr               ; Reset RxPtr for incoming transmissions
+        jmp     Loop 
 ///////////////////////////////////////////////////////////////////////////////
 // Char Received through UART ISR
 //////////////////////////////////////////////////////////////////////////////
@@ -46,11 +61,12 @@ CHAR_Rx mov.b   UCA0RXBUF, 0(RxPtr)
         reti
 CallLineW  mov.b  #001h, R6             ;Clear Display
            CALL   #CMDWR                     ;Enable LCD  
-
+        
         mov.w   #Rx,DATA_ARG
         call    #LNWR
         bic.b   #UCRXIFG,&UCA0IFG
-        mov.w   #Rx,RxPtr
+        mov.w   #Rx,RxPtr                ; Reset RxPtr for incoming transmissions
+        mov.w   #ToUpper, 2(SP)
         reti 
         
         
