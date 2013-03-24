@@ -53,7 +53,7 @@ public class MainFrame extends JFrame{
 		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
 		
-		String[] options = { "1.5mm","1mm", "0.5mm"};
+		String[] options = { "1.5mm","1.0mm", "0.5mm"};
 		this.layerThickness = new JComboBox(options);
 		this.layerThickness.setPreferredSize(new Dimension(20,40));
 		this.layerThickness.setMinimumSize(new Dimension(20,40));
