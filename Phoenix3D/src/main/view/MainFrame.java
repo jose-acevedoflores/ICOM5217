@@ -1,6 +1,8 @@
 package main.view;
 
 
+import java.awt.Dimension;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
@@ -50,6 +52,9 @@ public class MainFrame extends JFrame{
 		
 		String[] options = { "1.5mm","1mm", "0.5mm"};
 		this.layerThickness = new JComboBox(options);
+		this.layerThickness.setPreferredSize(new Dimension(20,40));
+		this.layerThickness.setMinimumSize(new Dimension(20,40));
+		this.layerThickness.setMaximumSize(new Dimension(160,0));
 		
 		this.logo = new JLabel(new ImageIcon("resources/logoS.png"));
 		this.numOfLayers = new JLabel("Number of layers: ");
@@ -83,6 +88,7 @@ public class MainFrame extends JFrame{
 		group.addComponent(this.importB);
 		group.addGap(260);
 		group.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(layerThickness)
 				.addComponent(this.logo)
 				.addComponent(this.numOfLayers)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -104,8 +110,9 @@ public class MainFrame extends JFrame{
 		.addComponent(this.importB)
 		.addComponent(this.logo)
 				);
-		group.addGap(120);
-	
+		group.addGap(100);
+		group.addComponent(layerThickness);
+		group.addGap(20);
 		group.addComponent(this.numOfLayers);
 		group.addGap(20);
 		group.addComponent(this.eta);
