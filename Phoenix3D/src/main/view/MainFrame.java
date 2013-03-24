@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import main.view.buttonActions.ImportButtonAction;
+
 /**
  * This class will represent a Phoenix3D application frame.
  * An object from this class will contain:
@@ -48,6 +50,7 @@ public class MainFrame extends JFrame{
 	{
 		super("Phoenix DLP 3D Printer");
 		this.importB = new JButton("Import");
+		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
 		
 		String[] options = { "1.5mm","1mm", "0.5mm"};
@@ -60,12 +63,13 @@ public class MainFrame extends JFrame{
 		this.numOfLayers = new JLabel("Number of layers: ");
 		this.eta = new JLabel("Estimated Printing Time: ");
 		
-	
+		//Add componenets to the layout 
 		this.initLayout();
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600, 400);
+		this.setLocationRelativeTo(null);
 		this.add(panel);
 		
 	}
@@ -88,7 +92,7 @@ public class MainFrame extends JFrame{
 		group.addComponent(this.importB);
 		group.addGap(260);
 		group.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addComponent(layerThickness)
+				.addComponent(this.layerThickness)
 				.addComponent(this.logo)
 				.addComponent(this.numOfLayers)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -111,7 +115,7 @@ public class MainFrame extends JFrame{
 		.addComponent(this.logo)
 				);
 		group.addGap(100);
-		group.addComponent(layerThickness);
+		group.addComponent(this.layerThickness);
 		group.addGap(20);
 		group.addComponent(this.numOfLayers);
 		group.addGap(20);
