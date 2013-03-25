@@ -3,6 +3,8 @@ package main.view.buttonActions;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import main.freesteel.FreeSteelSlice;
+
 /**
  * This class is in charge of monitoring when the user changes the Layer Thickness parameter on the GUI
  * @author joseacevedo
@@ -10,7 +12,9 @@ import java.awt.event.ItemListener;
  */
 public class LayerThicknessChangedListener implements ItemListener{
 
+	private FreeSteelSlice sliceScript = new FreeSteelSlice();
 	private boolean changedState = false;
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		
@@ -23,8 +27,10 @@ public class LayerThicknessChangedListener implements ItemListener{
 		 */
 		if(changedState)
 		{
-			String selecteThickness = e.getItem().toString();
-			System.out.println(selecteThickness);
+			String selectedThickness = e.getItem().toString();
+			System.out.println(selectedThickness);
+			FreeSteelSlice.LAYER_THICKNESS = Integer.parseInt(selectedThickness);
+			sliceScript.slice();
 			changedState = false;
 		}
 		else

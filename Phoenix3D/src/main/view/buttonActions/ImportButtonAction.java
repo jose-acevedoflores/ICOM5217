@@ -3,7 +3,6 @@ package main.view.buttonActions;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -53,11 +52,9 @@ public class ImportButtonAction implements ActionListener{
 			if(action.getActionCommand().equals(JFileChooser.APPROVE_SELECTION))
 			{
 				
-				File userSelectedFile = fileChooser.getSelectedFile();
+				FreeSteelSlice.STL_FILE_NAME = fileChooser.getSelectedFile().getAbsolutePath();
 				
-				userSelectedFile.getAbsolutePath();
-				
-				
+				sliceScript.slice();
 			}
 			else if (action.getActionCommand().equals(JFileChooser.CANCEL_SELECTION))
 			{
