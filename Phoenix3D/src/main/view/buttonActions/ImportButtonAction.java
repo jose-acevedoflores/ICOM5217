@@ -8,6 +8,8 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import main.freesteel.FreeSteelSlice;
+
 /**
  * This class will encapsulate the functionality of:
  * 1) getting the STL file the user wants to print 
@@ -18,9 +20,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class ImportButtonAction implements ActionListener{
 
-	JFileChooser fileChooser;
-	FileNameExtensionFilter filter;
-	Component comp;
+	private JFileChooser fileChooser;
+	private FileNameExtensionFilter filter;
+	private Component comp;
+	private FreeSteelSlice sliceScript; 
 	
 	public ImportButtonAction(Component frame)
 	{
@@ -30,6 +33,8 @@ public class ImportButtonAction implements ActionListener{
 		fileChooser.setFileFilter(filter);
 		
 		fileChooser.addActionListener(new UserSelectFile());
+		
+		sliceScript = new FreeSteelSlice();
 	}
 	
 	@Override
@@ -51,6 +56,7 @@ public class ImportButtonAction implements ActionListener{
 				File userSelectedFile = fileChooser.getSelectedFile();
 				
 				userSelectedFile.getAbsolutePath();
+				
 				
 			}
 			else if (action.getActionCommand().equals(JFileChooser.CANCEL_SELECTION))
