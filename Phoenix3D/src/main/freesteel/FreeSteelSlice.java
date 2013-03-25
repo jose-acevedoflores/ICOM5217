@@ -29,7 +29,7 @@ public class FreeSteelSlice {
 	}
 	
 	/**
-	 * 
+	 * This method slices the STL file in bmp images
 	 */
 	public void slice()
 	{
