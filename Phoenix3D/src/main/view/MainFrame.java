@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.view.buttonActions.ImportButtonAction;
+import main.view.buttonActions.LayerThicknessChangedListener;
 
 /**
  * This class will represent a Phoenix3D application frame.
@@ -58,6 +59,7 @@ public class MainFrame extends JFrame{
 		this.layerThickness.setPreferredSize(new Dimension(20,40));
 		this.layerThickness.setMinimumSize(new Dimension(20,40));
 		this.layerThickness.setMaximumSize(new Dimension(160,0));
+		this.layerThickness.addItemListener(new LayerThicknessChangedListener());
 		
 		this.logo = new JLabel(new ImageIcon("resources/logoS.png"));
 		this.numOfLayers = new JLabel("Number of layers: ");
