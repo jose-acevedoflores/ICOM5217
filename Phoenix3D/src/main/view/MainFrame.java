@@ -39,8 +39,8 @@ public class MainFrame extends JFrame{
 	private JComboBox layerThickness;
 
 	private JLabel logo;
-	private JLabel numOfLayers;
-	private JLabel eta;
+	public JLabel numOfLayers;
+	public JLabel eta;
 	
 	private GroupLayout layout;
 	private JPanel panel; 
@@ -59,7 +59,7 @@ public class MainFrame extends JFrame{
 		this.layerThickness.setPreferredSize(new Dimension(20,40));
 		this.layerThickness.setMinimumSize(new Dimension(20,40));
 		this.layerThickness.setMaximumSize(new Dimension(160,0));
-		this.layerThickness.addItemListener(new LayerThicknessChangedListener());
+		this.layerThickness.addItemListener(new LayerThicknessChangedListener(this));
 		
 		this.logo = new JLabel(new ImageIcon("resources/logoS.png"));
 		this.numOfLayers = new JLabel("Number of layers: ");
