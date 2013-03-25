@@ -61,7 +61,7 @@ public class MainFrame extends JFrame{
 		this.layerThickness.setMaximumSize(new Dimension(160,0));
 		this.layerThickness.addItemListener(new LayerThicknessChangedListener(this));
 		
-		this.logo = new JLabel(new ImageIcon("resources/logoS.png"));
+		this.logo = new JLabel(new ImageIcon("resources/GUILogo.png"));
 		this.numOfLayers = new JLabel("Number of layers: ");
 		this.eta = new JLabel("Estimated Printing Time: ");
 		
