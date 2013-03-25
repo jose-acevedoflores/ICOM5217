@@ -16,10 +16,10 @@ public class FreeSteelSlice {
 	public static double LAYER_THICKNESS = 1.5;
 	public static String ETA = "!";
 	public static int NUMBER_OF_LAYERS = 0;
-	
-	
+
+
 	private MainFrame viewReferences; 
-	
+
 	/**
 	 * Creates a new FreeSteel Runtime component to access the Python script of FreeSteel
 	 */
@@ -27,23 +27,28 @@ public class FreeSteelSlice {
 	{
 		viewReferences = frame;
 	}
-	
+
 	/**
 	 * This method slices the STL file in bmp images
 	 */
 	public void slice()
 	{
-
-		if(!STL_FILE_NAME.equals("!") )
+		System.out.println(System.getProperty("os.name"));
+		if(!System.getProperty("os.name").equals("Mac OS X"))
 		{
-			System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
-			//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
-			viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
+			if(!STL_FILE_NAME.equals("!") )
+			{
+				System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
+				//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
+				viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
+			}
+			else 
+				System.out.println("File or layer thickness not initialized");
 		}
-		else 
-			System.out.println("File or layer thickness not initialized");
-			
+		else
+			System.out.println("Mac OS X is not supported by freeSteel");
+		
 
 	}
-	
+
 }
