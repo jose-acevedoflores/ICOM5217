@@ -1,5 +1,9 @@
 package main.freesteel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import main.view.MainFrame;
 
 
@@ -17,7 +21,7 @@ public class FreeSteelSlice {
 	public static String ETA = "!";
 	public static int NUMBER_OF_LAYERS = 0;
 
-
+	private String sliceScriptPath;
 	private MainFrame viewReferences; 
 
 	/**
@@ -26,6 +30,7 @@ public class FreeSteelSlice {
 	public FreeSteelSlice(MainFrame frame)
 	{
 		viewReferences = frame;
+		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script/pythonTest.py";
 	}
 
 	/**
@@ -33,20 +38,41 @@ public class FreeSteelSlice {
 	 */
 	public void slice()
 	{
-		System.out.println(System.getProperty("os.name"));
-		if(!System.getProperty("os.name").equals("Mac OS X"))
+		
+		if(System.getProperty("os.name").equals("Linux"))
 		{
 			if(!STL_FILE_NAME.equals("!") )
 			{
 				System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
 				//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
 				viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
+				
+				try {
+					String cmd[] = {"python", "/home/jose/Documents/ICOM5217/Phoenix3D/"+sliceScriptPath};
+					Process p = Runtime.getRuntime().exec(cmd);
+					BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					p.waitFor();
+					
+					while(br.ready())
+						System.out.println(br.readLine());
+					
+					System.out.println("wut");
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+				
+				System.out.println("Out");
 			}
 			else 
 				System.out.println("File or layer thickness not initialized");
 		}
 		else
-			System.out.println("Mac OS X is not supported by freeSteel");
+			System.out.println(System.getProperty("os.name")+" is not supported by freeSteel");
 		
 
 	}
