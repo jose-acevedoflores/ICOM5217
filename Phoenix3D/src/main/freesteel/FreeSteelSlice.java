@@ -31,7 +31,7 @@ public class FreeSteelSlice {
 	 */
 	public FreeSteelSlice(MainFrame frame)
 	{
-		viewReferences = frame;
+		viewReferences  = frame;
 		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script/slice.py";
 		freeSteelOutput = "freeSteelGeneratedBMPs/";
 	}
@@ -46,21 +46,28 @@ public class FreeSteelSlice {
 		{
 			if(!STL_FILE_NAME.equals("!") )
 			{
-				System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
-				//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
-				viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
+				//System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
 				
 				try {
 					currentPath = System.getProperty("user.dir");
 					
-					String cmd[] = {"python", currentPath+"/"+sliceScriptPath};
+					String scriptLocation = currentPath+"/"+sliceScriptPath;
+					String options = "-z -15,150,0.5";
+					String outputLocation = currentPath+"/"+freeSteelOutput+"test.bmp";
+					String cmd[] = {"python", scriptLocation, options,
+							STL_FILE_NAME, "-o", outputLocation};
+					
+					for(String str : cmd)
+						System.out.println(str);
+					
 					Process p = Runtime.getRuntime().exec(cmd);
 					BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-					p.waitFor();
+					
 					
 					while(br.ready())
 						System.out.println(br.readLine());
 					
+					p.waitFor();
 					System.out.println("wut");
 
 				} catch (IOException e) {
@@ -71,7 +78,8 @@ public class FreeSteelSlice {
 					e.printStackTrace();
 				} 
 				
-				System.out.println("Out");
+				//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
+				viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
 			}
 			else 
 				System.out.println("File or layer thickness not initialized");
