@@ -1,3 +1,4 @@
 .metadata/
 Phoenix3D/bin/
 .DS_Store
+Phoenix3D/freeSteelGeneratedBMPs/*.bmp

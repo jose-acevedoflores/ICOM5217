@@ -22,6 +22,7 @@ public class FreeSteelSlice {
 	public static int NUMBER_OF_LAYERS = 0;
 
 	private String sliceScriptPath;
+	private String freeSteelOutput;
 	private String currentPath;
 	private MainFrame viewReferences; 
 
@@ -32,6 +33,7 @@ public class FreeSteelSlice {
 	{
 		viewReferences = frame;
 		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script/slice.py";
+		freeSteelOutput = "freeSteelGeneratedBMPs/";
 	}
 
 	/**
