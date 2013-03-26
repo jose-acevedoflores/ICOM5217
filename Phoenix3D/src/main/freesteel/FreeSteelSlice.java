@@ -22,6 +22,7 @@ public class FreeSteelSlice {
 	public static int NUMBER_OF_LAYERS = 0;
 
 	private String sliceScriptPath;
+	private String currentPath;
 	private MainFrame viewReferences; 
 
 	/**
@@ -30,7 +31,7 @@ public class FreeSteelSlice {
 	public FreeSteelSlice(MainFrame frame)
 	{
 		viewReferences = frame;
-		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script/pythonTest.py";
+		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script/slice.py";
 	}
 
 	/**
@@ -48,7 +49,9 @@ public class FreeSteelSlice {
 				viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
 				
 				try {
-					String cmd[] = {"python", "/home/jose/Documents/ICOM5217/Phoenix3D/"+sliceScriptPath};
+					currentPath = System.getProperty("user.dir");
+					
+					String cmd[] = {"python", currentPath+"/"+sliceScriptPath};
 					Process p = Runtime.getRuntime().exec(cmd);
 					BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 					p.waitFor();
@@ -59,10 +62,10 @@ public class FreeSteelSlice {
 					System.out.println("wut");
 
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				
 					e.printStackTrace();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} 
 				
