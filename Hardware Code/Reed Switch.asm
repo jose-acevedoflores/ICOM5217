@@ -46,7 +46,7 @@ BUZISR     xor.b #01000000b, &P1OUT     ;Toggle buzzer
            JNZ  Finish3
            xor.b #0100000b, &P1OUT     ;Toggle LED
            CLR R7
-Finish3    BIC.w  #01b, &TA0CCTL0              ;
+Finish3    BIC.w  #01b, &TA0CCTL0            ;
            reti;
 
 ;------------------------------------------------------------------------------

@@ -78,6 +78,7 @@ public class FreeSteelSlice {
 	 */
 	private class Task extends SwingWorker<Void, Void>
 	{
+		Process p;
 
 		@Override
 		protected Void doInBackground() throws Exception {
@@ -96,7 +97,7 @@ public class FreeSteelSlice {
 					System.out.println(str);
 
 				//Execute the script
-				Process p = Runtime.getRuntime().exec(cmd);
+				p = Runtime.getRuntime().exec(cmd);
 				
 				//Path where the BMPs are stored 
 				File freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
@@ -134,7 +135,7 @@ public class FreeSteelSlice {
 				e.printStackTrace();
 			} 
 			return null;
-	
+
 		}
 
 		@Override
@@ -144,7 +145,6 @@ public class FreeSteelSlice {
 			//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
 			viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
 		}
-
 
 	}
 	
@@ -170,9 +170,14 @@ public class FreeSteelSlice {
 				{
 
 					if (progressMonitor.isCanceled()) 
-						System.out.println("Task Cancelled "+task.cancel(true));
-		
-					 
+					{
+						if(task.cancel(true))
+						{
+							task.p.destroy();
+							System.out.println("Task Cancelled");
+						}
+						System.out.println("Error in Task Cancelled");
+					} 
 					else 
 						System.out.println("Task Completed");
 
