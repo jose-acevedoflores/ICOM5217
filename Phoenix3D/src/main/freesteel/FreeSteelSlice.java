@@ -2,16 +2,10 @@ package main.freesteel;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Random;
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.view.MainFrame;
 
@@ -111,7 +105,6 @@ public class FreeSteelSlice {
 					bmps = freeSteelBMPs.list();
 					//Sleep for up to one second.
 					Thread.sleep(1000);
-					System.out.println("Progress "+progress);
 					progress = (int) (bmps.length / size*100);
 					setProgress(progress);
 				}
