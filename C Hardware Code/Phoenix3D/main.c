@@ -23,7 +23,7 @@ void main(void) {
     /*Timer A0 setup*/
     UCSCTL4 |= SELA_2; //Choose ACLK source as Real Time CLK
     TA0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
-    TA0CCR0 |= 32767; //Store 0 in terminal count register.
+    TA0CCR0 |= 0; //Store 0 in terminal count register.
     TA0CCTL0 |= CCIE; //Enable TA0 interrupts.
 
     P1IE |= 0x01; //Enable Port 1 interrupts.
