@@ -25,7 +25,7 @@ void enableLCD(void) {
 }
 
 void commandWrite(char command) {
-	P5OUT &= ~(0x020); //Clear RS pin
+	P5OUT &= ~(0x02); //Clear RS pin
 	wait(280);
 	P6OUT = command; //Move data to data pins
 	wait(280);
@@ -33,7 +33,7 @@ void commandWrite(char command) {
 }
 
 void characterWrite(char character) {
-	P5OUT |= 0x020; //Set RS pin
+	P5OUT |= 0x02; //Set RS pin
 	wait(280);
 	P6OUT = character; //Move data to data pins
 	wait(280);
