@@ -172,8 +172,11 @@ public class FreeSteelSlice {
 					if (progressMonitor.isCanceled()) 
 					{
 						if(task.cancel(true))
+						{
 							task.p.destroy();
-						System.out.println("Task cancelled");
+							System.out.println("Task Cancelled");
+						}
+						System.out.println("Error in Task Cancelled");
 					} 
 					else 
 						System.out.println("Task Completed");
