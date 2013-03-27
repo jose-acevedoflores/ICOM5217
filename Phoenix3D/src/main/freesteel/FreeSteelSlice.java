@@ -44,7 +44,7 @@ public class FreeSteelSlice {
 	}
 
 	/**
-	 * This method slices the STL file in bmp images
+	 * This method slices the STL file into bmp images
 	 */
 	public void slice()
 	{
@@ -53,14 +53,17 @@ public class FreeSteelSlice {
 		{
 			if(!STL_FILE_NAME.equals("!") )
 			{
-				//System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
-
-				progressMonitor = new ProgressMonitor(viewReferences, "Generating bitmaps",
-						"", 0, 100);
-				task = new Task();
-				task.addPropertyChangeListener(new ProgressListener());
-				task.execute();
-
+				//Check if there is already a running task
+				if(task == null || task.isCancelled() || task.isDone() )
+				{
+					progressMonitor = new ProgressMonitor(viewReferences, "Generating bitmaps",
+							"", 0, 100);
+					task = new Task();
+					task.addPropertyChangeListener(new ProgressListener());
+					task.execute();
+				}
+				else
+					System.out.println("A task is already running");
 			}
 			else 
 				System.out.println("File or layer thickness not initialized");
@@ -79,6 +82,23 @@ public class FreeSteelSlice {
 	private class Task extends SwingWorker<Void, Void>
 	{
 		Process p;
+		private FilenameFilter filter;
+		private File freeSteelBMPs;
+		
+		public Task()
+		{
+			//Filter to pick only the .bmp files stores at freeSteelBMPs (BMPs storage space) 
+			filter = new FilenameFilter() {	
+				@Override
+				public boolean accept(File arg0, String arg1) {
+					return arg1.endsWith(".bmp");
+				}
+			};
+			
+			//Path where the BMPs are stored 
+			freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
+
+		}
 
 		@Override
 		protected Void doInBackground() throws Exception {
@@ -96,31 +116,28 @@ public class FreeSteelSlice {
 				for(String str : cmd)
 					System.out.println(str);
 
+
+				//Delete present bmp files
+				for(File f : freeSteelBMPs.listFiles())
+					if(f.getName().endsWith(".bmp"))
+						f.delete();
+
 				//Execute the script
 				p = Runtime.getRuntime().exec(cmd);
-				
-				//Path where the BMPs are stored 
-				File freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
-				
+
 				//Variables to determinate the percentage of completion 
 				String[] bmps;
 				int progress =0;
 				double size = (135/LAYER_THICKNESS);
-				
-				//Filter to pick only the STL files stores at freeSteelBMPs (BMPs storage space) 
-				FilenameFilter t = new FilenameFilter() {	
-					@Override
-					public boolean accept(File arg0, String arg1) {
-						return arg1.endsWith(".bmp");
-					}
-				};
-				
+
+
+				//Force the progress bar to show 
+				setProgress(1);
 				//Loop for calculating completion time
 				while (progress < 100 && !isCancelled()) {
-						
-					bmps = freeSteelBMPs.list(t);
-					
-					System.out.println(bmps.length);
+
+					bmps = freeSteelBMPs.list(filter);
+
 					//Sleep for one second.
 					Thread.sleep(1000);
 					progress = (int) (bmps.length / size*100);
@@ -143,11 +160,13 @@ public class FreeSteelSlice {
 		{
 			progressMonitor.setProgress(100);
 			//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
-			viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
+			viewReferences.numOfLayers.setText(
+					viewReferences.numOfLayers.getText().substring(0, 17)+
+					" F"); //freeSteelBMPs.list(filter).length);
 		}
 
 	}
-	
+
 	/**
 	 * This class listens to the setProgress(int) of the Task object and displays the changes on the 
 	 * progress dialog
@@ -159,7 +178,7 @@ public class FreeSteelSlice {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 
-			
+
 			if(evt.getPropertyName().equals("progress"))
 			{			
 				progressMonitor.setProgress((Integer) evt.getNewValue());
@@ -173,21 +192,23 @@ public class FreeSteelSlice {
 					{
 						if(task.cancel(true))
 						{
-							task.p.destroy();
+							task.p.destroy();		
 							System.out.println("Task Cancelled");
 						}
-						System.out.println("Error in Task Cancelled");
+						else
+							System.out.println("Error in Task Cancelled");
 					} 
 					else 
+					{
 						System.out.println("Task Completed");
-
+					}
 
 				}
 			}
 		}
 
 	}
-	
-	
+
+
 
 }
