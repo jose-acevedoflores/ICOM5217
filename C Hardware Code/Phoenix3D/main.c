@@ -22,6 +22,10 @@ void main(void) {
     P1DIR |= (0X060);//Set P1.5 and P1.6 for buzzer and LED outputs
     P1OUT &= ~(0x020); //Turn off LED initially.
 
+    /*LCD Port setup*/
+    P5DIR |= 0x03;//Set Port 5.0, 5.1 as outputs for LCD
+    P6DIR |= 0x0FF;//Set Port 6 as outputs for LCD Data
+
     /*Timer A0 setup*/
     UCSCTL4 |= SELA_2; //Choose ACLK source as Real Time CLK
     TA0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
@@ -33,13 +37,14 @@ void main(void) {
 
     __bis_SR_register(GIE); //Enable global interrupts.
 
+    char line1[20] = "Test complete`";
+    initializeLCD();
+
+    lineWrite(line1, LINE_1);
+
     microSteppingMode(FULLSTEP);
     motorStep(4000, 1);
 
-    ;char line1[20] = "Test complete";
-    ;initializeLCD();
-
-    ;lineWrite(line1, LINE_1);
 }
 
 #pragma vector=TIMER0_A0_VECTOR

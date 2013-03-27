@@ -19,24 +19,24 @@ enum LINE {
 
 void enableLCD(void) {
 	P5OUT |= 0x01; //Set enable pin
-	wait(280);
+	wait(500);
 	P5OUT &= ~(0x01); //Clear enable pin
-	wait(280);
+	wait(500);
 }
 
-void commandWrite(char command) {
+void commandWrite(int command) {
 	P5OUT &= ~(0x02); //Clear RS pin
-	wait(280);
+	wait(500);
 	P6OUT = command; //Move data to data pins
-	wait(280);
+	wait(500);
 	enableLCD(); //Send command to LCD
 }
 
-void characterWrite(char character) {
+void characterWrite(int character) {
 	P5OUT |= 0x02; //Set RS pin
-	wait(280);
+	wait(500);
 	P6OUT = character; //Move data to data pins
-	wait(280);
+	wait(500);
 	enableLCD(); //Send command to LCD
 }
 
@@ -45,9 +45,9 @@ void initializeLCD(void) {
 	commandWrite(0x030);
 	wait(10000);
 	commandWrite(0x030);
-	wait(280);
+	wait(500);
 	commandWrite(0x030);
-	wait(280);
+	wait(500);
 
 	commandWrite(0x01);
 	commandWrite(0x08);
