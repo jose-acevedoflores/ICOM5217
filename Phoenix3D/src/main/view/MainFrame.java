@@ -1,6 +1,8 @@
 package main.view;
 
 
+import java.awt.Dimension;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
@@ -9,6 +11,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import main.view.buttonActions.ImportButtonAction;
+import main.view.buttonActions.LayerThicknessChangedListener;
 
 /**
  * This class will represent a Phoenix3D application frame.
@@ -34,8 +39,8 @@ public class MainFrame extends JFrame{
 	private JComboBox layerThickness;
 
 	private JLabel logo;
-	private JLabel numOfLayers;
-	private JLabel eta;
+	public JLabel numOfLayers;
+	public JLabel eta;
 	
 	private GroupLayout layout;
 	private JPanel panel; 
@@ -46,21 +51,27 @@ public class MainFrame extends JFrame{
 	{
 		super("Phoenix DLP 3D Printer");
 		this.importB = new JButton("Import");
+		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
 		
-		String[] options = { "1.5mm","1mm", "0.5mm"};
+		String[] options = { "1.5mm","1.0mm", "0.5mm"};
 		this.layerThickness = new JComboBox(options);
+		this.layerThickness.setPreferredSize(new Dimension(20,40));
+		this.layerThickness.setMinimumSize(new Dimension(20,40));
+		this.layerThickness.setMaximumSize(new Dimension(160,0));
+		this.layerThickness.addItemListener(new LayerThicknessChangedListener(this));
 		
-		this.logo = new JLabel(new ImageIcon("resources/logoS.png"));
+		this.logo = new JLabel(new ImageIcon("resources/GUILogo.png"));
 		this.numOfLayers = new JLabel("Number of layers: ");
 		this.eta = new JLabel("Estimated Printing Time: ");
 		
-	
+		//Add componenets to the layout 
 		this.initLayout();
 		
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600, 400);
+		this.setLocationRelativeTo(null);
 		this.add(panel);
 		
 	}
@@ -83,6 +94,7 @@ public class MainFrame extends JFrame{
 		group.addComponent(this.importB);
 		group.addGap(260);
 		group.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+				.addComponent(this.layerThickness)
 				.addComponent(this.logo)
 				.addComponent(this.numOfLayers)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -104,8 +116,9 @@ public class MainFrame extends JFrame{
 		.addComponent(this.importB)
 		.addComponent(this.logo)
 				);
-		group.addGap(120);
-	
+		group.addGap(100);
+		group.addComponent(this.layerThickness);
+		group.addGap(20);
 		group.addComponent(this.numOfLayers);
 		group.addGap(20);
 		group.addComponent(this.eta);
