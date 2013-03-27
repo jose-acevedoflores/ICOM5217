@@ -104,13 +104,15 @@ public class FreeSteelSlice {
 				File freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
 				String[] bmps;
 				int progress =0;
-				int size = (int) (135*LAYER_THICKNESS);
+				double size = (135/LAYER_THICKNESS);
 				
 				while (progress < 100 && !isCancelled()) {
 						
 					bmps = freeSteelBMPs.list();
-				
-					progress = (int) (bmps.length / size);
+					//Sleep for up to one second.
+					Thread.sleep(1000);
+					System.out.println("Progress "+progress);
+					progress = (int) (bmps.length / size*100);
 					setProgress(progress);
 				}
 
@@ -128,7 +130,7 @@ public class FreeSteelSlice {
 		public void done()
 		{
 			System.out.println("Woot WOot");
-			progressMonitor.setProgress(0);
+			progressMonitor.setProgress(100);
 			//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
 			viewReferences.numOfLayers.setText(viewReferences.numOfLayers.getText().substring(0, 17)+ " 200");
 		}
