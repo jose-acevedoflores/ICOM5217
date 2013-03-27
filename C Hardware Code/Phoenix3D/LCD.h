@@ -5,10 +5,10 @@
  *      Author: joseoyola
  */
 
-char line1[20];
-char line2[20];
-char line3[20];
-char line4[20];
+char line1[20] = "";
+char line2[20] = "";
+char line3[20] = "";
+char line4[20] = "";
 
 enum LINE {
 	LINE_1,
