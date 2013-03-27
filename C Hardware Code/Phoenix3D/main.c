@@ -37,5 +37,12 @@ void main(void) {
 
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR(void){
-	P1OUT ^= 0x020;
+
+}
+
+#pragma vector=PORT1_VECTOR
+__interrupt void PORT1_ISR(void){
+	if((P1IN && 0x01) == 0){
+			TA0CCR0 = 15; //Store 15 in terminal count register.
+		}
 }
