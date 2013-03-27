@@ -14,10 +14,6 @@ enum SM{
 	THIRTYSECONDTHSTEP
 } stepMode;
 
-void wait(int delay){
-	volatile unsigned int i = 0;
-			for( ; i < delay; i++);
-}
 void motorStep(int numberSteps, int direction){
 	if(direction == 0){
 		P3OUT &= ~(0x01);
