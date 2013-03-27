@@ -1,7 +1,8 @@
-#include <msp430.h> 
-
 /*
- * main.c
+ * Motor.h
+ *
+ *  Created on: Mar 27, 2013
+ *      Author: Piro
  */
 
 enum SM{
@@ -13,10 +14,6 @@ enum SM{
 	THIRTYSECONDTHSTEP
 } stepMode;
 
-void wait(int delay){
-	volatile unsigned int i = 0;
-			for( ; i < delay; i++);
-}
 void motorStep(int numberSteps, int direction){
 	if(direction == 0){
 		P3OUT &= ~(0x01);
@@ -60,13 +57,3 @@ void microSteppingMode(enum SM stepMode){
 		break;
 	}
 }
-void main(void) {
-    WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
-	
-    P3DIR |= 0x01F; //Set P3.0, P3.1, P3.2, P3.3, P3.4 as output
-    P3OUT |= 0x01F;
-
-    microSteppingMode(FULLSTEP);
-    motorStep(4000, 1);
-}
-

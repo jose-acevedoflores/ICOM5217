@@ -71,7 +71,6 @@ public class Client {
 		Thread.sleep(100);
 		
 		controller.setPatternSequenceStart();
-		
 
 		out.close();
 		in.close();
