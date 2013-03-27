@@ -68,7 +68,7 @@ public class Client {
 		
 		controller.setPatternSequenceDisplay();
 		
-		Thread.sleep(500);
+		Thread.sleep(100);
 		
 		controller.setPatternSequenceStart();
 
