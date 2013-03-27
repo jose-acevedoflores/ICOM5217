@@ -66,7 +66,7 @@ void main(void) {
     P3DIR |= 0x01F; //Set P3.0, P3.1, P3.2, P3.3, P3.4 as output
     P3OUT |= 0x01F;
 
-    microSteppingMode(THIRTYSECONDTHSTEP);
+    microSteppingMode(FULLSTEP);
     motorStep(4000, 1);
 }
 

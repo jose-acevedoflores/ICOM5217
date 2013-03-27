@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v4.1.2                      
 ******************************************************************************
->> Linked Tue Mar 26 22:39:18 2013
+>> Linked Tue Mar 26 23:48:31 2013
 
 OUTPUT FILE NAME:   <Motor.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00004400
@@ -20,7 +20,7 @@ MEMORY CONFIGURATION
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
   RAM                   00002400   00002000  000000a0  00001f60  RWIX
-  FLASH                 00004400   0000bb80  00000138  0000ba48  RWIX
+  FLASH                 00004400   0000bb80  00000166  0000ba1a  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -106,14 +106,14 @@ section   page    origin      length       input sections
 *          0    00004400    0000001a     
                   00004400    0000001a     rts430x_lc_sd_eabi.lib : boot.obj (.text:_isr:_c_int00_noexit)
 
-.text      0    0000441a    0000011e     
+.text      0    0000441a    0000014c     
                   0000441a    0000006e     rts430x_lc_sd_eabi.lib : autoinit.obj (.text:_auto_init)
-                  00004488    0000003e     main.obj (.text:motorStep)
-                  000044c6    0000002a     main.obj (.text:microSteppingMode)
-                  000044f0    00000026     main.obj (.text:main)
-                  00004516    0000001a     main.obj (.text:wait)
-                  00004530    00000004     rts430x_lc_sd_eabi.lib : pre_init.obj (.text:_system_pre_init)
-                  00004534    00000004                            : exit.obj (.text:abort)
+                  00004488    0000005a     main.obj (.text:microSteppingMode)
+                  000044e2    0000003e     main.obj (.text:motorStep)
+                  00004520    00000024     main.obj (.text:main)
+                  00004544    0000001a     main.obj (.text:wait)
+                  0000455e    00000004     rts430x_lc_sd_eabi.lib : pre_init.obj (.text:_system_pre_init)
+                  00004562    00000004                            : exit.obj (.text:abort)
 
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_sd_eabi.lib : boot.obj (.reset)
@@ -205,7 +205,7 @@ address    name
 00000732   ADC12MEM9
 00000733   ADC12MEM9_H
 00000732   ADC12MEM9_L
-00004534   C$$EXIT
+00004562   C$$EXIT
 000008c0   CBCTL0
 000008c1   CBCTL0_H
 000008c0   CBCTL0_L
@@ -865,13 +865,13 @@ ffffffff   __c_args__
 00004400   _c_int00_noexit
 0000fffe   _reset_vector
 00004360   _stack
-00004530   _system_pre_init
-00004534   abort
+0000455e   _system_pre_init
+00004562   abort
 ffffffff   binit
-000044f0   main
-000044c6   microSteppingMode
-00004488   motorStep
-00004516   wait
+00004520   main
+00004488   microSteppingMode
+000044e2   motorStep
+00004544   wait
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1610,13 +1610,13 @@ address    name
 00004400   _c_int00
 00004400   _c_int00_noexit
 0000441a   _auto_init
-00004488   motorStep
-000044c6   microSteppingMode
-000044f0   main
-00004516   wait
-00004530   _system_pre_init
-00004534   C$$EXIT
-00004534   abort
+00004488   microSteppingMode
+000044e2   motorStep
+00004520   main
+00004544   wait
+0000455e   _system_pre_init
+00004562   C$$EXIT
+00004562   abort
 0000fffe   _reset_vector
 ffffffff   __binit__
 ffffffff   __c_args__
