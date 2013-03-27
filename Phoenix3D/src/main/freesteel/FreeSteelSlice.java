@@ -107,18 +107,17 @@ public class FreeSteelSlice {
 				double size = (135/LAYER_THICKNESS);
 				
 				//Filter to pick only the STL files stores at freeSteelBMPs (BMPs storage space) 
-				FilenameFilter t = new FilenameFilter() {
-					
+				FilenameFilter t = new FilenameFilter() {	
 					@Override
 					public boolean accept(File arg0, String arg1) {
-						return arg1.endsWith(".stl");
+						return arg1.endsWith(".bmp");
 					}
 				};
 				
 				//Loop for calculating completion time
 				while (progress < 100 && !isCancelled()) {
 						
-					bmps = freeSteelBMPs.list();
+					bmps = freeSteelBMPs.list(t);
 					
 					System.out.println(bmps.length);
 					//Sleep for one second.
@@ -135,7 +134,7 @@ public class FreeSteelSlice {
 				e.printStackTrace();
 			} 
 			return null;
-
+	
 		}
 
 		@Override
@@ -171,10 +170,9 @@ public class FreeSteelSlice {
 				{
 
 					if (progressMonitor.isCanceled()) 
-					{
-						task.cancel(true);
-						System.out.println("Task cancelled");
-					} 
+						System.out.println("Task Cancelled "+task.cancel(true));
+		
+					 
 					else 
 						System.out.println("Task Completed");
 
