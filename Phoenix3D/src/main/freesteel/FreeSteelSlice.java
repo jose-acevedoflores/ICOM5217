@@ -3,12 +3,15 @@ package main.freesteel;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Random;
-
 import javax.swing.ProgressMonitor;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.view.MainFrame;
 
@@ -57,7 +60,7 @@ public class FreeSteelSlice {
 			{
 				//System.out.println(STL_FILE_NAME+" -- "+LAYER_THICKNESS);
 
-				progressMonitor = new ProgressMonitor(viewReferences, "Running a Long Task",
+				progressMonitor = new ProgressMonitor(viewReferences, "Generating bitmaps",
 						"", 0, 100);
 				task = new Task();
 				task.addPropertyChangeListener(new ProgressListener());
@@ -73,6 +76,11 @@ public class FreeSteelSlice {
 
 	}
 
+	/**
+	 * 
+	 * @author jose
+	 *
+	 */
 	private class Task extends SwingWorker<Void, Void>
 	{
 
@@ -83,7 +91,7 @@ public class FreeSteelSlice {
 				currentPath = System.getProperty("user.dir");
 
 				String scriptLocation = currentPath+"/"+sliceScriptPath;
-				String options = "-z -15,150,"+LAYER_THICKNESS;
+				String options = "-z -15,130,"+LAYER_THICKNESS;
 				String outputLocation = currentPath+"/"+freeSteelOutput+"test.bmp";
 				String cmd[] = {"python", scriptLocation, options,
 						STL_FILE_NAME, "-o", outputLocation};
@@ -93,24 +101,20 @@ public class FreeSteelSlice {
 
 
 				Process p = Runtime.getRuntime().exec(cmd);
-				//	BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-
-				//				while(br.ready())
-				//					System.out.println(br.readLine());
+				File freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
+				String[] bmps;
 				int progress =0;
-				Random random = new Random();
+				int size = (int) (135*LAYER_THICKNESS);
+				
 				while (progress < 100 && !isCancelled()) {
-					//Sleep for up to one second.
-					Thread.sleep(random.nextInt(1000));
-					//Make random progress.
-					progress += random.nextInt(10);
-					setProgress(Math.min(progress, 100));
+						
+					bmps = freeSteelBMPs.list();
+				
+					progress = (int) (bmps.length / size);
+					setProgress(progress);
 				}
 
-				System.out.println(p.waitFor());
-
-				System.out.println("wut");
+				System.out.println("Return value "+p.waitFor());
 
 			} catch (IOException e) {
 
@@ -131,16 +135,20 @@ public class FreeSteelSlice {
 
 
 	}
+	
+	/**
+	 * 
+	 * @author jose
+	 *
+	 */
 	private class ProgressListener implements PropertyChangeListener{
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 
-			System.out.println("-_- "+evt.getPropertyName());
+			
 			if(evt.getPropertyName().equals("progress"))
 			{			
-				System.out.println("meh "+(Integer) evt.getNewValue());
-
 				progressMonitor.setProgress((Integer) evt.getNewValue());
 				String message =
 						String.format("Completed %d%%.\n", (Integer) evt.getNewValue());
@@ -162,5 +170,7 @@ public class FreeSteelSlice {
 		}
 
 	}
+	
+	
 
 }
