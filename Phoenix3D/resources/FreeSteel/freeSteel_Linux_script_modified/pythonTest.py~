@@ -1,0 +1,4 @@
+file = open("WIIIII.txt","w")
+
+
+file.close()
