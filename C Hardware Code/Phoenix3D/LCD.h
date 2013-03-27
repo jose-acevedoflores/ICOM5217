@@ -71,9 +71,9 @@ void lineWrite(char line[], enum LINE lineNumber) {
 			commandWrite(0x0D4);
 			break;
 	}
-
-	for (int i = 0; i < 20; i++) {
-		if (line[i] == "`") //If current character is the endline, break
+	volatile unsigned int i = 0;
+	for (; i < 20; i++) {
+		if (line[i] == '`' ) //If current character is the endline, break
 			break;
 		else characterWrite(line[i]); //Else write character on the screen
 	}
