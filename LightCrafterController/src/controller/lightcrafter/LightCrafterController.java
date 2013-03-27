@@ -15,57 +15,69 @@ import java.util.List;
 public class LightCrafterController {
 
 	private DataOutputStream output;
-	private List<Byte> command;
 	public static final int MAX_PACKET_SIZE = 512;
 	public static final int MAX_PAYLOAD_LENGTH = 65535;
 
 	
+	/**
+	 * Constructor for the LightCrafter control API
+	 * @param output A DataOuputStream object given by the socket used to communicate with the LightCrafter.
+	 */
 	public LightCrafterController(DataOutputStream output) {	
 		this.output = output;
-		this.command = new LinkedList<Byte>();
-
 	}
 
+	/**
+	 * Sets the display of the LightCrafter to static image display mode.
+	 * @throws IOException An exception thrown if there's any problem communicating with the LightCrafter.
+	 */
 	public void setStaticImageDisplay() throws IOException {
 
-		command.clear();
+		int[] command = new int[8];
 
-		command.add((byte) 0x02); // packet type: write command
-		command.add((byte) 0x01); // command byte 1
-		command.add((byte) 0x01); // command byte 2
-		command.add((byte) 0x00); // flags
-		command.add((byte) 0x01); // paydata length 1
-		command.add((byte) 0x00); // paydata length 2
-		command.add((byte) 0x00); // data: set static
-		addChecksum(command);	  // add checksum byte
+		command[0] = 0x02; // packet type: write command
+		command[1] = 0x01; // command byte 1
+		command[2] = 0x01; // command byte 2
+		command[3] = 0x00; // flags
+		command[4] = 0x01; // paydata length LSB
+		command[5] = 0x00; // paydata length MSB
+		command[6] = 0x00; // data: set static
+		command[7] = getChecksum(command);	  // add checksum byte
 
 		// Send packet
 		sendData(command);
-
+		command = null; 
 	}
 
+	/**
+	 * Sets the LightCrafter display mode to display the internal test patterns.
+	 * @throws IOException An exception thrown if there's any problem communicating with the LightCrafter.
+	 */
 	public void setInternalPatternDisplay() throws IOException {
 
-		command.clear();
+		int[] command = new int[8];
 
-		command.add((byte) 0x02); // packet type: write command
-		command.add((byte) 0x01); // command byte 1
-		command.add((byte) 0x01); // command byte 2
-		command.add((byte) 0x00); // flags
-		command.add((byte) 0x01); // paydata length 1
-		command.add((byte) 0x00); // paydata length 2
-		command.add((byte) 0x01); // data: set static
-		addChecksum(command);	  // add checksum byte
+		command[0] = 0x02; // packet type: write command
+		command[1] = 0x01; // command byte 1
+		command[2] = 0x01; // command byte 2
+		command[3] = 0x00; // flags
+		command[4] = 0x01; // paydata length LSB
+		command[5] = 0x00; // paydata length MSB
+		command[6] = 0x01; // data: set pattern
+		command[7] = getChecksum(command);	  // add checksum byte
 
 		// Send packet
 		sendData(command);
+		command = null;
 
 	}
+	
 
-	public void setStaticImageDisplayColor() {
-
-	}
-
+	/**
+	 * Sets the image to be displayed by the static image display mode.
+	 * @param currentImageInt An integer array containing the bytes of the image.
+	 * @throws IOException An exception thrown if there's any problem communicating with the LightCrafter.
+	 */
 	public void setStaticImageFile(int[] currentImageInt) throws IOException {
 
 		// Create all chunks
@@ -95,9 +107,6 @@ public class LightCrafterController {
 				packetLength = end - start;
 			}
 
-			//System.out.println("Packet length: " + packetLength);
-			//System.out.println("Start position: " + start);
-
 			System.arraycopy(currentImageInt, start, test, 6, packetLength);
 
 			test[65534] = getChecksum(test);
@@ -110,57 +119,57 @@ public class LightCrafterController {
 
 		}
 
-		// Tested, working code for files less than 65KB
-		/*int payloadLSB = (currentImageBytes.length % 256);
-		int payloadMSB = (int) Math.floor(currentImageBytes.length / 256);
-
-		command.clear();
-
-		command.add((byte) 0x02); // packet type: write command
-		command.add((byte) 0x01); // command byte 1
-		command.add((byte) 0x05); // command byte 2
-		command.add((byte) 0x00); // flags
-		command.add((byte) payloadLSB); // paydata length 1
-		command.add((byte) payloadMSB); // paydata length 2
-
-		for (byte b: currentImageBytes) {
-			command.add(b);
-		}
-
-		addChecksum(command);
-		sendData(command);*/
-
 	}
 
 
+	/**
+	 * Sets the LightCrafter to display the pattern sequence. 
+	 * @throws IOException An exception thrown if there's any problem communicating with the LightCrafter.
+	 */
 	public void setPatternSequenceDisplay() throws IOException {
 
-		command.clear();
+		int[] command = new int[8];
 
-		command.add((byte) 0x02); // packet type: write command
-		command.add((byte) 0x01); // command byte 1
-		command.add((byte) 0x01); // command byte 2
-		command.add((byte) 0x00); // flags
-		command.add((byte) 0x01); // paydata length LSB
-		command.add((byte) 0x00); // paydata length MSB
-		command.add((byte) 0x04); // data: set pattern
-		addChecksum(command);	  // add checksum byte
+		command[0] = 0x02; // packet type: write command
+		command[1] = 0x01; // command byte 1
+		command[2] = 0x01; // command byte 2
+		command[3] = 0x00; // flags
+		command[4] = 0x01; // paydata length LSB
+		command[5] = 0x00; // paydata length MSB
+		command[6] = 0x04; // data: set pattern
+		command[7] = getChecksum(command);	  // add checksum byte
 
 		// Send packet
 		sendData(command);
-
+		command = null;
+		
 	}
 
-	public void setPatternSequenceFiles(boolean autoTrigger, List<int[]> images, int initialDelay, int exposureTime) throws IOException {
+	/**
+	 * Sets up a pattern sequence of up to 1500 patterns in the LightCrafter.
+	 * @param autoTrigger True if auto trigger is desired. False will set manual trigger.
+	 * @param images A list of integer arrays, each integer array contains the byte of an image that is part of the pattern sequence.
+	 * @param inputTriggerTime The time in micro seconds for the input trigger delay.
+	 * @param exposureTime The time in micro seconds for the exposure time delay (how much an image is displayed)
+	 * @throws IOException An exception thrown if there's any problem communicating with the LightCrafter.
+	 */
+	public void setPatternSequenceFiles(boolean autoTrigger, List<int[]> images, int inputTriggerTime, int exposureTime) throws IOException {
 
 		// Get number of patterns
 		int patternAmountLSB = images.size() % 256;
 		int patternAmountMSB = (int) Math.floor(images.size() / 256);
 		
+		// Get exposure time
 		int exposure1 = exposureTime % 256;
 		int exposure2 = (exposureTime / 256) % 256;
 		int exposure3 = exposureTime / 65536;
 		int exposure4 = exposureTime / 16777215;
+		
+		// Get input trigger time
+		int inputTime1 = exposureTime % 256;
+		int inputTime2 = (exposureTime / 256) % 256;
+		int inputTime3 = exposureTime / 65536;
+		int inputTime4 = exposureTime / 16777215;
 		
 		// Set trigger type
 		int triggerType = 0x00;
@@ -183,18 +192,18 @@ public class LightCrafterController {
 		initCommand[8] = patternAmountMSB; // number of patterns 2
 		initCommand[9] = 0x00; // patterns only (no inverted)
 		initCommand[10] = triggerType; // trigger type: auto-trigger
-		initCommand[11] = 0x00; // input trigger delay 1
-		initCommand[12] = 0x00; // input trigger delay 2
-		initCommand[13] = 0x00; // input trigger delay 3
-		initCommand[14] = 0x00; // input trigger delay 4 (1000 ms = 1 s)
+		initCommand[11] = inputTime1; // input trigger delay 1
+		initCommand[12] = inputTime2; // input trigger delay 2
+		initCommand[13] = inputTime3; // input trigger delay 3
+		initCommand[14] = inputTime4; // input trigger delay 4
 		initCommand[15] = 0x40; // trigger signal period 1
 		initCommand[16] = 0x1F; // trigger signal period 2
 		initCommand[17] = 0x00; // trigger signal period 3
-		initCommand[18] = 0x00; // trigger signal period 4 (256 ms)
+		initCommand[18] = 0x00; // trigger signal period 4 (about 8000 us)
 		initCommand[19] = exposure1; // exposure period 1
 		initCommand[20] = exposure2; // exposure period 2
 		initCommand[21] = exposure3; // exposure period 3
-		initCommand[22] = exposure4; // exposure period 4 (1000 ms = 1 s)
+		initCommand[22] = exposure4; // exposure period 4
 		initCommand[23] = 0x00; // LED select?: red
 		initCommand[24] = 0x00; // Play mode
 		initCommand[25] = 0x00; // LED select?: red
@@ -207,7 +216,7 @@ public class LightCrafterController {
 		}
 
 		//For debug purposes
-		System.out.println("Initializing command sent");
+		//System.out.println("Initializing command sent");
 
 		// Send patterns		
 		for (int currentPattern = 0; currentPattern < images.size(); currentPattern++) {
@@ -264,9 +273,13 @@ public class LightCrafterController {
 
 	}
 
+	/**
+	 * Initiates a pattern sequence in the LightCrafter
+	 * @throws IOException An exception thrown if there's any problem communicating with the LightCrafter.
+	 */
 	public void setPatternSequenceStart() throws IOException {
 
-		command.clear();
+		List<Byte> command = new LinkedList<Byte>();
 
 		command.add((byte) 0x02); // packet type: write command
 		command.add((byte) 0x04); // command byte 1
@@ -279,6 +292,7 @@ public class LightCrafterController {
 
 		// Send packet
 		sendData(command);
+		
 	}
 
 	/**
@@ -338,41 +352,15 @@ public class LightCrafterController {
 	}
 
 	/**
-	 * 
-	 * @param list
-	 * @throws IOException
+	 * Transmits to LightCrafter the given integer array
+	 * @param toSend Integer array containing the bytes of the packet
+	 * @throws IOException Exception thrown if there's any problem communicating
+	 * with the LightCrafter via the open socket.
 	 */
-	public void sendData(byte[] toSend) throws IOException {
-
-		byte[] currentPacket = null;
-
-		if (toSend.length > 512) {
-			int currentPos = 0;
-
-			System.out.println("Data length: " + toSend.length);
-
-			while (currentPos < toSend.length) {
-
-				// Create a new temp packet
-				currentPacket = new byte[512];
-
-				for (int i = currentPos; (i < (currentPos + MAX_PACKET_SIZE)); i++) {//&& (i < toSend.length); i++) {
-					if (i < toSend.length) {
-						currentPacket[i - currentPos] = toSend[i]; 
-						//System.out.println(toSend[i]);
-					}
-					else {
-						currentPacket[i - currentPos] = 0;
-					}
-				}
-				currentPos = currentPos + 512;
-				//System.out.println("Currentpos (packet): " + currentPos);
-
-				output.write(currentPacket);
-			}
-		}
-		else { 
-			output.write(toSend);
+	public void sendData(int[] toSend) throws IOException {
+		
+		for (int i = 0; i < toSend.length; i++) {
+			output.write(toSend[i]);
 		}
 
 	}
@@ -389,13 +377,15 @@ public class LightCrafterController {
 		}
 
 		byte checksumByte = (byte) (checksum % 512);
-		// For debug purposes
-		//System.out.println(checksum % 512);
-		//System.out.println("Checksum byte: " + checksumByte);
 		partialPacket.add(checksumByte);
 
 	}
 
+	/**
+	 * Calculates the checksum byte for the given packet
+	 * @param partialPacket The packet used to calculate its checksum byte
+	 * @return The checksum byte
+	 */
 	public int getChecksum(int[] partialPacket) {
 
 		int checksum = 0;
