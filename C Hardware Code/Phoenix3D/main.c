@@ -17,7 +17,7 @@ void main(void) {
     P2OUT |= (0x080);
 
     /*Reed Switch Port setup*/
-    P1DIR &= ~(0x01);//Set P1.0 for reed switch interrupt
+    P1DIR &= ~(0x01F);//Set P1.0 for reed switch interrupt and limit buttons
 
     /*Buzzer and LED Port setup*/
     P1DIR |= (0X060);//Set P1.5 and P1.6 for buzzer and LED outputs
@@ -33,8 +33,8 @@ void main(void) {
     TA0CCR0 |= 0; //Store 0 in terminal count register.
     TA0CCTL0 |= CCIE; //Enable TA0 interrupts.
 
-    P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
-    P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
+    P1IE |= 0x01F; //Enable Port 1.0 and P1.1 interrupts.
+    P1IES |= 0x01F; //Port 1.0 and 1.1 edge selector H -> L
 
     __bis_SR_register(GIE); //Enable global interrupts.
 
@@ -44,6 +44,7 @@ void main(void) {
     lineWrite(line1, LINE_1);
     P2OUT &= ~(0x080);
     resetMotorToTop();
+    resetMotorToBottom();
 
     //microSteppingMode(FULLSTEP);
     //motorStep(4000, 1);
@@ -81,4 +82,10 @@ __interrupt void PORT1_ISR(void){
 		P2OUT |= (0x080);
 		P1IFG &= ~(0x02);
 	}
+
+	//P1.2 Requested the interrupt
+		if((P1IFG & 0x04) == 1){
+			P2OUT |= (0x080);
+			P1IFG &= ~(0x04);
+		}
 }
