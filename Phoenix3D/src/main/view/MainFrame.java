@@ -7,11 +7,8 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import java.util.LinkedList;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -59,8 +56,10 @@ public class MainFrame extends JFrame{
 
 	private GroupLayout layout;
 	private JPanel panel; 
+	
 	private Timer layerChangeTimer;
-
+	private TimerListener timerListener;
+	
 	/**
 	 * Initialize all the components that will be displayed in the frame 
 	 * @throws IOException 
@@ -107,8 +106,8 @@ public class MainFrame extends JFrame{
 		this.add(panel);
 
 		//Initialize timer 
-		this.layerChangeTimer = new Timer(500, null);
-
+		timerListener = new TimerListener();
+		this.layerChangeTimer = new Timer(500, timerListener);
 	}
 
 	/**
@@ -193,39 +192,19 @@ public class MainFrame extends JFrame{
 
 		if(!layerChangeTimer.isRunning())
 		{
-			final File[] bmps = freeSteelBMPs.listFiles();
+			File[] bmps = freeSteelBMPs.listFiles();
 
-			this.sortLayers(bmps);
+			int i = 0;
+			for(File f : this.sortLayers(bmps))
+			{
+				bmps[i] = f;
+				i++;
+			}		
 			
-//			layerChangeTimer.addActionListener(new ActionListener() {
-//
-//				int i=0;
-//				File[] freeSteelBMPs = bmps;
-//				@Override
-//				public void actionPerformed(ActionEvent arg0) {
-//					if(i < freeSteelBMPs.length)
-//					{	
-//						if(freeSteelBMPs[i].getName().endsWith(".bmp"))
-//							try {
-//								layerView.setIcon(new ImageIcon(
-//										ImageIO.read(freeSteelBMPs[i])
-//										.getScaledInstance(260, 260, Image.SCALE_SMOOTH)
-//										));
-//
-//							} catch (IOException e) {
-//								System.out.println("Image not found");
-//								e.printStackTrace();
-//							}
-//						
-//						System.out.println(freeSteelBMPs[i].getAbsolutePath());
-//						i++;
-//					}
-//					else 
-//						i=0;
-//				}
-//			});
-//
-//			layerChangeTimer.start();
+			timerListener.freeSteelBMPs = bmps;
+			timerListener.i=0;
+			
+			layerChangeTimer.start();
 			System.out.println("Cycle Started");
 		}
 
@@ -250,12 +229,61 @@ public class MainFrame extends JFrame{
 	 * 
 	 * @param bmps
 	 */
-	private void sortLayers(File[] bmps)
+	private LinkedList<File> sortLayers(File[] bmps)
 	{
-		File[] sorted = new File[bmps.length];
+		LinkedList<File> sorted = new LinkedList<File>();
+		sorted.add(bmps[0]);
+		int fileNum=0;
+		int index = 0;
 		
 		for(File f : bmps)
-			System.out.println(f.getName().substring(4, f.getName().lastIndexOf("("))); 
+		{
+			index =0;
+			fileNum = Integer.parseInt(f.getName().substring(f.getName().lastIndexOf("_")+1, f.getName().lastIndexOf("(")));
+			for(File f2 : sorted)
+			{
+				if(Integer.parseInt(f2.getName().substring(f2.getName().lastIndexOf("_")+1, f2.getName().lastIndexOf("("))) > fileNum)
+					break;
+				index++;
+			}
+			sorted.add(index, f);
+		}
+		sorted.removeLast();
+		return sorted;
+	}
+	
+	/**
+	 * 
+	 * @author jose
+	 *
+	 */
+	private class TimerListener implements ActionListener{
+	
+		int i=0;
+		File[] freeSteelBMPs;	
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(i < freeSteelBMPs.length)
+			{	
+				if(freeSteelBMPs[i].getName().endsWith(".bmp"))
+					try {
+						layerView.setIcon(new ImageIcon(
+								ImageIO.read(freeSteelBMPs[i])
+								.getScaledInstance(260, 260, Image.SCALE_SMOOTH)
+								));
+
+					} catch (IOException e) {
+						System.out.println("Image not found");
+						e.printStackTrace();
+					}
+				
+				System.out.println(freeSteelBMPs[i].getAbsolutePath());
+				i++;
+			}
+			else 
+				i=0;
+		}
 	}
 
 }
