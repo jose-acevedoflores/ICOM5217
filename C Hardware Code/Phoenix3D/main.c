@@ -14,6 +14,8 @@ void main(void) {
     /* Stepper Motor Port setup */
     P3DIR |= 0x01F; //Set P3.0, P3.1, P3.2, P3.3, P3.4 as output for motor stepper driver
     P3OUT |= 0x01F;
+    P2DIR |= (0x080);
+    P2OUT |= (0x080);
 
     /*Reed Switch Port setup*/
     P1DIR &= ~(0x01);//Set P1.0 for reed switch interrupt

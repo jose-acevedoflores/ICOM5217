@@ -16,6 +16,7 @@ enum SM{
 
 
 void motorStep(int numberSteps, int direction){
+	P2OUT &= ~(0x080);
 	if(direction == 0){
 		P3OUT &= ~(0x01);
 	}
