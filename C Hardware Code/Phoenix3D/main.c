@@ -33,8 +33,8 @@ void main(void) {
     TA0CCR0 |= 0; //Store 0 in terminal count register.
     TA0CCTL0 |= CCIE; //Enable TA0 interrupts.
 
-    P1IE |= 0x01; //Enable Port 1 interrupts.
-    P1IES |= 0x01; //Port 1 edge selector H -> L
+    P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
+    P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
 
     __bis_SR_register(GIE); //Enable global interrupts.
 
@@ -43,6 +43,7 @@ void main(void) {
 
     lineWrite(line1, LINE_1);
 
+    P2OUT &= ~(0x080);
     microSteppingMode(FULLSTEP);
     motorStep(4000, 1);
 
@@ -61,6 +62,8 @@ __interrupt void TIMER0_A0_ISR(void){
 
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR(void){
+	//P1.0 Requested the interrupt
+	if((P1IFG & 0x01) == 1){
 	if((P1IN & 0x01) == 0){
 			TA0CCR0 = 15; //Store 15 in terminal count register.
 		}
@@ -71,4 +74,10 @@ __interrupt void PORT1_ISR(void){
 
 	P1IES ^= 0x01;
 	P1IFG &= ~(0x01);
+}
+	//P1.1 Requested the interrupt
+	if((P1IFG & 0x02) == 1){
+		P2OUT |= (0x080);
+		P1IFG &= ~(0x02);
+	}
 }
