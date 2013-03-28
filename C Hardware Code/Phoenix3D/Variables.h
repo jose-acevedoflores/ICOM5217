@@ -16,10 +16,10 @@ unsigned int layerThickness;
 unsigned int layerQuantity;
 unsigned int resinDryTime;
 unsigned int currentLayer;
-unsigned int totalTime;
+unsigned long totalTime;
 
 // Array of strings that contain up to 1500 filenames of maximum 31 characters each
-unsigned char layerFilenames[1500][31];
+char layerFilenames[1500][21];
 
 // The following global variables may not be needed.
 unsigned long startTime;
