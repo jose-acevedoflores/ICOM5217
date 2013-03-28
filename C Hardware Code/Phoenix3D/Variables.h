@@ -16,8 +16,18 @@ unsigned int layerThickness;
 unsigned int layerQuantity;
 unsigned int resinDryTime;
 unsigned int currentLayer;
+unsigned int totalTime;
+
 // Array of strings that contain up to 1500 filenames of maximum 31 characters each
-char layerFilenames[1500][31];
+unsigned char layerFilenames[1500][31];
 
 // The following global variables may not be needed.
 unsigned long startTime;
+unsigned long currentTime;
+
+enum PRINTER_STATUS {
+	READY,
+	PRINTING,
+	CANCELLING,
+	DONE_PRINTING
+};

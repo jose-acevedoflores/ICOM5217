@@ -5,8 +5,33 @@
  *      Author: Piro
  */
 
+struct realTime {
+	int seconds;
+	int minutes;
+	int hours;
+};
+
 void wait(int delay){
 	volatile unsigned int i = 0;
-			for( ; i < delay; i++);
+	for( ; i < delay; i++);
 }
 
+// Returns an structure with the first element as seconds, the second element as minutes, the third as hours
+struct realTime getTimeFromSeconds(long time) {
+
+	struct realTime t;
+
+	t.minutes = time / 60;
+	if (t.minutes >= 60) {
+		t.hours = t.minutes / 60;
+		t.minutes = t.minutes % 60;
+	}
+
+	t.seconds = time % 60;
+	if (t.seconds >= 60) {
+		t.minutes = t.minutes + (t.seconds / 60);
+		t.seconds = t.seconds % 60;
+	}
+
+	return result;
+}

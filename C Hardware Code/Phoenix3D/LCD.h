@@ -9,7 +9,7 @@ char line1[20] = "";
 char line2[20] = "";
 char line3[20] = "";
 char line4[20] = "";
-
+enum LCD_STATUS status = SHOW_LAYERS_AMOUNT;
 
 // Describes the current status of the LCD
 enum LCD_STATUS {
@@ -17,14 +17,14 @@ enum LCD_STATUS {
 	SHOW_TIME_ELAPSED,
 	SHOW_TIME_REMAINING,
 	SHOW_CURRENT_LAYER_FILENAME
-} lcd_stat;
+};
 
 enum LINE {
 	LINE_1,
 	LINE_2,
 	LINE_3,
 	LINE_4
-} lineNumber;
+};
 
 void enableLCD(void) {
 	P5OUT |= 0x01; //Set enable pin
@@ -96,17 +96,35 @@ void updateDisplay(void) {
 }
 
 void updateDisplayStatus(void) {
-	/*switch(status) {
+	switch(status) {
 	case SHOW_LAYERS_AMOUNT:
+		volatile char temp[20] = "";
+		sprintf(temp, " %d of %d", currentLayer, layerQuantity);
+
+		lineWrite("    Printing layer    ", LINE_2);
+		lineWrite(temp, LINE_3);
+		status = SHOW_TIME_ELAPSED;
 		break;
 	case SHOW_TIME_ELAPSED:
+		volatile unsigned long elapsedTime = currentTime - startTime;
+		char temp[20] = "";
+		volatile struct realTime t;
+		t = getTimeFromSeconds(elapsedTime);
+		sprintf(temp, " %d h %d m %d s elapsed", t.hours, t.minutes, t.seconds);
+		lineWrite("   Approximately    ", LINE_2);
+		lineWrite(temp, LINE_3);
+		status = SHOW_TIME_REMAINING;
 		break;
 	case SHOW_TIME_REMAINING:
+		volatile unsigned long elapsedTime = currentTime - startTime;
+		volatile unsigned long remainingTime = totalTime - elapsedTime;
+
+
 		break;
 	case SHOW_CURRENT_LAYER_FILENAME:
 		break;
 
-	}*/
+	}
 }
 
 
