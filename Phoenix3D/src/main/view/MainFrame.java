@@ -22,6 +22,7 @@ import javax.swing.Timer;
 
 import main.view.buttonActions.ImportButtonAction;
 import main.view.buttonActions.LayerThicknessChangedListener;
+import main.view.buttonActions.PrintButtonAction;
 
 /**
  * This class will represent a Phoenix3D application frame.
@@ -41,10 +42,10 @@ public class MainFrame extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JButton importB;
-	private JButton printB;
+	public JButton importB;
+	public JButton printB;
 
-	private JComboBox layerThickness;
+	public JComboBox layerThickness;
 
 	private JLabel logo;
 	private JLabel numOfLayersLabel;
@@ -70,7 +71,9 @@ public class MainFrame extends JFrame{
 		this.importB = new JButton("Import");
 		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
-
+		this.printB.addActionListener(new PrintButtonAction());
+		this.printB.setEnabled(false);
+		
 		String[] options = { "1.5mm","1.0mm", "0.5mm"};
 		this.layerThickness = new JComboBox(options);
 		this.layerThickness.setPreferredSize(new Dimension(20,40));

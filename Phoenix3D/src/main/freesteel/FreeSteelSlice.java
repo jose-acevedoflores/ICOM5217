@@ -84,7 +84,7 @@ public class FreeSteelSlice {
 		Process p;
 		private FilenameFilter filter;
 		private File freeSteelBMPs;
-		
+
 		public Task()
 		{
 			//Filter to pick only the .bmp files stores at freeSteelBMPs (BMPs storage space) 
@@ -94,7 +94,7 @@ public class FreeSteelSlice {
 					return arg1.endsWith(".bmp") || arg1.endsWith(".temp");
 				}
 			};
-			
+
 			//Path where the BMPs are stored 
 			currentPath = System.getProperty("user.dir");
 			freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
@@ -107,6 +107,11 @@ public class FreeSteelSlice {
 		protected Void doInBackground() throws Exception {
 			setProgress(0);
 			try {
+				//Disables UI buttons
+				viewReferences.importB.setEnabled(false);
+				viewReferences.printB.setEnabled(false);
+				viewReferences.layerThickness.setEnabled(false);
+
 				//Set the parameters for the python script
 				String scriptLocation = currentPath+"/"+sliceScriptPath;
 				String options = "-z -200,200,"+LAYER_THICKNESS;
@@ -123,8 +128,8 @@ public class FreeSteelSlice {
 				for(File f : freeSteelBMPs.listFiles())				
 					if(f.getName().endsWith(".bmp") || f.getName().endsWith(".temp"))
 						f.delete();
-				
-				
+
+
 				//Execute the script
 				p = Runtime.getRuntime().exec(cmd);
 
@@ -166,13 +171,24 @@ public class FreeSteelSlice {
 			for(File f : freeSteelBMPs.listFiles())				
 				if(f.getName().endsWith(".temp"))
 					f.delete();
-			
-			//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
-			viewReferences.numOfLayers.setText(""+(freeSteelBMPs.list(filter).length));
-			
-			viewReferences.belowEta.setText((freeSteelBMPs.list(filter).length*15)+" segs" );
-			
-			viewReferences.startLayerCycle(this.freeSteelBMPs);
+
+			if(!isCancelled())
+			{
+				//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
+				viewReferences.numOfLayers.setText(""+(freeSteelBMPs.list(filter).length));
+				//Updates the Estimated Printing time
+				viewReferences.belowEta.setText((freeSteelBMPs.list(filter).length*15)+" segs" );
+
+				//Re-enable GUI buttons
+				viewReferences.printB.setEnabled(true);
+
+				//Start Cycling the layers
+				viewReferences.startLayerCycle(this.freeSteelBMPs);
+			}
+			//Re-enable GUI buttons
+			viewReferences.layerThickness.setEnabled(true);
+			viewReferences.importB.setEnabled(true);
+
 		}
 
 	}
