@@ -9,7 +9,7 @@ char line1[20] = "";
 char line2[20] = "";
 char line3[20] = "";
 char line4[20] = "";
-LCD_STATUS status = SHOW_LAYERS_AMOUNT;
+
 
 // Describes the current status of the LCD
 enum LCD_STATUS {
@@ -96,7 +96,7 @@ void updateDisplay(void) {
 }
 
 void updateDisplayStatus(void) {
-	switch(status) {
+	/*switch(status) {
 	case SHOW_LAYERS_AMOUNT:
 		break;
 	case SHOW_TIME_ELAPSED:
@@ -106,7 +106,7 @@ void updateDisplayStatus(void) {
 	case SHOW_CURRENT_LAYER_FILENAME:
 		break;
 
-	}
+	}*/
 }
 
 

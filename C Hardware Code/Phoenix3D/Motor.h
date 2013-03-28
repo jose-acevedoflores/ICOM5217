@@ -31,24 +31,8 @@ void motorStep(int numberSteps, int direction){
     	P3OUT &= ~(0x02);
     	wait(500);
     }
-}
 
-// Pin 1.1 is top motor location sensor
-void resetMotorToTop() {
-	while (!(~P1IN & 0x01)) {
-		// Move motor ten steps up
-		motorStep(5,1);
-	}
 }
-
-// Pin 1.2 is bottom motor location sensor
-void resetMotorToBottom() {
-	while (!(~P1IN & 0x02)) {
-			// Move motor ten steps down
-			motorStep(5,0);
-		}
-}
-
 void microSteppingMode(enum SM stepMode){
 	switch(stepMode){
 	case FULLSTEP:
@@ -74,4 +58,24 @@ void microSteppingMode(enum SM stepMode){
 		P3OUT |= 0x01C;
 		break;
 	}
+}
+
+
+
+// Pin 1.1 is top motor location sensor
+void resetMotorToTop() {
+	microSteppingMode(FULLSTEP);
+	while (!(~P1IN & 0x01)) {
+		// Move motor ten steps up
+		motorStep(5,1);
+	}
+}
+
+// Pin 1.2 is bottom motor location sensor
+void resetMotorToBottom() {
+	microSteppingMode(FULLSTEP);
+	while (!(~P1IN & 0x02)) {
+			// Move motor ten steps down
+			motorStep(5,0);
+		}
 }

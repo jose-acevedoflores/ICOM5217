@@ -42,10 +42,11 @@ void main(void) {
     initializeLCD();
 
     lineWrite(line1, LINE_1);
-
     P2OUT &= ~(0x080);
-    microSteppingMode(FULLSTEP);
-    motorStep(4000, 1);
+    resetMotorToTop();
+
+    //microSteppingMode(FULLSTEP);
+    //motorStep(4000, 1);
 
 }
 
