@@ -4,8 +4,13 @@ package main.view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
@@ -16,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import main.view.buttonActions.ImportButtonAction;
 import main.view.buttonActions.LayerThicknessChangedListener;
@@ -33,14 +39,14 @@ import main.view.buttonActions.LayerThicknessChangedListener;
  *
  */
 public class MainFrame extends JFrame{
-	
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JButton importB;
 	private JButton printB;
-	
+
 	private JComboBox layerThickness;
 
 	private JLabel logo;
@@ -48,11 +54,13 @@ public class MainFrame extends JFrame{
 	public JLabel numOfLayers;
 	private JLabel eta;
 	public JLabel belowEta;
-	
+
 	public JLabel layerView;
-	
+
 	private GroupLayout layout;
 	private JPanel panel; 
+	private Timer layerChangeTimer;
+
 	/**
 	 * Initialize all the components that will be displayed in the frame 
 	 * @throws IOException 
@@ -63,39 +71,46 @@ public class MainFrame extends JFrame{
 		this.importB = new JButton("Import");
 		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
-		
+
 		String[] options = { "1.5mm","1.0mm", "0.5mm"};
 		this.layerThickness = new JComboBox(options);
 		this.layerThickness.setPreferredSize(new Dimension(20,40));
 		this.layerThickness.setMinimumSize(new Dimension(20,40));
 		this.layerThickness.setMaximumSize(new Dimension(160,0));
 		this.layerThickness.addItemListener(new LayerThicknessChangedListener(this));
-		
+
 		this.logo = new JLabel(new ImageIcon("resources/GUILogo.png"));
+
 		this.numOfLayersLabel = new JLabel("Number of layers: ");
 		this.numOfLayers = new JLabel(" ");
 		this.numOfLayers.setFont(new Font(Font.SERIF, Font.PLAIN, 12));
+
 		this.eta = new JLabel("Estimated Printing Time: ");
 		this.belowEta = new JLabel(" ");
 		this.belowEta.setFont(new Font(Font.SERIF, Font.PLAIN, 12));
-		
-		
+
+
+		//layer view is JLabel to hold and cycle the layers to be projected 
+		// by the LCr 
 		this.layerView = new JLabel(new ImageIcon(
-				 ImageIO.read(new File("resources/noFileSelected.png"))
-				 .getScaledInstance(260, 260, Image.SCALE_SMOOTH)
+				ImageIO.read(new File("resources/noFileSelected.png"))
+				.getScaledInstance(260, 260, Image.SCALE_SMOOTH)
 				));
-		
+
 		//Add components to the layout 
 		this.initLayout();
-		
-		
+
+
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(600, 400);
 		this.setLocationRelativeTo(null);
 		this.add(panel);
-		
+
+		//Initialize timer 
+		this.layerChangeTimer = new Timer(500, null);
+
 	}
-	
+
 	/**
 	 * This method sets the layout of the elements that will be shown to the user
 	 */
@@ -103,15 +118,15 @@ public class MainFrame extends JFrame{
 	{
 		this.panel = new JPanel();
 		this.layout = new GroupLayout(this.panel);
-		
+
 		SequentialGroup group;
-		
+
 		//Set Horizontal Alignment
 		group = this.layout.createSequentialGroup();
-		
+
 		//Add components
 		group.addGap(20);
-	
+
 		group.addGroup(layout.createParallelGroup()
 				.addComponent(this.importB)
 				.addComponent(this.layerView)
@@ -129,19 +144,19 @@ public class MainFrame extends JFrame{
 						)
 
 				);
-		
+
 		this.layout.setHorizontalGroup(group);
-		
+
 		//Set Vertical Alignment 
 		group = this.layout.createSequentialGroup();
-		
+
 		//Add components 
 		group.addGap(20);
 		group.addGroup(layout.createParallelGroup()
-		.addComponent(this.importB)
-		.addComponent(this.logo)
+				.addComponent(this.importB)
+				.addComponent(this.logo)
 				);
-		
+
 		group.addGap(20);
 		group.addGroup(layout.createParallelGroup()
 				.addComponent(this.layerView)
@@ -152,22 +167,95 @@ public class MainFrame extends JFrame{
 						.addGroup(layout.createParallelGroup()
 								.addComponent(this.numOfLayersLabel)
 								.addComponent(this.numOfLayers)
-										)
-						.addGap(20)
-						.addComponent(this.eta)
-						.addComponent(this.belowEta)
-						.addGap(20)
-						.addComponent(this.printB)
+								)
+								.addGap(20)
+								.addComponent(this.eta)
+								.addComponent(this.belowEta)
+								.addGap(20)
+								.addComponent(this.printB)
 						)
 				);
-		
-		
+
+
 		this.layout.setVerticalGroup(group);
-		
-		
+
+
 		//Add the layout to the panel
 		panel.setLayout(layout);
 	}
-	
-	
+
+	/**
+	 * 
+	 * @param freeSteelBMPs
+	 */
+	public void startLayerCycle(File freeSteelBMPs)
+	{
+
+		if(!layerChangeTimer.isRunning())
+		{
+			final File[] bmps = freeSteelBMPs.listFiles();
+
+			this.sortLayers(bmps);
+			
+//			layerChangeTimer.addActionListener(new ActionListener() {
+//
+//				int i=0;
+//				File[] freeSteelBMPs = bmps;
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					if(i < freeSteelBMPs.length)
+//					{	
+//						if(freeSteelBMPs[i].getName().endsWith(".bmp"))
+//							try {
+//								layerView.setIcon(new ImageIcon(
+//										ImageIO.read(freeSteelBMPs[i])
+//										.getScaledInstance(260, 260, Image.SCALE_SMOOTH)
+//										));
+//
+//							} catch (IOException e) {
+//								System.out.println("Image not found");
+//								e.printStackTrace();
+//							}
+//						
+//						System.out.println(freeSteelBMPs[i].getAbsolutePath());
+//						i++;
+//					}
+//					else 
+//						i=0;
+//				}
+//			});
+//
+//			layerChangeTimer.start();
+			System.out.println("Cycle Started");
+		}
+
+		else
+			System.out.println("Timer Running");
+
+	}
+
+	/**
+	 * 
+	 */
+	public void stopLayerCycle()
+	{
+		if(layerChangeTimer.isRunning())
+		{
+			layerChangeTimer.stop();
+			System.out.println("Cycle Stopped");
+		}
+	}
+
+	/**
+	 * 
+	 * @param bmps
+	 */
+	private void sortLayers(File[] bmps)
+	{
+		File[] sorted = new File[bmps.length];
+		
+		for(File f : bmps)
+			System.out.println(f.getName().substring(4, f.getName().lastIndexOf("("))); 
+	}
+
 }

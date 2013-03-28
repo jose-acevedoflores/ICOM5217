@@ -99,6 +99,8 @@ public class FreeSteelSlice {
 			currentPath = System.getProperty("user.dir");
 			freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
 
+			//Stop the cycle that displays the layers on the GUI 
+			viewReferences.stopLayerCycle();
 		}
 
 		@Override
@@ -169,6 +171,8 @@ public class FreeSteelSlice {
 			viewReferences.numOfLayers.setText(""+(freeSteelBMPs.list(filter).length));
 			
 			viewReferences.belowEta.setText((freeSteelBMPs.list(filter).length*15)+" segs" );
+			
+			viewReferences.startLayerCycle(this.freeSteelBMPs);
 		}
 
 	}
