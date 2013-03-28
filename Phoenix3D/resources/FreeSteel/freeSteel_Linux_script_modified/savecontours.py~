@@ -458,8 +458,10 @@ def WriteLayerIMG(ifn, z, allpoints, siz, scale, pan, colour, mode):
     # -- Additions begin here --
     invertedImage = ImageOps.invert(img)
     
-    if not invertedImage.getbbox():
+    if invertedImage.getbbox():
   		invertedImage.save(ifn)
+    else:
+	  	open(ifn,"w")
     #img.save(ifn)
 
 

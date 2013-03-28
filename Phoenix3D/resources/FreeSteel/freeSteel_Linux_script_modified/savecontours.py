@@ -460,6 +460,8 @@ def WriteLayerIMG(ifn, z, allpoints, siz, scale, pan, colour, mode):
     
     if invertedImage.getbbox():
   		invertedImage.save(ifn)
+    else:
+	  	open(ifn[:-3]+"temp","w")
     #img.save(ifn)
 
 
