@@ -3,7 +3,11 @@ package main.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
@@ -45,12 +49,15 @@ public class MainFrame extends JFrame{
 	private JLabel eta;
 	public JLabel belowEta;
 	
+	public JLabel layerView;
+	
 	private GroupLayout layout;
 	private JPanel panel; 
 	/**
 	 * Initialize all the components that will be displayed in the frame 
+	 * @throws IOException 
 	 */
-	public MainFrame()
+	public MainFrame() throws IOException
 	{
 		super("Phoenix DLP 3D Printer");
 		this.importB = new JButton("Import");
@@ -71,7 +78,14 @@ public class MainFrame extends JFrame{
 		this.eta = new JLabel("Estimated Printing Time: ");
 		this.belowEta = new JLabel(" ");
 		this.belowEta.setFont(new Font(Font.SERIF, Font.PLAIN, 12));
-		//Add componenets to the layout 
+		
+		
+		this.layerView = new JLabel(new ImageIcon(
+				 ImageIO.read(new File("resources/no_file_selected.bmp"))
+				 .getScaledInstance(260, 260, Image.SCALE_SMOOTH)
+				));
+		
+		//Add components to the layout 
 		this.initLayout();
 		
 		
@@ -97,8 +111,12 @@ public class MainFrame extends JFrame{
 		
 		//Add components
 		group.addGap(20);
-		group.addComponent(this.importB);
-		group.addGap(260);
+	
+		group.addGroup(layout.createParallelGroup()
+				.addComponent(this.importB)
+				.addComponent(this.layerView)
+				);
+		group.addGap(90);
 		group.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(this.layerThickness)
 				.addComponent(this.logo)
@@ -123,19 +141,26 @@ public class MainFrame extends JFrame{
 		.addComponent(this.importB)
 		.addComponent(this.logo)
 				);
-		group.addGap(100);
-		group.addComponent(this.layerThickness);
+		
 		group.addGap(20);
 		group.addGroup(layout.createParallelGroup()
-				
-		.addComponent(this.numOfLayersLabel)
-		.addComponent(numOfLayers)
+				.addComponent(this.layerView)
+				.addGroup(layout.createSequentialGroup()
+						.addGap(60)
+						.addComponent(this.layerThickness)
+						.addGap(20)
+						.addGroup(layout.createParallelGroup()
+								.addComponent(this.numOfLayersLabel)
+								.addComponent(this.numOfLayers)
+										)
+						.addGap(20)
+						.addComponent(this.eta)
+						.addComponent(this.belowEta)
+						.addGap(20)
+						.addComponent(this.printB)
+						)
 				);
-		group.addGap(20);
-		group.addComponent(this.eta);
-		group.addComponent(this.belowEta);
-		group.addGap(20);
-		group.addComponent(this.printB);
+		
 		
 		this.layout.setVerticalGroup(group);
 		
