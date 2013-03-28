@@ -1,5 +1,19 @@
 package main.view.buttonActions;
 
-public class PrintButtonAction {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * 
+ * @author jose
+ *
+ */
+public class PrintButtonAction implements ActionListener{
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		System.out.println("print");
+	}
 
 }
