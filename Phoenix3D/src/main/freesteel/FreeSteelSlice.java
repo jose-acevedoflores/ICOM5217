@@ -39,7 +39,7 @@ public class FreeSteelSlice {
 	public FreeSteelSlice(MainFrame frame)
 	{
 		viewReferences  = frame;
-		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script/slice.py";
+		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script_modified/slice.py";
 		freeSteelOutput = "freeSteelGeneratedBMPs/";
 	}
 
@@ -91,11 +91,12 @@ public class FreeSteelSlice {
 			filter = new FilenameFilter() {	
 				@Override
 				public boolean accept(File arg0, String arg1) {
-					return arg1.endsWith(".bmp");
+					return arg1.endsWith(".bmp") || arg1.endsWith(".temp");
 				}
 			};
 			
 			//Path where the BMPs are stored 
+			currentPath = System.getProperty("user.dir");
 			freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
 
 		}
@@ -105,9 +106,8 @@ public class FreeSteelSlice {
 			setProgress(0);
 			try {
 				//Set the parameters for the python script
-				currentPath = System.getProperty("user.dir");
 				String scriptLocation = currentPath+"/"+sliceScriptPath;
-				String options = "-z -15,130,"+LAYER_THICKNESS;
+				String options = "-z -200,200,"+LAYER_THICKNESS;
 				String outputLocation = currentPath+"/"+freeSteelOutput+"test.bmp";
 				String cmd[] = {"python", scriptLocation, options,
 						STL_FILE_NAME, "-o", outputLocation};
@@ -117,24 +117,25 @@ public class FreeSteelSlice {
 					System.out.println(str);
 
 
-				//Delete present bmp files
-				for(File f : freeSteelBMPs.listFiles())
-					if(f.getName().endsWith(".bmp"))
+				//Delete present .bmp and .temp files
+				for(File f : freeSteelBMPs.listFiles())				
+					if(f.getName().endsWith(".bmp") || f.getName().endsWith(".temp"))
 						f.delete();
-
+				
+				
 				//Execute the script
 				p = Runtime.getRuntime().exec(cmd);
 
 				//Variables to determinate the percentage of completion 
 				String[] bmps;
 				int progress =0;
-				double size = (135/LAYER_THICKNESS);
+				double size = (400/LAYER_THICKNESS);
 
 
 				//Force the progress bar to show 
 				setProgress(1);
 				//Loop for calculating completion time
-				while (progress < 100 && !isCancelled()) {
+				while (progress < 100 && !isCancelled() && !isDone()) {
 
 					bmps = freeSteelBMPs.list(filter);
 
@@ -159,10 +160,15 @@ public class FreeSteelSlice {
 		public void done()
 		{
 			progressMonitor.setProgress(100);
+			//Delete present .temp files
+			for(File f : freeSteelBMPs.listFiles())				
+				if(f.getName().endsWith(".temp"))
+					f.delete();
+			
 			//The substring here gets the original content of the JLabel (Number of layers:) and adds the new computed number of layers
-			viewReferences.numOfLayers.setText(
-					viewReferences.numOfLayers.getText().substring(0, 17)+
-					" F"); //freeSteelBMPs.list(filter).length);
+			viewReferences.numOfLayers.setText(""+(freeSteelBMPs.list(filter).length));
+			
+			viewReferences.belowEta.setText((freeSteelBMPs.list(filter).length*15)+" segs" );
 		}
 
 	}

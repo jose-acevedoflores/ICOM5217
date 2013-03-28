@@ -2,6 +2,7 @@ package main.view;
 
 
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -39,8 +40,10 @@ public class MainFrame extends JFrame{
 	private JComboBox layerThickness;
 
 	private JLabel logo;
+	private JLabel numOfLayersLabel;
 	public JLabel numOfLayers;
-	public JLabel eta;
+	private JLabel eta;
+	public JLabel belowEta;
 	
 	private GroupLayout layout;
 	private JPanel panel; 
@@ -62,9 +65,12 @@ public class MainFrame extends JFrame{
 		this.layerThickness.addItemListener(new LayerThicknessChangedListener(this));
 		
 		this.logo = new JLabel(new ImageIcon("resources/GUILogo.png"));
-		this.numOfLayers = new JLabel("Number of layers: ");
+		this.numOfLayersLabel = new JLabel("Number of layers: ");
+		this.numOfLayers = new JLabel(" ");
+		this.numOfLayers.setFont(new Font(Font.SERIF, Font.PLAIN, 12));
 		this.eta = new JLabel("Estimated Printing Time: ");
-		
+		this.belowEta = new JLabel(" ");
+		this.belowEta.setFont(new Font(Font.SERIF, Font.PLAIN, 12));
 		//Add componenets to the layout 
 		this.initLayout();
 		
@@ -96,14 +102,15 @@ public class MainFrame extends JFrame{
 		group.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addComponent(this.layerThickness)
 				.addComponent(this.logo)
-				.addComponent(this.numOfLayers)
+				.addComponent(this.numOfLayersLabel)
+				.addComponent(this.belowEta)
 				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
 						.addComponent(this.eta)
+						.addComponent(this.numOfLayers)
 						.addComponent(this.printB)
 						)
 
 				);
-		
 		
 		this.layout.setHorizontalGroup(group);
 		
@@ -119,10 +126,15 @@ public class MainFrame extends JFrame{
 		group.addGap(100);
 		group.addComponent(this.layerThickness);
 		group.addGap(20);
-		group.addComponent(this.numOfLayers);
+		group.addGroup(layout.createParallelGroup()
+				
+		.addComponent(this.numOfLayersLabel)
+		.addComponent(numOfLayers)
+				);
 		group.addGap(20);
 		group.addComponent(this.eta);
-		group.addGap(40);
+		group.addComponent(this.belowEta);
+		group.addGap(20);
 		group.addComponent(this.printB);
 		
 		this.layout.setVerticalGroup(group);
