@@ -81,7 +81,7 @@ public class MainFrame extends JFrame{
 		
 		
 		this.layerView = new JLabel(new ImageIcon(
-				 ImageIO.read(new File("resources/no_file_selected.bmp"))
+				 ImageIO.read(new File("resources/noFileSelected.png"))
 				 .getScaledInstance(260, 260, Image.SCALE_SMOOTH)
 				));
 		
