@@ -1,4 +1,5 @@
 #include <msp430.h> 
+#include "Variables.h"
 #include "Utils.h"
 #include "Motor.h"
 #include "LCD.h"
@@ -6,14 +7,14 @@
  * main.c
  */
 
-unsigned int counterLED = 0;
-
 void main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
 	
     /* Stepper Motor Port setup */
     P3DIR |= 0x01F; //Set P3.0, P3.1, P3.2, P3.3, P3.4 as output for motor stepper driver
     P3OUT |= 0x01F;
+    P2DIR |= (0x080);
+    P2OUT |= (0x080);
 
     /*Reed Switch Port setup*/
     P1DIR &= ~(0x01);//Set P1.0 for reed switch interrupt
@@ -32,8 +33,8 @@ void main(void) {
     TA0CCR0 |= 0; //Store 0 in terminal count register.
     TA0CCTL0 |= CCIE; //Enable TA0 interrupts.
 
-    P1IE |= 0x01; //Enable Port 1 interrupts.
-    P1IES |= 0x01; //Port 1 edge selector H -> L
+    P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
+    P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
 
     __bis_SR_register(GIE); //Enable global interrupts.
 
@@ -41,9 +42,11 @@ void main(void) {
     initializeLCD();
 
     lineWrite(line1, LINE_1);
+    P2OUT &= ~(0x080);
+    resetMotorToTop();
 
-    microSteppingMode(FULLSTEP);
-    motorStep(4000, 1);
+    //microSteppingMode(FULLSTEP);
+    //motorStep(4000, 1);
 
 }
 
@@ -60,6 +63,8 @@ __interrupt void TIMER0_A0_ISR(void){
 
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR(void){
+	//P1.0 Requested the interrupt
+	if((P1IFG & 0x01) == 1){
 	if((P1IN & 0x01) == 0){
 			TA0CCR0 = 15; //Store 15 in terminal count register.
 		}
@@ -70,4 +75,10 @@ __interrupt void PORT1_ISR(void){
 
 	P1IES ^= 0x01;
 	P1IFG &= ~(0x01);
+}
+	//P1.1 Requested the interrupt
+	if((P1IFG & 0x02) == 1){
+		P2OUT |= (0x080);
+		P1IFG &= ~(0x02);
+	}
 }
