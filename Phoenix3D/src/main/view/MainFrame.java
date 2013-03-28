@@ -71,7 +71,7 @@ public class MainFrame extends JFrame{
 		this.importB = new JButton("Import");
 		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
-		this.printB.addActionListener(new PrintButtonAction());
+		this.printB.addActionListener(new PrintButtonAction("resources/freeSteelGeneratedBMPs"));
 		this.printB.setEnabled(false);
 		
 		String[] options = { "1.5mm","1.0mm", "0.5mm"};
