@@ -65,6 +65,28 @@ void main(void) {
 	P2OUT &= ~(0x080);
 	resetMotorToTop();
 
+	lineWrite(line1, LINE_1);
+	P2OUT &= ~(0x080);
+	resetMotorToTop();
+	resetMotorToBottom();
+
+	//char line1[20] = "Test complete`";
+	initializeLCD();
+
+	// Below is a testing routine for the updateDisplayStatus() function
+	startTime = currentTime; // Set startTime
+
+	updateDisplayStatus();
+	wait(1000);
+	updateDisplayStatus();
+	wait(1000);
+	updateDisplayStatus();
+
+	//lineWrite(line1, LINE_1);
+	P2OUT &= ~(0x080);
+	resetMotorToTop();
+
+>>>>>>> ad5094d86801be6de937be7cfb196f2ada06fb9f
 	//microSteppingMode(FULLSTEP);
 	//motorStep(4000, 1);
 
