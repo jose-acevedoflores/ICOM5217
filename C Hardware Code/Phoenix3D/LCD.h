@@ -2,13 +2,22 @@
  * LCD.h
  *
  *  Created on: Mar 27, 2013
- *      Author: joseoyola
+ *      Author: joseoyola and hfranqui
  */
 
 char line1[20] = "";
 char line2[20] = "";
 char line3[20] = "";
 char line4[20] = "";
+LCD_STATUS status = SHOW_LAYERS_AMOUNT;
+
+// Describes the current status of the LCD
+enum LCD_STATUS {
+	SHOW_LAYERS_AMOUNT,
+	SHOW_TIME_ELAPSED,
+	SHOW_TIME_REMAINING,
+	SHOW_CURRENT_LAYER_FILENAME
+} lcd_stat;
 
 enum LINE {
 	LINE_1,
@@ -84,6 +93,20 @@ void updateDisplay(void) {
 	lineWrite(line2, LINE_2); //Update line2
 	lineWrite(line3, LINE_3); //Update line3
 	lineWrite(line4, LINE_4); //Update line4
+}
+
+void updateDisplayStatus(void) {
+	switch(status) {
+	case SHOW_LAYERS_AMOUNT:
+		break;
+	case SHOW_TIME_ELAPSED:
+		break;
+	case SHOW_TIME_REMAINING:
+		break;
+	case SHOW_CURRENT_LAYER_FILENAME:
+		break;
+
+	}
 }
 
 

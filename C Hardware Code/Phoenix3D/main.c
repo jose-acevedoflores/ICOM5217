@@ -1,12 +1,11 @@
 #include <msp430.h> 
+#include "Variables.h"
 #include "Utils.h"
 #include "Motor.h"
 #include "LCD.h"
 /*
  * main.c
  */
-
-unsigned int counterLED = 0;
 
 void main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
