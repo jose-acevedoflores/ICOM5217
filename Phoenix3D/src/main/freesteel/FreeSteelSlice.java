@@ -142,7 +142,7 @@ public class FreeSteelSlice {
 				//Force the progress bar to show 
 				setProgress(1);
 				//Loop for calculating completion time
-				while (progress < 100 && !isCancelled() && !isDone()) {
+				while (progress < 100 && !isCancelled()) {
 
 					bmps = freeSteelBMPs.list(filter);
 
