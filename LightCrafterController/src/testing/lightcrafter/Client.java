@@ -54,6 +54,7 @@ public class Client {
 				currentImageInt[i] = currentImageBytes[i];
 			}
 			list.add(currentImageInt);
+			is.close();
 		}
 		
 		System.out.println(list.size());
