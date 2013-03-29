@@ -17,7 +17,7 @@ void wait(int delay){
 }
 
 // Returns an structure with the first element as seconds, the second element as minutes, the third as hours
-struct realTime getTimeFromSeconds(long time) {
+struct realTime getTimeFromSeconds(int time) {
 
 	struct realTime t;
 
@@ -37,7 +37,7 @@ struct realTime getTimeFromSeconds(long time) {
 }
 
 // Converts an integer to a character array
-void *changeIntegerToChar(int integer, char result[]) {
+/*void *changeIntegerToChar(int integer, char result[]) {
 
     int int4 = 0, int3 = 0, int2 = 0, int1 = 0;
 
@@ -54,7 +54,7 @@ void *changeIntegerToChar(int integer, char result[]) {
         int1 = integer % 10;
     }
 
-    result[4] = '\0';
+    result[4] = '`';
     result[3] = (char) (int1 + 48);
     result[2] = (char) (int2 + 48);
     result[1] = (char) (int3 + 48);
@@ -74,4 +74,4 @@ void *concatenateIntToString(char string[], int strLen, char integer[], int intL
     memcpy(&result[strLen],&integer[i],intLen);
 
     return;
-}
+}*/

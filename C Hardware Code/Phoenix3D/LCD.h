@@ -95,7 +95,7 @@ void updateDisplay(void) {
 	lineWrite(line4, LINE_4); //Update line4
 }
 
-void updateDisplayStatus(void) {
+void updateDisplayStatus(enum LCD_STATUS status) {
 	switch(status) {
 	case SHOW_LAYERS_AMOUNT: {
 		char temp[20] = "";
@@ -108,11 +108,15 @@ void updateDisplayStatus(void) {
 		break;
 	}
 	case SHOW_TIME_ELAPSED: {
-		volatile unsigned long elapsedTime = currentTime - startTime;
+		//int elapsedTime = currentTime - startTime;
+		int elapsedTime = 23456;
 		char temp[20] = "";
-		struct realTime t;
-		t = getTimeFromSeconds(elapsedTime);
-		//sprintf(temp, " %dh %dm %ds elapsed", t.hours, t.minutes, t.seconds);
+
+		sprintf(temp, "%d`", currentTime);
+		lineWrite(temp, LINE_1);
+		struct realTime t = getTimeFromSeconds(elapsedTime);
+
+		sprintf(temp, " %dh %dm %ds elapsed`", t.hours, t.minutes, t.seconds);
 
 		lineWrite("   Approximately`", LINE_2);
 		lineWrite(temp, LINE_3);
@@ -120,12 +124,11 @@ void updateDisplayStatus(void) {
 		break;
 	}
 	case SHOW_TIME_REMAINING: {
-		volatile unsigned long elapsedTime = currentTime - startTime;
-		volatile unsigned long remainingTime = totalTime - elapsedTime;
+		int elapsedTime = currentTime - startTime;
+		int remainingTime = totalTime - elapsedTime;
 
 		char temp[20] = "";
-		struct realTime t;
-		t = getTimeFromSeconds(remainingTime);
+		struct realTime t = getTimeFromSeconds(remainingTime);
 		//sprintf(temp, "Approx. %dh %dm %ds", t.hours, t.minutes, t.seconds);
 
 		lineWrite(temp, LINE_2);
@@ -135,8 +138,8 @@ void updateDisplayStatus(void) {
 	}
 	case SHOW_CURRENT_LAYER_FILENAME: {
 
-		lineWrite("   Printing file`", LINE_2);
-		lineWrite(layerFilenames[currentLayer], LINE_3);
+		//lineWrite("   Printing file`", LINE_2);
+		//lineWrite(layerFilenames[currentLayer], LINE_3);
 		status = SHOW_LAYERS_AMOUNT;
 		break;
 	}

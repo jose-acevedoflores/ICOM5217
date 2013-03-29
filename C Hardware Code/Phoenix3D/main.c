@@ -1,8 +1,9 @@
 #include <msp430.h>
+#include <stdio.h>
 #include "Variables.h"
 #include "Utils.h"
 #include "Motor.h"
-//#include "LCD.h"
+#include "LCD.h"
 /*
  * main.c
  */
@@ -32,8 +33,11 @@ void main(void) {
 	TA0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
 	TA0CCR0 |= 0; //Store 0 in terminal count register.
 	TA0CCTL0 |= CCIE; //Enable TA0 count 0 interrupts
-	TA0CCR1 |= 32767; //Set terminal count to 32767 to know a second has passed
-	TA0CCTL1 |= CCIE; //Enable TA0 count 1 interrupts
+
+	TA1CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
+	TA1CCR0 |= 32767; //Set terminal count to 32767 to know a second has passed
+	TA1CCTL0 |= CCIE; //Enable TA0 count 1 interrupts
+
 	P1IE |= 0x01F; //Enable Port 1.0 and P1.1 interrupts.
 	P1IES |= 0x01F; //Port 1.0 and 1.1 edge selector H -> L
 
@@ -44,49 +48,32 @@ void main(void) {
 	totalTime = resinDryTime * layerQuantity; // Calculate total estimated time
 
 	__bis_SR_register(GIE); //Enable global interrupts.
-//	lineWrite(line1, LINE_1);
-	P2OUT &= ~(0x080);
-	resetMotorToTop();
-	resetMotorToBottom();
-/*
-	//char line1[20] = "Test complete`";
-	initializeLCD();
-
-	// Below is a testing routine for the updateDisplayStatus() function
-	startTime = currentTime; // Set startTime
-
-	updateDisplayStatus();
-	wait(1000);
-	updateDisplayStatus();
-	wait(1000);
-	updateDisplayStatus();
-
-	//lineWrite(line1, LINE_1); */
-	P2OUT &= ~(0x080);
-	resetMotorToTop();
-
-	lineWrite(line1, LINE_1);
-	P2OUT &= ~(0x080);
-	resetMotorToTop();
-	resetMotorToBottom();
-
-	//char line1[20] = "Test complete`";
-	initializeLCD();
-
-	// Below is a testing routine for the updateDisplayStatus() function
-	startTime = currentTime; // Set startTime
-
-	updateDisplayStatus();
-	wait(1000);
-	updateDisplayStatus();
-	wait(1000);
-	updateDisplayStatus();
-
 	//lineWrite(line1, LINE_1);
 	P2OUT &= ~(0x080);
-	resetMotorToTop();
+	//	resetMotorToTop();
 
->>>>>>> ad5094d86801be6de937be7cfb196f2ada06fb9f
+	initializeLCD();
+	//char line5[20] = "Test complete`";
+	//lineWrite(line5, LINE_1);
+
+	// Below is a testing routine for the updateDisplayStatus() function
+	startTime = currentTime; // Set startTime
+
+	//updateDisplayStatus(SHOW_LAYERS_AMOUNT);
+
+	/*while (1) {
+		char temp[20] = "";
+
+		sprintf(temp, "%d`", currentTime);
+		lineWrite(temp, LINE_1);
+	}*/
+
+	//wait(10000);
+	updateDisplayStatus(SHOW_TIME_ELAPSED);
+
+	//wait(10000);
+	//updateDisplayStatus(SHOW_TIME_REMAINING);
+
 	//microSteppingMode(FULLSTEP);
 	//motorStep(4000, 1);
 
@@ -94,18 +81,20 @@ void main(void) {
 
 #pragma vector=TIMER0_A0_VECTOR
 __interrupt void TIMER0_A0_ISR(void){
-	if (TA0CCR0 == 15) {
-		P1OUT ^= (0x040);//Toggle Buzzer
-		counterLED++;
-		if(counterLED == 1024){
-			P1OUT ^= 0x020;
-			counterLED = 0;
-		}
-		TA0CCTL0 &= ~(0x01);
+	P1OUT ^= (0x040);//Toggle Buzzer
+	counterLED++;
+	if(counterLED == 1024){
+		P1OUT ^= 0x020;
+		counterLED = 0;
 	}
-	else if (TA0CCR1 == 32767){
-		currentTime++;
-	}
+	TA0CCTL0 &= ~(0x01);
+
+}
+
+#pragma vector=TIMER0_A1_VECTOR
+__interrupt void TIMER0_A1_VECTOR_ISR(void) {
+	P1OUT ^= (0X020);
+	currentTime++;
 }
 
 #pragma vector=PORT1_VECTOR
