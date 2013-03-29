@@ -12,18 +12,18 @@
 unsigned int counterLED = 0;
 
 // Global variables received through communication
-unsigned int layerThickness;
-unsigned int layerQuantity;
-unsigned int resinDryTime;
-unsigned int currentLayer;
-unsigned long totalTime;
+int layerThickness = 0;
+int layerQuantity = 0;
+int resinDryTime = 0;
+int currentLayer = 0;
+int totalTime = 0;
 
 // Array of strings that contain up to 1500 filenames of maximum 31 characters each
 char layerFilenames[1500][21];
 
 // The following global variables may not be needed.
-unsigned long startTime;
-unsigned long currentTime;
+int startTime = 0;
+int currentTime = 0;
 
 enum PRINTER_STATUS {
 	READY,
