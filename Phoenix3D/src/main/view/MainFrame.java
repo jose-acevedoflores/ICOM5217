@@ -44,6 +44,7 @@ public class MainFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	public JButton importB;
 	public JButton printB;
+	private PrintButtonAction printAction;
 
 	public JComboBox layerThickness;
 
@@ -71,7 +72,7 @@ public class MainFrame extends JFrame{
 		this.importB = new JButton("Import");
 		this.importB.addActionListener(new ImportButtonAction(this));
 		this.printB = new JButton("Print");
-		this.printB.addActionListener(new PrintButtonAction("resources/freeSteelGeneratedBMPs"));
+		this.printB.addActionListener(this.printAction = new PrintButtonAction());
 		this.printB.setEnabled(false);
 		
 		String[] options = { "1.5mm","1.0mm", "0.5mm"};
@@ -202,7 +203,10 @@ public class MainFrame extends JFrame{
 			{
 				bmps[i] = f;
 				i++;
-			}		
+			}
+			
+			//The print button is now ready to send the data 
+			printAction.ready(bmps);
 			
 			timerListener.freeSteelBMPs = bmps;
 			timerListener.i=0;
@@ -232,7 +236,7 @@ public class MainFrame extends JFrame{
 	 * 
 	 * @param bmps
 	 */
-	private LinkedList<File> sortLayers(File[] bmps)
+	public LinkedList<File> sortLayers(File[] bmps)
 	{
 		LinkedList<File> sorted = new LinkedList<File>();
 		sorted.add(bmps[0]);
