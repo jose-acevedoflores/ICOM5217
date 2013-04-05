@@ -14,8 +14,12 @@ enum SM{
 	THIRTYSECONDTHSTEP
 } stepMode;
 
+enum DR{
+	UP = 0,
+	DOWN = 1
+} stepDirection;
 
-void motorStep(int numberSteps, int direction){
+void motorStep(int numberSteps, enum DR direction){
 
 	if(direction == 0){
 		P3OUT &= ~(0x01);
@@ -67,7 +71,7 @@ void resetMotorToTop() {
 	microSteppingMode(FULLSTEP);
 	while (!(~P1IN & 0x01)) {
 		// Move motor ten steps up
-		motorStep(5,1);
+		motorStep(5,UP);
 	}
 }
 
@@ -76,6 +80,6 @@ void resetMotorToBottom() {
 	microSteppingMode(FULLSTEP);
 	while (!(~P1IN & 0x02)) {
 			// Move motor ten steps down
-			motorStep(5,0);
+			motorStep(5,DOWN);
 		}
 }

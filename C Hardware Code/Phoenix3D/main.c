@@ -36,7 +36,7 @@ void main(void) {
 
 	TA1CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
 	TA1CCR0 |= 32767; //Set terminal count to 32767 to know a second has passed
-	TA1CCTL0 |= CCIE; //Enable TA0 count 1 interrupts
+	//TA1CCTL0 |= CCIE; //Enable TA0 count 1 interrupts
 
 	P1IE |= 0x01F; //Enable Port 1.0 and P1.1 interrupts.
 	P1IES |= 0x01F; //Port 1.0 and 1.1 edge selector H -> L
@@ -69,14 +69,13 @@ void main(void) {
 	}*/
 
 	//wait(10000);
-	updateDisplayStatus(SHOW_TIME_ELAPSED);
+	//updateDisplayStatus(SHOW_TIME_ELAPSED);
 
 	//wait(10000);
 	//updateDisplayStatus(SHOW_TIME_REMAINING);
 
-	//microSteppingMode(FULLSTEP);
-	//motorStep(4000, 1);
-
+	microSteppingMode(FULLSTEP);
+	motorStep(1000, UP);
 }
 
 #pragma vector=TIMER0_A0_VECTOR
