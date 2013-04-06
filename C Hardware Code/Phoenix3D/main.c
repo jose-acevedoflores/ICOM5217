@@ -24,6 +24,9 @@ void main(void) {
 	P1DIR |= (0X060);//Set P1.5 and P1.6 for buzzer and LED outputs
 	P1OUT &= ~(0x020); //Turn off LED initially.
 
+	/*Interface Buttons Port setup*/
+	P1DIR &= ~(0x018);//Set P1.3 and P1.4 as inputs for interface buttons
+
 	/*LCD Port setup*/
 	P5DIR |= 0x03;//Set Port 5.0, 5.1 as outputs for LCD
 	P6DIR |= 0x0FF;//Set Port 6 as outputs for LCD Data
@@ -41,8 +44,8 @@ void main(void) {
 	P1IE |= 0x01F; //Enable Port 1.0 and P1.1 interrupts.
 	P1IES |= 0x01F; //Port 1.0 and 1.1 edge selector H -> L
 
-	P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
-	P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
+//	P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
+//	P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
 
 	// For debug purposes only
 	resinDryTime = 120;
@@ -53,7 +56,7 @@ void main(void) {
 
 	__bis_SR_register(GIE); //Enable global interrupts.
 	//lineWrite(line1, LINE_1);
-	P2OUT &= ~(0x080);
+	activateMotor();
 	//	resetMotorToTop();
 
 	initializeLCD();
@@ -64,7 +67,7 @@ void main(void) {
 	startTime = currentTime; // Set startTime
 	//status = 0;
 
-	resetMotorToBottom();
+	resetMotorToTop();
 
 	while (1);
 
@@ -100,7 +103,7 @@ __interrupt void TIMER0_B0_VECTOR_ISR(void) {
 #pragma vector=PORT1_VECTOR
 __interrupt void PORT1_ISR(void){
 	//P1.0 Requested the interrupt
-	if((P1IFG & 0x01) == 1){
+	if((P1IFG & 0x01) != 0){
 		if((P1IN & 0x01) == 0){
 			TA0CCR0 = 15; //Store 15 in terminal count register.
 		}
@@ -113,15 +116,33 @@ __interrupt void PORT1_ISR(void){
 		P1IFG &= ~(0x01);
 	}
 	//P1.1 Requested the interrupt
-	if((P1IFG & 0x02) == 1){
-		P2OUT |= (0x080);
+	else if((P1IFG & 0x02) != 0){
+		P2OUT |= (0x080);//Disable Motor driver
 		P1IFG &= ~(0x02);
 	}
 
 	//P1.2 Requested the interrupt
-	if((P1IFG & 0x04) == 1){
-		P2OUT |= (0x080);
+	else if((P1IFG & 0x04) != 0){
+		P2OUT |= (0x080);//Disable Motor driver
 		P1IFG &= ~(0x04);
 	}
+
+	//P1.3 Requested the interrupt
+	else if((P1IFG & 0x08) != 0){
+		cancelPrint();
+		P1IFG &= ~(0x08);
+		}
+	//P1.4 Requested the interrupt
+	else if((P1IFG & 0x010) != 0){
+		if(cancelRequest){
+			P2OUT |= (0x080);//Disable Motor driver
+			cancelRequest = false;
+		}
+		else{
+			status = (status+1)%4;
+			updateDisplayStatus(status);
+		}
+		P1IFG &= ~(0x010);
+			}
 }
 

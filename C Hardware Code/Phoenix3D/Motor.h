@@ -2,7 +2,7 @@
  * Motor.h
  *
  *  Created on: Mar 27, 2013
- *      Author: Piro
+ *      Author: fernando
  */
 
 enum SM{
@@ -82,4 +82,12 @@ void resetMotorToBottom() {
 			// Move motor ten steps down
 			motorStep(5,DOWN);
 		}
+}
+
+void activateMotor(){
+	P2OUT &= ~(0x080);
+}
+
+void deactivateMotor(){
+	P2OUT |= (0x080);
 }

@@ -2,7 +2,7 @@
  * Utils.h
  *
  *  Created on: Mar 27, 2013
- *      Author: Piro
+ *      Author: fernando
  */
 
 struct realTime {
@@ -36,42 +36,4 @@ struct realTime getTimeFromSeconds(int time) {
 	return t;
 }
 
-// Converts an integer to a character array
-/*void *changeIntegerToChar(int integer, char result[]) {
 
-    int int4 = 0, int3 = 0, int2 = 0, int1 = 0;
-
-    if (integer > 1000) {
-        int4 = integer / 1000;
-        integer = integer % 1000;
-    }
-    if (integer > 100) {
-        int3 = integer / 100;
-        integer = integer % 100;
-    }
-    if (integer > 10) {
-        int2 = integer / 10;
-        int1 = integer % 10;
-    }
-
-    result[4] = '`';
-    result[3] = (char) (int1 + 48);
-    result[2] = (char) (int2 + 48);
-    result[1] = (char) (int3 + 48);
-    result[0] = (char) (int4 + 48);
-
-    return;
-}
-
-void *concatenateIntToString(char string[], int strLen, char integer[], int intLen, char result[]) {
-
-    int i = 0;
-    while (integer[i] == '0') {
-        i++;
-    }
-
-    memcpy(result, string, strLen);
-    memcpy(&result[strLen],&integer[i],intLen);
-
-    return;
-}*/

@@ -31,3 +31,9 @@ enum PRINTER_STATUS {
 	CANCELLING,
 	DONE_PRINTING
 };
+
+typedef int bool;
+#define true 1
+#define false 0
+
+bool cancelRequest = false;

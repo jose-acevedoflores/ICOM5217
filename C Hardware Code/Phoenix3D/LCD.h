@@ -96,13 +96,11 @@ void updateDisplay(void) {
 }
 
 void clearDisplay(void) {
-	lineWrite("                    ", LINE_1);
-	lineWrite("                    ", LINE_2);
-	lineWrite("                    ", LINE_3);
-	lineWrite("                    ", LINE_4);
+	commandWrite(0x01);
 }
 
 void updateDisplayStatus(int status) {
+	clearDisplay();
 	switch(status) {
 	case 0: {
 		char temp[20] = "";
@@ -163,6 +161,10 @@ void updateDisplayStatus(int status) {
 	}
 }
 
-//__no_operation();
-//char arreglotest[20] = "pipisito 09`";
+void cancelPrint(){
 
+	clearDisplay();
+	lineWrite("Press algo to cancel`",LINE_2);
+	cancelRequest = true;
+
+}
