@@ -1,0 +1,19 @@
+    int i = 0, start = 0;
+    while (Rx[i] != ',') {
+        layerQuantity[i] = Rx[i++];
+    }
+    sprintf(layerQuantity, "%s%c", layerQuantity, '`');
+    i++;
+
+    start = i;
+    while(Rx[i] != ',') {
+        thickness[i-start] = Rx[i++];
+    }
+    sprintf(thickness, "%s%c", thickness, '`');
+    i++;
+
+    start = i;
+    while(Rx[i] != '`') {
+        fileName[i-start] = Rx[i++];
+    }
+    sprintf(fileName, "%s%c", fileName, '`');
