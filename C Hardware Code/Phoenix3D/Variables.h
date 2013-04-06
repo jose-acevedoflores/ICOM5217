@@ -45,3 +45,4 @@ int receivedIndex = 0;
 char fileName[20] = "";
 char numberOfLayers[5] = "";
 char thickness[6]= "";
+char pageNumber[2] = "";

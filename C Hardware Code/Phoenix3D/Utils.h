@@ -39,30 +39,23 @@ struct realTime getTimeFromSeconds(int time) {
 //This function formats the RxBuf[] array
 void formatReceivedData(char Rx[])
 {
-	int i, start, end;
-	for(i = 0 ; i < receivedIndex; i++) {
-		if(Rx[i] != ',' && (i >= start) && (i < end)) {
-			if (i <= 5) {
-				numberOfLayers[i] = Rx[i];
-			}
-			if (i >= 5 && i <= 12) {
-				thickness[i-start] = Rx[i];
-			}
-			if (i >= 12) {
-				fileName[i-start] = Rx[i];
-			}
-		}
-		else {
-			start = i;
-			if (i <= 5) {
-				end = i + 6;
-			}
-			else if (i >= 5 && i <= 12) {
-				end = i + 6;
-			}
-			else {
-				end = receivedIndex;
-			}
-		}
+	int i = 0, start = 0;
+	while (Rx[i] != ',') {
+		numberOfLayers[i++] = Rx[i];
 	}
+	numberOfLayers[i] = '`';
+
+	start = i;
+	while (Rx[i] != ',') {
+		thickness[i - start] = Rx[i];
+		i++;
+	}
+	thickness[i-start] = '`';
+
+	while (Rx[i] != '`') {
+		fileName[i - start] = Rx[i];
+		i++;
+	}
+	fileName[i-start] = '`';
+
 }

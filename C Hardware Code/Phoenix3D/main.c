@@ -160,7 +160,17 @@ __interrupt void USCI_A1_ISR(void){
 
 	else
 	{
+		RxBuf[receivedIndex++] = '`';
+		//lineWrite(RxBuf,LINE_1);
+
 		formatReceivedData(RxBuf);
+		clearDisplay();
+		lineWrite(fileName,LINE_2);
+		lineWrite(numberOfLayers,LINE_3);
+		lineWrite(thickness,LINE_4);
+
+		//lineWrite((char*)((status+1)+0x030),LINE_4);
+
 		receivedIndex = 0;
 	}
 
