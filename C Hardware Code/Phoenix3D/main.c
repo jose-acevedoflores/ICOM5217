@@ -135,7 +135,13 @@ __interrupt void PORT1_ISR(void){
 
 	//P1.3 Requested the interrupt
 	else if((P1IFG & 0x08) != 0){
+		if(!cancelRequest){
 		cancelPrint();
+		}
+		else{
+			updateDisplayStatus(status);
+			cancelRequest = false;
+		}
 		P1IFG &= ~(0x08);
 	}
 	//P1.4 Requested the interrupt

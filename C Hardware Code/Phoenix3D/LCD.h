@@ -164,7 +164,7 @@ void updateDisplayStatus(int status) {
 void cancelPrint(){
 
 	clearDisplay();
-	lineWrite("Press algo to cancel`",LINE_2);
+	lineWrite(" Press > to cancel`",LINE_2);
 	cancelRequest = true;
 
 }
