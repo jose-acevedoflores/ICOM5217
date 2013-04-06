@@ -4,6 +4,7 @@
 #include "Utils.h"
 #include "Motor.h"
 #include "LCD.h"
+#include "UART.h"
 /*
  * main.c
  */
@@ -56,7 +57,7 @@ void main(void) {
 
 	__bis_SR_register(GIE); //Enable global interrupts.
 	//lineWrite(line1, LINE_1);
-	activateMotor();
+	deactivateMotor();
 	//	resetMotorToTop();
 
 	initializeLCD();
@@ -67,7 +68,12 @@ void main(void) {
 	startTime = currentTime; // Set startTime
 	//status = 0;
 
-	resetMotorToTop();
+	//resetMotorToTop();
+	initializeUART();
+	lineWrite("Filename: cube.stl`",LINE_1);
+	lineWrite("Num of layers: 1273`",LINE_2);
+	lineWrite("Layer Thickness: 0.5mm`",LINE_3);
+	lineWrite("1/4`",LINE_4);
 
 	while (1);
 
@@ -145,4 +151,18 @@ __interrupt void PORT1_ISR(void){
 		P1IFG &= ~(0x010);
 			}
 }
+//UART RX ISR
+#pragma vector=USCI_A1_VECTOR
+__interrupt void USCI_A1_ISR(void){
 
+	if(UCA1RXBUF != '`')
+		RxBuf[receivedIndex++] = UCA1RXBUF;
+
+	else
+	{
+		formatReceivedData(RxBuf);
+		receivedIndex = 0;
+	}
+
+	UCA1IFG &= ~(UCRXIFG); // Clear Interrupt flag
+}

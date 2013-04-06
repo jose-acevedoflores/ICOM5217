@@ -37,3 +37,11 @@ typedef int bool;
 #define false 0
 
 bool cancelRequest = false;
+
+
+// Array used to save the characters received from the UART
+char RxBuf[200] = "";
+int receivedIndex = 0;
+char fileName[20] = "";
+char numberOfLayers[5] = "";
+char thickness[6]= "";
