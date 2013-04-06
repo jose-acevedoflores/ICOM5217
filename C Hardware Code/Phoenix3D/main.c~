@@ -34,19 +34,15 @@ void main(void) {
 	TA0CCR0 |= 0; //Store 0 in terminal count register.
 	TA0CCTL0 |= CCIE; //Enable TA0 count 0 interrupts
 
-	TB0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
-	TB0CCR0 = 32767; //Set terminal count to 32767 to know a second has passed
-	TB0CCTL0 |= CCIE; //Enable TA0 count 1 interrupts
+	TA1CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
+	TA1CCR0 |= 32767; //Set terminal count to 32767 to know a second has passed
+	//TA1CCTL0 |= CCIE; //Enable TA0 count 1 interrupts
 
 	P1IE |= 0x01F; //Enable Port 1.0 and P1.1 interrupts.
 	P1IES |= 0x01F; //Port 1.0 and 1.1 edge selector H -> L
 
 	P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
 	P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
-
-	// For debug purposes only
-	resinDryTime = 120;
-	layerQuantity = 1200;
 
 	currentTime = 0; // Initialize time variable
 	totalTime = resinDryTime * layerQuantity; // Calculate total estimated time
@@ -62,15 +58,24 @@ void main(void) {
 
 	// Below is a testing routine for the updateDisplayStatus() function
 	startTime = currentTime; // Set startTime
-	//status = 0;
 
-	resetMotorToBottom();
+	//updateDisplayStatus(SHOW_LAYERS_AMOUNT);
 
-	while (1);
+	/*while (1) {
+		char temp[20] = "";
 
-	//microSteppingMode(FULLSTEP);
-	//motorStep(4000, 1);
+		sprintf(temp, "%d`", currentTime);
+		lineWrite(temp, LINE_1);
+	}*/
 
+	//wait(10000);
+	//updateDisplayStatus(SHOW_TIME_ELAPSED);
+
+	//wait(10000);
+	//updateDisplayStatus(SHOW_TIME_REMAINING);
+
+	microSteppingMode(FULLSTEP);
+	motorStep(1000, UP);
 }
 
 #pragma vector=TIMER0_A0_VECTOR
@@ -85,16 +90,10 @@ __interrupt void TIMER0_A0_ISR(void){
 
 }
 
-#pragma vector=TIMER0_B0_VECTOR
-__interrupt void TIMER0_B0_VECTOR_ISR(void) {
+#pragma vector=TIMER0_A1_VECTOR
+__interrupt void TIMER0_A1_VECTOR_ISR(void) {
+	P1OUT ^= (0X020);
 	currentTime++;
-
-	if (currentTime % 5 == 0) {
-		//clearDisplay();
-		//updateDisplayStatus(status);
-		status = currentTime % 4;
-		TA0CCTL0 &= ~(0x01);
-	}
 }
 
 #pragma vector=PORT1_VECTOR
@@ -124,4 +123,3 @@ __interrupt void PORT1_ISR(void){
 		P1IFG &= ~(0x04);
 	}
 }
-

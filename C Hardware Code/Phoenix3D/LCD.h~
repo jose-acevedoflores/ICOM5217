@@ -9,11 +9,15 @@ char line1[20] = "";
 char line2[20] = "";
 char line3[20] = "";
 char line4[20] = "";
-
-// Global variable used to write spaces before any text in the function lineWrite(). Used to center text
-int spaceBefore = 0;
-// Global variable that specifies the status of the LCD.
 int status = 0;
+
+// Describes the current status of the LCD
+enum LCD_STATUS {
+	SHOW_LAYERS_AMOUNT = 0,
+	SHOW_TIME_ELAPSED = 1,
+	SHOW_TIME_REMAINING = 2,
+	SHOW_CURRENT_LAYER_FILENAME = 3
+};
 
 enum LINE {
 	LINE_1,
@@ -77,15 +81,11 @@ void lineWrite(char line[], enum LINE lineNumber) {
 		break;
 	}
 	volatile unsigned int i = 0;
-	for (; i < 20 + spaceBefore; i++) {
-		if (line[i-spaceBefore] == '`' ) //If current character is the endline, break
+	for (; i < 20; i++) {
+		if (line[i] == '`' ) //If current character is the endline, break
 			break;
-		// Addition: begins to write in an specific place in the line, given by spaceBefore
-		else if (i >= spaceBefore) characterWrite(line[i - spaceBefore]); // Change: write character if spaces are already written
-		else characterWrite(' '); // Else put a space before
+		else characterWrite(line[i]); //Else write character on the screen
 	}
-	// Resets space before
-	spaceBefore = 0;
 }
 
 void updateDisplay(void) {
@@ -95,74 +95,57 @@ void updateDisplay(void) {
 	lineWrite(line4, LINE_4); //Update line4
 }
 
-void clearDisplay(void) {
-	lineWrite("                    ", LINE_1);
-	lineWrite("                    ", LINE_2);
-	lineWrite("                    ", LINE_3);
-	lineWrite("                    ", LINE_4);
-}
-
-void updateDisplayStatus(int status) {
+void updateDisplayStatus(enum LCD_STATUS status) {
 	switch(status) {
-	case 0: {
+	case SHOW_LAYERS_AMOUNT: {
 		char temp[20] = "";
 
-		sprintf(temp, "%d of %d`", currentLayer, layerQuantity);
-		int i = 0;
-		for (; temp[i] != '`'; i++);
+		//sprintf(temp, " %d of %d `", currentLayer, layerQuantity);
 
-		lineWrite("   Printing layer`", LINE_2);
-		spaceBefore = (20 - i)/2;
+		lineWrite("    Printing layer`", LINE_2);
 		lineWrite(temp, LINE_3);
-
+		status = SHOW_TIME_ELAPSED;
 		break;
 	}
-	case 1: {
+	case SHOW_TIME_ELAPSED: {
 		//int elapsedTime = currentTime - startTime;
-		int elapsedTime = currentTime - startTime;
+		int elapsedTime = 23456;
 		char temp[20] = "";
+
+		sprintf(temp, "%d`", currentTime);
+		lineWrite(temp, LINE_1);
 		struct realTime t = getTimeFromSeconds(elapsedTime);
 
-		sprintf(temp, "%dh %dm %ds`", t.hours, t.minutes, t.seconds);
-
-		int i = 0;
-		for (; temp[i] != '`'; i++);
+		sprintf(temp, " %dh %dm %ds elapsed`", t.hours, t.minutes, t.seconds);
 
 		lineWrite("   Approximately`", LINE_2);
-		spaceBefore = (20 - i)/2;
 		lineWrite(temp, LINE_3);
-		lineWrite("      elapsed`", LINE_4);
-
+		status = SHOW_TIME_REMAINING;
 		break;
 	}
-	case 2: {
+	case SHOW_TIME_REMAINING: {
 		int elapsedTime = currentTime - startTime;
 		int remainingTime = totalTime - elapsedTime;
 
 		char temp[20] = "";
 		struct realTime t = getTimeFromSeconds(remainingTime);
-		sprintf(temp, "%dh %dm %ds`", t.hours, t.minutes, t.seconds);
+		//sprintf(temp, "Approx. %dh %dm %ds", t.hours, t.minutes, t.seconds);
 
-		int i = 0;
-		for (; temp[i] != '`'; i++);
-
-		lineWrite("   Approximately`", LINE_2);
-		spaceBefore = (20 - i)/2;
-		lineWrite(temp, LINE_3);
-		lineWrite("     remaining`", LINE_4);
-
+		lineWrite(temp, LINE_2);
+		lineWrite(" remaining.`", LINE_3);
+		status = SHOW_CURRENT_LAYER_FILENAME;
 		break;
 	}
-	case 3: {
+	case SHOW_CURRENT_LAYER_FILENAME: {
 
-		lineWrite("   Printing file`", LINE_2);
+		//lineWrite("   Printing file`", LINE_2);
 		//lineWrite(layerFilenames[currentLayer], LINE_3);
-
+		status = SHOW_LAYERS_AMOUNT;
 		break;
 	}
 	}
 }
 
+
 //__no_operation();
 //char arreglotest[20] = "pipisito 09`";
-
