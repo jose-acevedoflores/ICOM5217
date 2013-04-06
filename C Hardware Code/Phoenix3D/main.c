@@ -45,8 +45,8 @@ void main(void) {
 	P1IE |= 0x01F; //Enable Port 1.0 and P1.1 interrupts.
 	P1IES |= 0x01F; //Port 1.0 and 1.1 edge selector H -> L
 
-//	P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
-//	P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
+	//	P1IE |= 0x03; //Enable Port 1.0 and P1.1 interrupts.
+	//	P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
 
 	// For debug purposes only
 	resinDryTime = 120;
@@ -137,7 +137,7 @@ __interrupt void PORT1_ISR(void){
 	else if((P1IFG & 0x08) != 0){
 		cancelPrint();
 		P1IFG &= ~(0x08);
-		}
+	}
 	//P1.4 Requested the interrupt
 	else if((P1IFG & 0x010) != 0){
 		if(cancelRequest){
@@ -149,7 +149,7 @@ __interrupt void PORT1_ISR(void){
 			updateDisplayStatus(status);
 		}
 		P1IFG &= ~(0x010);
-			}
+	}
 }
 //UART RX ISR
 #pragma vector=USCI_A1_VECTOR
@@ -165,6 +165,7 @@ __interrupt void USCI_A1_ISR(void){
 
 		formatReceivedData(RxBuf);
 		clearDisplay();
+		lineWrite(RxBuf, LINE_1);
 		lineWrite(fileName,LINE_2);
 		lineWrite(numberOfLayers,LINE_3);
 		lineWrite(thickness,LINE_4);
