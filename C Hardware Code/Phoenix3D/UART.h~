@@ -21,9 +21,8 @@ void initializeUART(void){
 
 }
 
-void send(char character)
+void send(int character)
 {
 	while(!(UCA1IFG&UCTXIFG));
 	UCA1TXBUF = character;
 }
-

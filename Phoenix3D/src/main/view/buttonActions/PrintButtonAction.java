@@ -5,9 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -15,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import main.freesteel.FreeSteelSlice;
-
 import controller.lightcrafter.LightCrafterController;
 
 /**
@@ -38,6 +35,8 @@ public class PrintButtonAction implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		sendDataToMicroProcessor();
+		
 		try{
 			Thread t = new Thread(new Runnable() {
 
@@ -117,65 +116,54 @@ public class PrintButtonAction implements ActionListener{
 			}
 		}
 
-		// Additions begin here
-		// Create file to send printing information to the microprocessor
-
-		File file = new File(System.getProperty("user.home") + File.separator + "tempLayerData.dat");
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(file);
-		} catch (FileNotFoundException e1) {
-			System.out.println("File can't be created. Check your permissions to write at " + System.getProperty("user.home"));
-			e1.printStackTrace();
-		}
-
-		String editedFileName = FreeSteelSlice.STL_FILE_NAME.substring(FreeSteelSlice.STL_FILE_NAME.lastIndexOf(File.separator)+1, FreeSteelSlice.STL_FILE_NAME.lastIndexOf('.'));
-		
-		writer.print("numberOfLayers:" + freeSteelBMPs.length + ",");
-		writer.print("layerThickness:" + FreeSteelSlice.LAYER_THICKNESS + ",");
-		writer.print("fileName:" + editedFileName + ",");
-		writer.print("end`");
-		writer.close();
-
-		Process p = null;
-
-		String prefix = "";
-		String suffix = ".exe";
-
-		//TODO: Add support for Mac OSX
-		// Add support for executing Linux binaries
-		if (System.getProperty("os.name").equals("Linux")) {
-			prefix = "./";
-			suffix = "";
-		}
-
-		String programName = prefix + "serialport" + suffix;
-		String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "serialPortComponent" + File.separator;
-		String tempFileLocation = file.getAbsolutePath();
-
-		String cmd[] = {programName, tempFileLocation};
-		String envp[] = {""};
-
-		try {
-			p = Runtime.getRuntime().exec(cmd, envp, new File(programLocation));
-		} catch (IOException e1) {
-			System.out.println("There was a problem trying to execute the serial port communication program.");
-			e1.printStackTrace();
-		}
-		// Eliminates warning
-		p.getErrorStream();
-
-		try {
-			int status = p.waitFor();
-			if (status == 0) {
-				file.delete();
-			}
-			p.destroy();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		
-		System.out.println("print");
 	}
 
+	private void sendDataToMicroProcessor() {
+		// Additions begin here
+				// Send printing information to the microprocessor
+
+				String editedFileName = FreeSteelSlice.STL_FILE_NAME.substring(FreeSteelSlice.STL_FILE_NAME.lastIndexOf(File.separator)+1, FreeSteelSlice.STL_FILE_NAME.lastIndexOf('.'));
+				
+				Process p = null;
+
+				String prefix = "";
+				String suffix = ".exe";
+
+				//TODO: Add support for Mac OSX
+				// Add support for executing Linux binaries
+				if (System.getProperty("os.name").equals("Linux")) {
+					prefix = "./";
+					suffix = "";
+				}
+
+				String programName = prefix + "serialport" + suffix;
+				String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
+				String information = Integer.toString(freeSteelBMPs.length) + "," + Double.toString(FreeSteelSlice.LAYER_THICKNESS) + "," + editedFileName + "`";
+
+				System.out.println("Information to send to the microprocessor: " + information);
+				
+				String cmd[] = {programName, information};
+				String envp[] = {""};
+
+				try {
+					p = Runtime.getRuntime().exec(cmd, envp, new File(programLocation));
+				} catch (IOException e1) {
+					System.out.println("There was a problem trying to execute the serial port communication program.");
+					e1.printStackTrace();
+				}
+				// Eliminates warning
+				p.getErrorStream();
+
+				try {
+					int status = p.waitFor();
+					if (status == 0) {
+					}
+					p.destroy();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+				
+				System.out.println("print");
+	}
+	
 }
