@@ -1,0 +1,61 @@
+Partlist
+
+Exported from SchematicV1.sch at 3/2/2013 6:48:44 PM
+
+EAGLE Version 6.0.0 Copyright (c) 1988-2011 CadSoft
+
+Assembly variant: 
+
+Part     Value              Device             Package         Library                Sheet
+
+C1       100uF              C-US075-032X103    C075-032X103    rcl                    1
+C2       0.1uF              C-US075-032X103    C075-032X103    rcl                    1
+C3       0.47uF             C-US075-032X103    C075-032X103    rcl                    1
+C4       0.1uF              C-US075-032X103    C075-032X103    rcl                    1
+C5       0.1uF              C-US075-032X103    C075-032X103    rcl                    1
+C6       2mF                C-US075-032X103    C075-032X103    rcl                    1
+C7       10uF               C-US075-032X103    C075-032X103    rcl                    1
+C8       10uF               C-US075-032X103    C075-032X103    rcl                    1
+C9       10uF               C-US075-032X103    C075-032X103    rcl                    1
+C10      3.3uF              C-US075-032X103    C075-032X103    rcl                    1
+C11      3.3uF              C-US075-032X103    C075-032X103    rcl                    1
+C12      3.3uF              C-US075-032X103    C075-032X103    rcl                    1
+C13      3.3uF              C-US075-032X103    C075-032X103    rcl                    1
+C14      3.3uF              C-US075-032X103    C075-032X103    rcl                    1
+C15      220nF              C-US075-032X103    C075-032X103    rcl                    1
+C16      220nF              C-US075-032X103    C075-032X103    rcl                    1
+C17      4.7uF              C-US075-032X103    C075-032X103    rcl                    1
+GBL005                      GBU4               GBU4S           rectifier              1
+HD44780  LCD_2X16_SIL       LCD_2X16_SIL       HY-1602F        lcd_2x16_led_backlight 1
+IC1      LM1117T-3.3        LM1117T-3.3        TO220           lm1117                 1
+IC2      LM1117T-5.0        LM1117T-5.0        TO220           lm1117                 1
+LED1                        LEDB155            Q62902-B155     led                    1
+Q1       4MHz               XTAL/S             QS              special                1
+R1       47k                R-US_0207/10       0207/10         rcl                    1
+R2       2k                 R-US_0207/10       0207/10         rcl                    1
+R3       47k                R-US_0207/10       0207/10         rcl                    1
+R4       2k                 R-US_0207/10       0207/10         rcl                    1
+R5       47k                R-US_0207/10       0207/10         rcl                    1
+R6       2k                 R-US_0207/10       0207/10         rcl                    1
+R7       47k                R-US_0207/10       0207/10         rcl                    1
+R8       2k                 R-US_0207/10       0207/10         rcl                    1
+R9       47k                R-US_0207/10       0207/10         rcl                    1
+R10      2k                 R-US_0207/10       0207/10         rcl                    1
+R11      220                R-US_0207/10       0207/10         rcl                    1
+R12      220                R-US_0207/10       0207/10         rcl                    1
+R13      1M                 R-US_0207/10       0207/10         rcl                    1
+S1NC     REED-SWITCH-MK04   REED-SWITCH-MK6-4  MK6-4           switch-reed            1
+S2NO     TS SWITCH          TL32PO             TL3XPO          switch                 1
+S3NO     TS SWITCH          TL32PO             TL3XPO          switch                 1
+S4NO     PUSHBUTTON         PUSHBUTTON         PUSHBUTTON      PUSHBUTTON             1
+S4NO1    PUSHBUTTON         PUSHBUTTON         PUSHBUTTON      PUSHBUTTON             1
+SG1      FBP3009            B/C17S             B/C17S          buzzer                 1
+T1                          XFORMER            T70-E           special                1
+U$1      FAN                FAN                FAN             FAN                    1
+U$2      STEPPERMOTOR       STEPPERMOTOR       STEPPERMOTOR    STEPPERMOTOR           1
+U$3      LIGHTCRAFTER       LIGHTCRAFTER       LIGHTCRAFTER    Lightcrafter           1
+U$4      FAN                FAN                FAN             FAN                    1
+U1       MSP430F5528_RGC_64 MSP430F5528_RGC_64 RGC64_4P25X4P25 MSP430F5528QFN64       1
+U2       LM1085_NDE_3       LM1085_NDE_3       T03B            LM1085                 1
+U3                          DRV8824            BO              DRV8824B0              1
+X1       PN61729-S          PN61729-S          PN61729-S       con-berg               1

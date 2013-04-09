@@ -11,9 +11,9 @@ char line3[20] = "";
 char line4[20] = "";
 
 // Global variable used to write spaces before any text in the function lineWrite(). Used to center text
-volatile int spaceBefore = 0;
+int spaceBefore = 0;
 // Global variable that specifies the status of the LCD.
-volatile int status = 0;
+int status = 0;
 
 enum LINE {
 	LINE_1,
@@ -62,7 +62,6 @@ void initializeLCD(void) {
 }
 
 void lineWrite(char line[], enum LINE lineNumber) {
-	//__disable_interrupt();
 	switch(lineNumber) { //Move cursor to current line
 	case LINE_1:
 		commandWrite(0x080);
@@ -79,20 +78,14 @@ void lineWrite(char line[], enum LINE lineNumber) {
 	}
 	volatile unsigned int i = 0;
 	for (; i < 20 + spaceBefore; i++) {
-		if ((i >= spaceBefore) && line[i-spaceBefore] == '`') { //If current character is the endline, break
+		if (line[i-spaceBefore] == '`' ) //If current character is the endline, break
 			break;
-		}
 		// Addition: begins to write in an specific place in the line, given by spaceBefore
-		else if (i >= spaceBefore) {
-			characterWrite(line[i - spaceBefore]); // Change: write character if spaces are already written
-		}
-		else {
-			characterWrite(' '); // Else put a space before
-		}
+		else if (i >= spaceBefore) characterWrite(line[i - spaceBefore]); // Change: write character if spaces are already written
+		else characterWrite(' '); // Else put a space before
 	}
 	// Resets space before
 	spaceBefore = 0;
-	//__enable_interrupt();
 }
 
 void updateDisplay(void) {
@@ -160,13 +153,8 @@ void updateDisplayStatus(int status) {
 	}
 	case 3: {
 
-		lineWrite("   Printing file:`", LINE_2);
-
-		volatile int i = 0;
-		for (; layerFilename[i] != '`'; i++);
-		i = i + 1;
-		spaceBefore = (20 - i)/2;
-		lineWrite(layerFilename, LINE_3);
+		lineWrite("   Printing file`", LINE_2);
+		//lineWrite(layerFilenames[currentLayer], LINE_3);
 
 		break;
 	}
@@ -176,8 +164,7 @@ void updateDisplayStatus(int status) {
 void cancelPrint(){
 
 	clearDisplay();
-	lineWrite(" Press '>' to cancel`",LINE_2);
+	lineWrite(" Press > to cancel`",LINE_2);
 	cancelRequest = true;
 
 }
-
