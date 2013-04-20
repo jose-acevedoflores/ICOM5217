@@ -1,4 +1,5 @@
 package controller.lightcrafter;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -166,13 +167,20 @@ public class LightCrafterController {
 		int exposure4 = exposureTime / 16777215;
 		
 		// Get input trigger time
-		int inputTime1 = exposureTime % 256;
-		int inputTime2 = (exposureTime / 256) % 256;
-		int inputTime3 = exposureTime / 65536;
-		int inputTime4 = exposureTime / 16777215;
+		int inputTime1 = inputTriggerTime % 256;
+		int inputTime2 = (inputTriggerTime / 256) % 256;
+		int inputTime3 = inputTriggerTime / 65536;
+		int inputTime4 = inputTriggerTime / 16777215;
+		
+		// Set trigger signal period
+		int triggerSignalTime = inputTriggerTime + exposureTime + 100000;
+		int triggerTime1 = triggerSignalTime % 256;
+		int triggerTime2 = (triggerSignalTime / 256) % 256;
+		int triggerTime3 = triggerSignalTime / 65536;
+		int triggerTime4 = triggerSignalTime / 16777215;
 		
 		// Set trigger type
-		int triggerType = 0x00;
+		int triggerType = 0x02;
 		if (autoTrigger)
 			triggerType = 0x01;
 		
@@ -196,10 +204,10 @@ public class LightCrafterController {
 		initCommand[12] = inputTime2; // input trigger delay 2
 		initCommand[13] = inputTime3; // input trigger delay 3
 		initCommand[14] = inputTime4; // input trigger delay 4
-		initCommand[15] = 0x40; // trigger signal period 1
-		initCommand[16] = 0x1F; // trigger signal period 2
-		initCommand[17] = 0x00; // trigger signal period 3
-		initCommand[18] = 0x00; // trigger signal period 4 (about 8000 us)
+		initCommand[15] = triggerTime1; // trigger signal period 1
+		initCommand[16] = triggerTime2; // trigger signal period 2
+		initCommand[17] = triggerTime3; // trigger signal period 3
+		initCommand[18] = triggerTime4; // trigger signal period 4 (about 8000 us)
 		initCommand[19] = exposure1; // exposure period 1
 		initCommand[20] = exposure2; // exposure period 2
 		initCommand[21] = exposure3; // exposure period 3
