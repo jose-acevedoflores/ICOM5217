@@ -57,24 +57,26 @@ void main(void) {
 
 	__bis_SR_register(GIE); //Enable global interrupts.
 	//lineWrite(line1, LINE_1);
-	deactivateMotor();
+	activateMotor();
 	//	resetMotorToTop();
 
 	initializeLCD();
 	//char line5[20] = "Test complete`";
 	//lineWrite(line5, LINE_1);
 
+	//printPhoenix3D();
+
 	// Below is a testing routine for the updateDisplayStatus() function
 	startTime = currentTime; // Set startTime
 	//status = 0;
 
-	//resetMotorToTop();
-	initializeUART();
+	resetMotorToBottom();
+	/*initializeUART();
 	lineWrite("Filename: cube.stl`",LINE_1);
 	lineWrite("Num of layers: 1273`",LINE_2);
 	lineWrite("Layer Thickness: 0.5mm`",LINE_3);
 	lineWrite("1/4`",LINE_4);
-
+*/
 	while (1);
 
 	//microSteppingMode(FULLSTEP);
