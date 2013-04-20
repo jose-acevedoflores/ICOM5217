@@ -5,6 +5,7 @@
 #include "Motor.h"
 #include "LCD.h"
 #include "UART.h"
+#include "UVLed.h"
 /*
  * main.c
  */
@@ -39,6 +40,9 @@ void main(void) {
 	/*LCD Port setup*/
 	P5DIR |= 0x03;//Set Port 5.0, 5.1 as outputs for LCD
 	P6DIR |= 0x0FF;//Set Port 6 as outputs for LCD Data
+
+	/*UV LED Port setup */
+	P5DIR |= 0x04; // Set Port 5.2 as output to control the UV Led
 
 	/*Timer A0 setup*/
 	UCSCTL4 |= SELA_2; //Choose ACLK source as Real Time CLK
@@ -79,7 +83,7 @@ void main(void) {
 	startTime = currentTime; // Set startTime
 	//status = 0;
 
-	resetMotorToBottom();
+	resetMotorToTop();
 	/*initializeUART();
 	lineWrite("Filename: cube.stl`",LINE_1);
 	lineWrite("Num of layers: 1273`",LINE_2);
@@ -113,11 +117,12 @@ void main(void) {
 				status = (status + 1) % 4;
 				updateDisplayStatus(status);
 
+
 				activateMotor();
 				motorStep(steps, UP);
 				deactivateMotor();
-
-				TB0CCTL0 &= ~(0x01);
+				turnUVOn();
+				TB0CCTL0 &= ~(0x01); //Clear TimerB IFG
 				__enable_interrupt();
 				checkIfDoPrintStep = false;
 			}
@@ -174,6 +179,7 @@ __interrupt void TIMER0_A0_ISR(void){
 __interrupt void TIMER0_B0_VECTOR_ISR(void) {
 	currentTime++;
 	if (jobStatus == printing) {
+		turnUVOff();
 		checkIfDoPrintStep = true;
 	}
 

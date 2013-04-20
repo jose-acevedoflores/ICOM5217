@@ -69,7 +69,7 @@ void microSteppingMode(enum SM stepMode){
 // Pin 1.1 is top motor location sensor
 void resetMotorToTop() {
 	microSteppingMode(FULLSTEP);
-	while (!(~P1IN & 0x01)) {
+	while (!(~P1IN & 0x02)) {
 		// Move motor ten steps up
 		motorStep(5,UP);
 	}
@@ -78,7 +78,7 @@ void resetMotorToTop() {
 // Pin 1.2 is bottom motor location sensor
 void resetMotorToBottom() {
 	microSteppingMode(FULLSTEP);
-	while (!(~P1IN & 0x02)) {
+	while (!(~P1IN & 0x04)) {
 			// Move motor ten steps down
 			motorStep(5,DOWN);
 		}
