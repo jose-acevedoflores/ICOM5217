@@ -5,7 +5,6 @@
 #include "Motor.h"
 #include "LCD.h"
 #include "UART.h"
-#include "UVLed.h"
 /*
  * main.c
  */
@@ -41,9 +40,6 @@ void main(void) {
 	P5DIR |= 0x03;//Set Port 5.0, 5.1 as outputs for LCD
 	P6DIR |= 0x0FF;//Set Port 6 as outputs for LCD Data
 
-	/*UV LED Port setup */
-	P5DIR |= 0x04; // Set Port 5.2 as output to control the UV Led
-
 	/*Timer A0 setup*/
 	UCSCTL4 |= SELA_2; //Choose ACLK source as Real Time CLK
 	TA0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
@@ -68,16 +64,10 @@ void main(void) {
 
 	__bis_SR_register(GIE); //Enable global interrupts.
 
-	//lineWrite(line1, LINE_1);
-	activateMotor();
-	//	resetMotorToTop();
-
-
 	initializeLCD();
 	lineWrite("       Ready`", LINE_2);
 	initializeUART();
 
-<<<<<<< HEAD
 	activateMotor();
 	resetMotorToBottom();
 
@@ -88,24 +78,6 @@ void main(void) {
 	// Added turn on LED
 	P2OUT |= 0x01;
 	P2OUT &= ~(0x02);
-=======
-	//printPhoenix3D();
-
-	// Below is a testing routine for the updateDisplayStatus() function
-	startTime = currentTime; // Set startTime
-	//status = 0;
-
-	resetMotorToTop();
-	/*initializeUART();
-	lineWrite("Filename: cube.stl`",LINE_1);
-	lineWrite("Num of layers: 1273`",LINE_2);
-	lineWrite("Layer Thickness: 0.5mm`",LINE_3);
-	lineWrite("1/4`",LINE_4);
-*/
-	
-	//activateMotor();
-	//resetMotorToBottom();
->>>>>>> 251fdc7b74571ba4670e366bec3a41d857c5d06b
 
 	while (1) {
 		if (jobStatus == printing && checkIfDoPrintStep) {
@@ -130,11 +102,9 @@ void main(void) {
 				status = (status + 1) % 4;
 				updateDisplayStatus(status);
 
-
 				activateMotor();
 				motorStep(steps, UP);
 				deactivateMotor();
-<<<<<<< HEAD
 
 				// Added code
 				P2OUT |= (0x02);
@@ -171,10 +141,6 @@ void main(void) {
 				P2OUT &= ~(0x02);
 
 				TB0CCTL0 &= ~(0x01);
-=======
-				turnUVOn();
-				TB0CCTL0 &= ~(0x01); //Clear TimerB IFG
->>>>>>> 251fdc7b74571ba4670e366bec3a41d857c5d06b
 				__enable_interrupt();
 				checkIfDoPrintStep = false;
 			}
@@ -211,7 +177,6 @@ void main(void) {
 	}
 
 
-
 }
 
 #pragma vector=TIMER0_A0_VECTOR
@@ -231,7 +196,6 @@ __interrupt void TIMER0_A0_ISR(void){
 __interrupt void TIMER0_B0_VECTOR_ISR(void) {
 	currentTime++;
 	if (jobStatus == printing) {
-		turnUVOff();
 		checkIfDoPrintStep = true;
 	}
 
