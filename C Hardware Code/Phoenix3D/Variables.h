@@ -48,3 +48,30 @@ char numberOfLayers[5] = "";
 char thickness[6]= "";
 char pageNumber[2] = "";
 
+
+///*Custom Phoenix3D Splash Screen*/
+//
+////3
+//char customChar1[8] = {
+//	0x0E,
+//	0x1B,
+//	0x03,
+//	0x0E,
+//	0x03,
+//	0x0B,
+//	0x0E,
+//	0x0
+//};
+//
+////D
+//char customChar2[8] = {
+//	0x1E,
+//	0x1B,
+//	0x1B,
+//	0x1B,
+//	0x1B,
+//	0x1B,
+//	0x1E,
+//	0x0
+//};
+
