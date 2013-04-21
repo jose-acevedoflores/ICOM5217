@@ -68,8 +68,16 @@ void main(void) {
 	lineWrite("       Ready`", LINE_2);
 	initializeUART();
 
-	//activateMotor();
-	//resetMotorToBottom();
+	activateMotor();
+	resetMotorToBottom();
+
+	// Added code
+	P2DIR |= 0x02;
+	P2DIR |= 0x01;
+
+	// Added turn on LED
+	P2OUT |= 0x01;
+	P2OUT &= ~(0x02);
 
 	while (1) {
 		if (jobStatus == printing && checkIfDoPrintStep) {
@@ -97,6 +105,40 @@ void main(void) {
 				activateMotor();
 				motorStep(steps, UP);
 				deactivateMotor();
+
+				// Added code
+				P2OUT |= (0x02);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				wait(10000);
+				P2OUT &= ~(0x02);
 
 				TB0CCTL0 &= ~(0x01);
 				__enable_interrupt();
