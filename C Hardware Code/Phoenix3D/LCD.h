@@ -173,11 +173,10 @@ void updateDisplayStatus(int status) {
 	}
 }
 
-void cancelPrint(){
+void cancelLCDPrompt(){
 
 	clearDisplay();
 	lineWrite(" Press '>' to cancel`",LINE_2);
 	cancelRequest = true;
 
 }
-

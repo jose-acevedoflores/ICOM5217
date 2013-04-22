@@ -8,6 +8,9 @@
  * 		Author: hfranqui
  */
 
+#ifndef VARIABLES_H_
+#define VARIABLES_H_
+
 // Global variables
 unsigned int counterLED = 0;
 
@@ -51,3 +54,4 @@ char pageNumber[2] = "";
 // UART Ack variable
 volatile bool uartACK= false;
 volatile bool UARTReady= false;
+#endif /* VARIABLES_H_ */

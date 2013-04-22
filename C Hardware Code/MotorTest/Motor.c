@@ -1,23 +1,16 @@
 /*
- * Motor.h
+ * Motor.c
  *
- *  Created on: Mar 27, 2013
- *      Author: fernando
+ *  Created on: Apr 21, 2013
+ *      Author: Piro
  */
 
-enum SM{
-	FULLSTEP,
-	HALFSTEP,
-	QUARTERSTEP,
-	EIGHTHSTEP,
-	SIXTEENTHSTEP,
-	THIRTYSECONDTHSTEP
-} stepMode;
 
-enum DR{
-	UP = 0,
-	DOWN = 1
-} stepDirection;
+
+#include "Utils.h"
+#include "Motor.h"
+
+
 
 void motorStep(int numberSteps, enum DR direction){
 
@@ -69,27 +62,25 @@ void microSteppingMode(enum SM stepMode){
 // Pin 1.1 is top motor location sensor
 void resetMotorToTop() {
 	microSteppingMode(FULLSTEP);
-	while (!(~P1IN & BIT1)) {
+	while (!(~P1IN & 0x02)) {
 		// Move motor ten steps up
 		motorStep(5,UP);
 	}
-	P1IFG &=~(BIT1);
 }
 
 // Pin 1.2 is bottom motor location sensor
 void resetMotorToBottom() {
 	microSteppingMode(FULLSTEP);
-	while (!(~P1IN & BIT2)) {
+	while (!(~P1IN & 0x04)) {
 			// Move motor ten steps down
 			motorStep(5,DOWN);
 		}
-	P1IFG &=~(BIT2);
 }
 
 void activateMotor(){
-	P2OUT |= (0x080);
+	P2OUT &= ~(0x080);
 }
 
 void deactivateMotor(){
-	P2OUT &= ~(0x080);
+	P2OUT |= (0x080);
 }
