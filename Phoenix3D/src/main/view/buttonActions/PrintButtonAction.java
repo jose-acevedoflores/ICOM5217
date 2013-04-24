@@ -35,7 +35,7 @@ public class PrintButtonAction implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		sendDataToMicroProcessor();
+		
 		
 		try{
 			Thread t = new Thread(new Runnable() {
@@ -100,7 +100,8 @@ public class PrintButtonAction implements ActionListener{
 			lcrController.setPatternSequenceDisplay();
 			Thread.sleep(100);
 			lcrController.setPatternSequenceStart();
-
+			
+			sendDataToMicroProcessor();
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
