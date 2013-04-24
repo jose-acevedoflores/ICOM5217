@@ -80,11 +80,19 @@ public class PrintButtonAction implements ActionListener{
 
 			List<int[]> list = new LinkedList<int[]>();
 			FileInputStream is;
+			
+			//Save support layers
+			is = new FileInputStream(new File(System.getProperty("user.dir")+"/resources/supportLayers.bmp"));
+			byte[] currentImageBytes = new byte[is.available()];
+			int[] currentImageInt = new int[currentImageBytes.length];
+			is.read(currentImageBytes);
+			list.add(currentImageInt);
+			
 			for(File f : freeSteelBMPs)
 			{
 				is = new FileInputStream(f);
-				byte[] currentImageBytes = new byte[is.available()];
-				int[] currentImageInt = new int[currentImageBytes.length];
+				currentImageBytes = new byte[is.available()];
+				currentImageInt = new int[currentImageBytes.length];
 				is.read(currentImageBytes);
 
 				for(int i = 0 ; i < currentImageBytes.length; i++)
@@ -121,7 +129,7 @@ public class PrintButtonAction implements ActionListener{
 			}
 			
 			System.out.println("Done printing...");
-			
+			is.close();
 			
 
 		} catch (IOException e1) {
