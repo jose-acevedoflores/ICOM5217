@@ -114,7 +114,7 @@ public class FreeSteelSlice {
 
 				//Set the parameters for the python script
 				String scriptLocation = currentPath+"/"+sliceScriptPath;
-				String options = "-z -200,200,"+LAYER_THICKNESS;
+				String options = "-z -200,200,"+LAYER_THICKNESS+" -h 480 -w 854";
 				String outputLocation = currentPath+"/"+freeSteelOutput+"test.bmp";
 				String cmd[] = {"python", scriptLocation, options,
 						STL_FILE_NAME, "-o", outputLocation};
