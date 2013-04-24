@@ -93,7 +93,7 @@ public class PrintButtonAction implements ActionListener{
 				list.add(currentImageInt);
 			}
 			System.out.println("Sending files: "+freeSteelBMPs.length);
-			lcrController.setPatternSequenceFiles(true, list, 0, 250000);
+			lcrController.setPatternSequenceFiles(false, list, 10, 10000000);
 			Thread.sleep(50);
 			lcrController.setInternalPatternDisplay();
 			Thread.sleep(50);

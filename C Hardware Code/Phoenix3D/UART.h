@@ -26,4 +26,3 @@ void send(char character)
 	while(!(UCA1IFG&UCTXIFG));
 	UCA1TXBUF = character;
 }
-
