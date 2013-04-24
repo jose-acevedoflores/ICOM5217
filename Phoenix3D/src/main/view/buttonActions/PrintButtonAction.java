@@ -93,7 +93,7 @@ public class PrintButtonAction implements ActionListener{
 				list.add(currentImageInt);
 			}
 			System.out.println("Sending files: "+freeSteelBMPs.length);
-			lcrController.setPatternSequenceFiles(false, list, 10, 10000000);
+			lcrController.setPatternSequenceFiles(false, list, 10, 20000);
 			Thread.sleep(50);
 			lcrController.setInternalPatternDisplay();
 			Thread.sleep(50);
@@ -102,6 +102,27 @@ public class PrintButtonAction implements ActionListener{
 			lcrController.setPatternSequenceStart();
 			
 			sendDataToMicroProcessor();
+			
+			// Additions begin here - code for controlling LightCrafter during
+			// printing operation
+			
+			// Display first image in the sequence
+			lcrController.advancePatternSequence();
+			
+			int currentLayer = 0;
+			while (currentLayer < list.size()) {
+				
+				// Wait 10 minutes for each layer
+				Thread.sleep(60000);
+				
+				currentLayer++;
+				lcrController.advancePatternSequence();
+				
+			}
+			
+			System.out.println("Done printing...");
+			
+			
 
 		} catch (IOException e1) {
 			e1.printStackTrace();

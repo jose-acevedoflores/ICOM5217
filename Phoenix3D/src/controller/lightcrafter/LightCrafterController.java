@@ -19,7 +19,7 @@ public class LightCrafterController {
 	public static final int MAX_PACKET_SIZE = 512;
 	public static final int MAX_PAYLOAD_LENGTH = 65535;
 
-	
+
 	/**
 	 * Constructor for the LightCrafter control API
 	 * @param output A DataOuputStream object given by the socket used to communicate with the LightCrafter.
@@ -72,7 +72,7 @@ public class LightCrafterController {
 		command = null;
 
 	}
-	
+
 
 	/**
 	 * Sets the image to be displayed by the static image display mode.
@@ -143,7 +143,7 @@ public class LightCrafterController {
 		// Send packet
 		sendData(command);
 		command = null;
-		
+
 	}
 
 	/**
@@ -159,34 +159,34 @@ public class LightCrafterController {
 		// Get number of patterns
 		int patternAmountLSB = images.size() % 256;
 		int patternAmountMSB = (int) Math.floor(images.size() / 256);
-		
+
 		// Get exposure time
 		int exposure1 = exposureTime % 256;
 		int exposure2 = (exposureTime / 256) % 256;
 		int exposure3 = exposureTime / 65536;
 		int exposure4 = exposureTime / 16777215;
-		
+
 		// Get input trigger time
 		int inputTime1 = inputTriggerTime % 256;
 		int inputTime2 = (inputTriggerTime / 256) % 256;
 		int inputTime3 = inputTriggerTime / 65536;
 		int inputTime4 = inputTriggerTime / 16777215;
-		
+
 		// Set trigger signal period
 		int triggerSignalTime = inputTriggerTime + exposureTime + 100000;
 		int triggerTime1 = triggerSignalTime % 256;
 		int triggerTime2 = (triggerSignalTime / 256) % 256;
 		int triggerTime3 = triggerSignalTime / 65536;
 		int triggerTime4 = triggerSignalTime / 16777215;
-		
+
 		// Set trigger type
 		int triggerType = 0x02;
 		if (autoTrigger)
 			triggerType = 0x01;
-		
+
 		// Send pattern setup packet first
 		int[] initCommand = new int[27];
-		
+
 		initCommand[0] = 0x02; // packet type: write command
 		initCommand[1] = 0x04; // command byte 1
 		initCommand[2] = 0x80; // command byte 2
@@ -252,7 +252,7 @@ public class LightCrafterController {
 				test[3] = flags;
 				test[4] = 0xF8;
 				test[5] = 0xFF;
-				
+
 				test[6] = currentPattern;
 				test[7] = 0x00;
 				test[8] = 0x00;
@@ -300,7 +300,30 @@ public class LightCrafterController {
 
 		// Send packet
 		sendData(command);
-		
+
+	}
+
+	/**
+	 * 
+	 * @throws IOException
+	 */
+	public void advancePatternSequence() throws IOException {
+
+		int[] test = new int[7];
+
+		test[0] = 0x02;	// packet type: write command
+		test[1] = 0x04;	// command byte 1
+		test[2] = 0x03;	// command byte 2
+		test[3] = 0x00; // flags
+		test[4] = 0x00; // paydata length LSB
+		test[5] = 0x00;	// paydata length MSB
+		test[6] = getChecksum(test);	// add checksum byte
+
+		// Send packet
+		for (int i = 0; i < 7; i++) {
+			output.write(test[i]);
+		}
+
 	}
 
 	/**
@@ -366,7 +389,7 @@ public class LightCrafterController {
 	 * with the LightCrafter via the open socket.
 	 */
 	public void sendData(int[] toSend) throws IOException {
-		
+
 		for (int i = 0; i < toSend.length; i++) {
 			output.write(toSend[i]);
 		}
