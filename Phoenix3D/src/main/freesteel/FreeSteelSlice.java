@@ -114,7 +114,7 @@ public class FreeSteelSlice {
 
 				//Set the parameters for the python script
 				String scriptLocation = currentPath+"/"+sliceScriptPath;
-				String options = "-z -200,200,"+LAYER_THICKNESS+" -h 480 -w 854";
+				String options = "-h 480 -w 854 -z -200,200,"+LAYER_THICKNESS;
 				String outputLocation = currentPath+"/"+freeSteelOutput+"test.bmp";
 				String cmd[] = {"python", scriptLocation, options,
 						STL_FILE_NAME, "-o", outputLocation};
@@ -131,7 +131,8 @@ public class FreeSteelSlice {
 
 
 				//Execute the script
-				p = Runtime.getRuntime().exec(cmd);
+				p = Runtime.getRuntime().exec("python "+scriptLocation + " "+options +" "+STL_FILE_NAME+" -o "+outputLocation
+						);
 
 				//Variables to determinate the percentage of completion 
 				String[] bmps;
