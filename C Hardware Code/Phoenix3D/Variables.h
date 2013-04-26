@@ -51,3 +51,17 @@ char pageNumber[2] = "";
 // UART Ack variable
 volatile bool uartACK= false;
 volatile bool UARTReady= false;
+
+// DT stands for Drying Time . Drying time for the different thicknesses. The value is the amount in SECONDS.
+enum DT{
+	DRY_TIME_15 = 60,
+	DRY_TIME_10 = 60,
+	DRY_TIME_05 = 5
+} dryingTimeConstants;
+
+// SPT stands for Stepping Per Thickness . The values represents the predefine step sizes for three different thicknesses.
+enum SPT{
+	STEP_15 = 189,
+	STEP_10 = 126,
+	STEP_05 = 63
+}steppingConstants;

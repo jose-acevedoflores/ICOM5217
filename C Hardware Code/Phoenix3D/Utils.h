@@ -45,7 +45,7 @@ void formatReceivedData(char Rx[])
 	}
 	numberOfLayers[i] = '`';
 	i++;
-
+//TODO Thickness now arrives represented by 1 for 0.5, 2 for 1.0, 3 for 1.5
 	start = i+1;
 	while(Rx[i] != ',') {
 		thickness[i-start] = Rx[i++];
