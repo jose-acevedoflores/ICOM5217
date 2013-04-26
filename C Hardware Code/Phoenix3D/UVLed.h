@@ -1,9 +1,14 @@
 void turnUVOn(void)
 {
-	P5OUT |= 0x04; // Assign to P5.2 the value 1
+	P2OUT |= BIT0; // Assign to P5.2 the value 1
 }
 
 void turnUVOff(void)
 {
-	P5OUT &=(~ 0x04); // Assign to P5.2 the value 0
+	P2OUT &=(~ BIT0); // Assign to P5.2 the value 0
+}
+
+void initLCr(void)
+{
+	P2DIR |= BIT0+BIT1; //
 }

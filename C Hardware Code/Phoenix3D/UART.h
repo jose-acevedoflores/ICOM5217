@@ -21,6 +21,12 @@ void initializeUART(void){
 
 }
 
+void deactivateUART(void){
+
+	UCA1IE &= ~UCRXIE;		//Clear Interrupt for this port
+
+}
+
 void send(char character)
 {
 	while(!(UCA1IFG&UCTXIFG));

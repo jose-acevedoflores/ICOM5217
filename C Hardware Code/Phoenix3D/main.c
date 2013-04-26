@@ -6,6 +6,7 @@
 #include "Motor.h"
 #include "LCD.h"
 #include "UART.h"
+#include "UVLed.h"
 /*
  * main.c
  */
@@ -15,6 +16,7 @@
   void stopPrintJob() {
 	jobStatus = done_printing;
 	deactivateMotor();
+	turnUVOff();
 	clearDisplay();
 	lineWrite("   Done printing`", LINE_2);
 	__bis_SR_register(LPM1);
@@ -61,7 +63,7 @@ void main(void) {
 	//	P1IES |= 0x03; //Port 1.0 and 1.1 edge selector H -> L
 
 	// For debug purposes only
-	resinDryTime = 10;
+	resinDryTime = 10; //in seconds
 	currentTime = 0; // Initialize time variable
 
 
@@ -314,9 +316,9 @@ __interrupt void USCI_A1_ISR(void){
 
 	UCA1IFG &= ~(UCRXIFG); // Clear Interrupt flag
 }
-//*/
+*/
 
-void main(void) {
+ void main(void) {
 	WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
 
 	// Stepper Motor Port setup
@@ -336,8 +338,10 @@ void main(void) {
 
 	//Limit sensor Port setup
 	P1DIR &= ~(BIT1 + BIT2); // Set P1.1 and P1.2 as input
-	P1IES |= BIT1 + BIT2; //Port 1.1 and 1.2 edge selector H -> L
-	P1IE	  |= BIT1 + BIT2;// Enable interrupt on P1.1 and P1.2
+	//P1IES |= BIT1 + BIT2; //Port 1.1 and 1.2 edge selector H -> L
+	P1IES |= BIT2;
+	P1IES &= ~BIT1;
+	P1IE  |= BIT1 + BIT2;// Enable interrupt on P1.1 and P1.2
 
 	//Interface Buttons Port setup
 	P1DIR &= ~(BIT4+BIT3);//Set P1.3 and P1.4 as inputs for interface buttons
@@ -355,35 +359,31 @@ void main(void) {
 	TA0CCTL0 |= CCIE; //Enable TA0 count 0 interrupts
 
 	//Timer B0 setup
-//	TB0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
-//	TB0CCR0 = 32767; //Set terminal count to 32767 to know a second has passed
+	TB0CTL |= TASSEL_1 | ID_0 | MC_1;//Set prescaler, UP Mode.
+	TB0CCR0 = 32767; //Set terminal count to 32767 to know a second has passed
 
+	//UV setup
+	initLCr();
 
 	status = 0;
 
-
-
 	// For debug purposes only
-	resinDryTime = 10;
+	//resinDryTime = 600;
 	currentTime = 0; // Initialize time variable
-
 
 	initializeLCD();
 	lineWrite("       Ready`", LINE_2);
 
+
+//		activateMotor();
+//		resetMotorToTop();
+//		deactivateMotor();
 	activateMotor();
-	resetMotorToTop();
+	//resetMotorToBottom();
 	deactivateMotor();
 
-	activateMotor();
-	resetMotorToBottom();
-	deactivateMotor();
+	turnUVOn();
 
-//	while(1) {
-//		motorStep(2533,UP);
-//		//resetMotorToTop();
-//		wait(10000);
-//	}
 
 //	// Added code
 //	P2DIR |= 0x02;
@@ -394,8 +394,133 @@ void main(void) {
 //	P2OUT &= ~(0x02);
 
 	initializeUART();
-	__bis_SR_register(GIE); //Enable global interrupts.
-	while(1);
+
+	P1IE = 0; //Testing purposes, turning off all interrupts from port 1
+
+	__bis_SR_register(GIE );//+ LPM3); //Enable global interrupts.
+
+	while (1) {
+			if (jobStatus == printing && checkIfDoPrintStep) {
+
+				if (jobStatus == printing && currentLayer != 0 && currentLayer == layerQuantity) {
+					stopPrintJob();
+				}
+
+				if ((jobStatus == printing) && (currentTime % resinDryTime == 0)) {
+					int steps = 126; //1.0mm
+					resinDryTime = 1200;
+					if (layerThickness == 1) { //0.5mm
+
+						steps = 63;
+						resinDryTime = 60;
+					}
+					if (layerThickness == 3) { //1.5mm
+						steps = 189;
+						resinDryTime = 1800;
+					}
+					currentLayer++;
+
+					__disable_interrupt();
+
+					clearDisplay();
+					status = (status + 1) % 4;
+					updateDisplayStatus(status);
+
+					turnUVOff();
+
+					activateMotor();
+					motorStep(steps, UP);
+					deactivateMotor();
+
+					// Added code
+					/*P2OUT |= (BIT1); // Trigger P2.1
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					wait(10000);
+					P2OUT &= ~(BIT1);*/
+
+					turnUVOn();
+
+					TB0CCTL0 &= ~(0x01);
+					__enable_interrupt();
+					checkIfDoPrintStep = false;
+				}
+			}
+
+			if (doPrintSetup) {
+				layerQuantity = atoi(numberOfLayers);
+				resinDryTime = 10;
+				//resinDryTime = 1200;
+
+				if (thickness == "1.5`") {
+					layerThickness = 3;
+
+				}
+				else if (thickness == "1.0`") {
+					layerThickness = 2;
+
+				}
+				else if (thickness == "0.5`") {
+					layerThickness = 1;
+
+				}
+
+				totalTime = resinDryTime * layerQuantity; // Calculate total estimated time
+				startTime = currentTime; // Set startTime
+				receivedIndex = 0;
+
+				microSteppingMode(FULLSTEP);
+				activateMotor();		// Turn on motor
+				jobStatus = printing;	// Set printer status to printing
+				UCA1IE &= UCRXIE;		// Deactivate UART interrupts
+				doPrintSetup = false;
+			}
+			//microSteppingMode(FULLSTEP);
+			//motorStep(4000, 1);
+
+			if (jobStatus == done_printing) {
+				stopPrintJob();
+			}
+		}
+//	while(1) {
+//		if (doPrintSetup) {
+//			doPrintSetup = false;
+//
+//			// For debug purposes
+//			lineWrite(layerFilename, LINE_1);
+//			lineWrite(numberOfLayers, LINE_2);
+//			lineWrite(thickness, LINE_3);
+//
+//
+//		}
+//	}
 }
 
 /************************************************************************************************************************
@@ -412,12 +537,12 @@ __interrupt void PORT1_ISR(void){
 				lineWrite(" Please close the`", LINE_2);
 				lineWrite("  lid to continue!`", LINE_3);
 				TA0CCR0 = 15; //Store 15 in terminal count register.
-				jobStatus = ready;	// Halt printing status
+				//jobStatus = ready;	// Halt printing status
 			}
 			else{ // If reed sensor is closed
-				TA0CCR0 = 0; // Halt timer
+				TA0CCR0 = 0; // Halt timer buzzer timer
 				P1OUT &= ~(0x020); // Turn off LED.
-				jobStatus = printing; // Set printer status to printing
+				//jobStatus = printing; // Set printer status to printing
 			}
 
 			P1IES ^= 0x01;
@@ -480,6 +605,20 @@ __interrupt void TIMER0_A0_ISR(void){
 }
 
 /************************************************************************************************************************
+ * Timer B0 ISR
+ **************************************************************************************************************************/
+
+#pragma vector=TIMER0_B0_VECTOR
+__interrupt void TIMER0_B0_VECTOR_ISR(void) {
+	currentTime++;
+	if (jobStatus == printing) {
+		checkIfDoPrintStep = true;
+	}
+
+}
+
+
+/************************************************************************************************************************
  * UART ISR
  **************************************************************************************************************************/
 #pragma vector=USCI_A1_VECTOR
@@ -511,8 +650,11 @@ __interrupt void USCI_A1_ISR(void){
 
 		formatReceivedData(RxBuf);
 		doPrintSetup = true;
+		lineWrite("Information received.`",LINE_3);
+		deactivateUART();
 		TB0CCTL0 |= CCIE; //Enable TA0 count 1 interrupts
-		__bic_SR_register_on_exit(LPM3); // Activate CPU upon ending interrupt
+		P1IE = BIT0 + BIT1 + BIT2 + BIT3 + BIT4; //Testing purposes, turning on
+		//__bic_SR_register_on_exit(LPM3); // Activate CPU upon ending interrupt
 
 	}
 
