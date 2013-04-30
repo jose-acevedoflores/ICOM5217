@@ -75,14 +75,14 @@ public class MainFrame extends JFrame{
 		this.printB.addActionListener(this.printAction = new PrintButtonAction());
 		this.printB.setEnabled(false);
 		
-		String[] options = { "1.5mm","1.0mm", "0.5mm"};
+		String[] options = { "1.0mm", "0.5mm","0.25mm"};
 		this.layerThickness = new JComboBox(options);
 		this.layerThickness.setPreferredSize(new Dimension(20,40));
 		this.layerThickness.setMinimumSize(new Dimension(20,40));
 		this.layerThickness.setMaximumSize(new Dimension(160,0));
 		this.layerThickness.addItemListener(new LayerThicknessChangedListener(this));
 
-		this.logo = new JLabel(new ImageIcon("resources/GUILogo.png"));
+		this.logo = new JLabel(new ImageIcon("resources"+System.getProperty("file.separator")+"GUILogo.png"));
 
 		this.numOfLayersLabel = new JLabel("Number of layers: ");
 		this.numOfLayers = new JLabel(" ");

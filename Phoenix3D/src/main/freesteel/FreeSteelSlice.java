@@ -39,8 +39,9 @@ public class FreeSteelSlice {
 	public FreeSteelSlice(MainFrame frame)
 	{
 		viewReferences  = frame;
-		sliceScriptPath = "resources/FreeSteel/freeSteel_Linux_script_modified/slice.py";
-		freeSteelOutput = "freeSteelGeneratedBMPs/";
+		sliceScriptPath = "resources"+System.getProperty("file.separator")+"FreeSteel"+System.getProperty("file.separator"); 
+		
+		freeSteelOutput = "freeSteelGeneratedBMPs"+System.getProperty("file.separator");
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class FreeSteelSlice {
 				{
 					progressMonitor = new ProgressMonitor(viewReferences, "Generating bitmaps",
 							"", 0, 100);
-					task = new Task();
+					task = new Task("freeSteel_Linux_script_modified"+System.getProperty("file.separator")+"slice.py");
 					task.addPropertyChangeListener(new ProgressListener());
 					task.execute();
 				}
@@ -67,6 +68,27 @@ public class FreeSteelSlice {
 			}
 			else 
 				System.out.println("File or layer thickness not initialized");
+		}
+		else if(System.getProperty("os.name").equals("Windows 7"))
+		{
+			System.out.println("Windows 7 is buggy when it comes to slicing the object");
+			//Errors are present
+//			if(!STL_FILE_NAME.equals("!") )
+//			{
+//				//Check if there is already a running task
+//				if(task == null || task.isCancelled() || task.isDone() )
+//				{
+//					progressMonitor = new ProgressMonitor(viewReferences, "Generating bitmaps",
+//							"", 0, 100);
+//					task = new Task("freeSteel_windows"+System.getProperty("file.separator")+"slice.exe");
+//					task.addPropertyChangeListener(new ProgressListener());
+//					task.execute();
+//				}
+//				else
+//					System.out.println("A task is already running");
+//			}
+//			else 
+//				System.out.println("File or layer thickness not initialized");
 		}
 		else
 			System.out.println(System.getProperty("os.name")+" is not supported by freeSteel");
@@ -85,7 +107,7 @@ public class FreeSteelSlice {
 		private FilenameFilter filter;
 		private File freeSteelBMPs;
 
-		public Task()
+		public Task(String scriptType)
 		{
 			//Filter to pick only the .bmp files stores at freeSteelBMPs (BMPs storage space) 
 			filter = new FilenameFilter() {	
@@ -97,8 +119,11 @@ public class FreeSteelSlice {
 
 			//Path where the BMPs are stored 
 			currentPath = System.getProperty("user.dir");
-			freeSteelBMPs = new File(currentPath+"/"+freeSteelOutput);
-
+			freeSteelBMPs = new File(currentPath+System.getProperty("file.separator")+freeSteelOutput);
+			if(!freeSteelBMPs.exists())
+				freeSteelBMPs.mkdir();
+			
+			sliceScriptPath += scriptType;
 			//Stop the cycle that displays the layers on the GUI 
 			viewReferences.stopLayerCycle();
 		}
@@ -113,9 +138,9 @@ public class FreeSteelSlice {
 				viewReferences.layerThickness.setEnabled(false);
 
 				//Set the parameters for the python script
-				String scriptLocation = currentPath+"/"+sliceScriptPath;
+				String scriptLocation = currentPath+System.getProperty("file.separator")+sliceScriptPath;
 				String options = "-h 480 -w 854 -z -200,200,"+LAYER_THICKNESS;
-				String outputLocation = currentPath+"/"+freeSteelOutput+"test.bmp";
+				String outputLocation = currentPath+System.getProperty("file.separator")+freeSteelOutput+"test.bmp";
 				String cmd[] = {"python", scriptLocation, options,
 						STL_FILE_NAME, "-o", outputLocation};
 
@@ -131,9 +156,13 @@ public class FreeSteelSlice {
 
 
 				//Execute the script
-				p = Runtime.getRuntime().exec("python "+scriptLocation + " "+options +" "+STL_FILE_NAME+" -o "+outputLocation
+				if(System.getProperty("os.name").equals("Linux"))
+					p = Runtime.getRuntime().exec("python "+scriptLocation + " "+options +" "+STL_FILE_NAME+" -o "+outputLocation
 						);
-
+				else if(System.getProperty("os.name").equals("Windows 7"))
+					p = Runtime.getRuntime().exec(scriptLocation + " "+options +" "+STL_FILE_NAME+" -o "+outputLocation
+							);
+				
 				//Variables to determinate the percentage of completion 
 				String[] bmps;
 				int progress =0;

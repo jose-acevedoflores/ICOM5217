@@ -168,7 +168,7 @@ public class PrintButtonAction implements ActionListener{
 
 				String programName = prefix + "serialport" + suffix;
 				String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
-				String information = Integer.toString(freeSteelBMPs.length) + "," + Double.toString(FreeSteelSlice.LAYER_THICKNESS) + "," + editedFileName + "`";
+				String information = "<>"+Integer.toString(freeSteelBMPs.length) + "," + Double.toString(FreeSteelSlice.LAYER_THICKNESS) + "," + editedFileName + "`";
 
 				System.out.println("Information to send to the microprocessor: " + information);
 				
