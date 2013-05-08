@@ -193,6 +193,10 @@ public class PrintButtonAction implements ActionListener{
 			prefix = "./";
 			suffix = "";
 		}
+				String programName = prefix + "serialport" + suffix;
+				String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
+				String information = "<>"+Integer.toString(freeSteelBMPs.length) + "," + Double.toString(FreeSteelSlice.LAYER_THICKNESS) + "," + editedFileName + "`";
+
 
 		String programName = prefix + "serialport" + suffix;
 		String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
