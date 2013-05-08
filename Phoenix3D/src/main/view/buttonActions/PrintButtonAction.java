@@ -35,8 +35,8 @@ public class PrintButtonAction implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		
-		
+
+
 		try{
 			Thread t = new Thread(new Runnable() {
 
@@ -79,15 +79,19 @@ public class PrintButtonAction implements ActionListener{
 			System.out.println("Socket on ");
 
 			List<int[]> list = new LinkedList<int[]>();
-			FileInputStream is;
-			
+			FileInputStream is = null;
+
 			//Save support layers
-			is = new FileInputStream(new File(System.getProperty("user.dir")+"/resources/supportLayers.bmp"));
+			is = new FileInputStream(new File(System.getProperty("user.dir")+"/resources/supportLayers1.bmp"));
 			byte[] currentImageBytes = new byte[is.available()];
-			int[] currentImageInt = new int[currentImageBytes.length];
+			int[] currentImageInt = new int[currentImageBytes.length];			
 			is.read(currentImageBytes);
-			list.add(currentImageInt);
 			
+			for(int i = 0 ; i < currentImageBytes.length; i++)
+				currentImageInt[i] = currentImageBytes[i];
+			
+			list.add(currentImageInt);
+
 			for(File f : freeSteelBMPs)
 			{
 				is = new FileInputStream(f);
@@ -108,29 +112,53 @@ public class PrintButtonAction implements ActionListener{
 			lcrController.setPatternSequenceDisplay();
 			Thread.sleep(100);
 			lcrController.setPatternSequenceStart();
-			
+
 			sendDataToMicroProcessor();
-			
+
 			// Additions begin here - code for controlling LightCrafter during
 			// printing operation
-			
+
 			// Display first image in the sequence
 			lcrController.advancePatternSequence();
+
+			//TODO: Check correct resin dry times for the adequate layer thickness
+			long resinDryTime = 601000;
+			//long resinDryTime = 10000;
+			
+			if (FreeSteelSlice.LAYER_THICKNESS == 1.5) {
+				resinDryTime = 1801000;
+			}
+			else if (FreeSteelSlice.LAYER_THICKNESS == 1.0) {
+				resinDryTime = 1201000;
+			}
+
+			long startUpTime = 1201000 - resinDryTime;
+
+			// Wait some time for the micro procesor
+			Thread.sleep(1000);
 			
 			int currentLayer = 0;
 			while (currentLayer < list.size()) {
-				
+
 				// Wait 10 minutes for each layer
-				Thread.sleep(60000);
-				
+				if (currentLayer == 0) {
+					// For debug purposes
+					Thread.sleep(startUpTime);
+				}
+
+				Thread.sleep(resinDryTime);
+				//Thread.sleep(10000);
+
+				System.out.println("Printing layer " + currentLayer + " of " + list.size());
+
 				currentLayer++;
 				lcrController.advancePatternSequence();
-				
+
 			}
-			
+
 			System.out.println("Done printing...");
 			is.close();
-			
+
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -150,50 +178,50 @@ public class PrintButtonAction implements ActionListener{
 
 	private void sendDataToMicroProcessor() {
 		// Additions begin here
-				// Send printing information to the microprocessor
+		// Send printing information to the microprocessor
 
-				String editedFileName = FreeSteelSlice.STL_FILE_NAME.substring(FreeSteelSlice.STL_FILE_NAME.lastIndexOf(File.separator)+1, FreeSteelSlice.STL_FILE_NAME.lastIndexOf('.'));
-				
-				Process p = null;
+		String editedFileName = FreeSteelSlice.STL_FILE_NAME.substring(FreeSteelSlice.STL_FILE_NAME.lastIndexOf(File.separator)+1, FreeSteelSlice.STL_FILE_NAME.lastIndexOf('.'));
 
-				String prefix = "";
-				String suffix = ".exe";
+		Process p = null;
 
-				//TODO: Add support for Mac OSX
-				// Add support for executing Linux binaries
-				if (System.getProperty("os.name").equals("Linux")) {
-					prefix = "./";
-					suffix = "";
-				}
+		String prefix = "";
+		String suffix = ".exe";
 
-				String programName = prefix + "serialport" + suffix;
-				String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
-				String information = Integer.toString(freeSteelBMPs.length) + "," + Double.toString(FreeSteelSlice.LAYER_THICKNESS) + "," + editedFileName + "`";
+		//TODO: Add support for Mac OSX
+		// Add support for executing Linux binaries
+		if (System.getProperty("os.name").equals("Linux")) {
+			prefix = "./";
+			suffix = "";
+		}
 
-				System.out.println("Information to send to the microprocessor: " + information);
-				
-				String cmd[] = {programName, information};
-				String envp[] = {""};
+		String programName = prefix + "serialport" + suffix;
+		String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
+		String information = "<>" + Integer.toString(freeSteelBMPs.length) + "," + Double.toString(FreeSteelSlice.LAYER_THICKNESS) + "," + editedFileName + "`";
 
-				try {
-					p = Runtime.getRuntime().exec(cmd, envp, new File(programLocation));
-				} catch (IOException e1) {
-					System.out.println("There was a problem trying to execute the serial port communication program.");
-					e1.printStackTrace();
-				}
-				// Eliminates warning
-				p.getErrorStream();
+		System.out.println("Information to send to the microprocessor: " + information);
 
-				try {
-					int status = p.waitFor();
-					if (status == 0) {
-					}
-					p.destroy();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				
-				System.out.println("print");
+		String cmd[] = {programName, information};
+		String envp[] = {""};
+
+		try {
+			p = Runtime.getRuntime().exec(cmd, envp, new File(programLocation));
+		} catch (IOException e1) {
+			System.out.println("There was a problem trying to execute the serial port communication program.");
+			e1.printStackTrace();
+		}
+		// Eliminates warning
+		p.getErrorStream();
+
+		try {
+			int status = p.waitFor();
+			if (status == 0) {
+			}
+			p.destroy();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+		System.out.println("print");
 	}
-	
+
 }

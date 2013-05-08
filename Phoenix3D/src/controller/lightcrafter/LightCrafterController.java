@@ -180,7 +180,7 @@ public class LightCrafterController {
 		int triggerTime4 = triggerSignalTime / 16777215;
 
 		// Set trigger type
-		int triggerType = 0x02;
+		int triggerType = 0x00;
 		if (autoTrigger)
 			triggerType = 0x01;
 
