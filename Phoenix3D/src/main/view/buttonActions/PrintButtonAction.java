@@ -227,5 +227,55 @@ public class PrintButtonAction implements ActionListener{
 
 		System.out.println("print");
 	}
+	
+	/**
+	 * Send the signal to the micro to advance a layer
+	 */
+	private void advanceMicro(){
+		
+		
 
+		Process p = null;
+
+		String prefix = "";
+		String suffix = ".exe";
+
+		//TODO: Add support for Mac OSX
+		// Add support for executing Linux binaries
+		if (System.getProperty("os.name").equals("Linux")) {
+			prefix = "./";
+			suffix = "";
+		}
+				String programName = prefix + "serialport" + suffix;
+				String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
+				String information = "!!a"+"`";
+
+
+		
+		System.out.println("Information to send to the microprocessor: " + information); 
+
+		String cmd[] = {programName, information};
+		String envp[] = {""};
+
+		try {
+			p = Runtime.getRuntime().exec(cmd, envp, new File(programLocation));
+		} catch (IOException e1) {
+			System.out.println("There was a problem trying to execute the serial port communication program. ADVANCE MICRO");
+			e1.printStackTrace();
+		}
+		// Eliminates warning
+		p.getErrorStream();
+
+		try {
+			int status = p.waitFor();
+			if (status == 0) {
+			}
+			p.destroy();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+
+		System.out.println("print");
+	}
+	
 }
