@@ -153,6 +153,7 @@ public class PrintButtonAction implements ActionListener{
 
 				currentLayer++;
 				lcrController.advancePatternSequence();
+				this.advanceMicro();
 
 			}
 
