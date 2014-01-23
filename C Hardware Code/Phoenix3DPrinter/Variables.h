@@ -51,6 +51,7 @@ char pageNumber[2] = "";
 // UART Ack variable
 volatile bool uartACK= false;
 volatile bool UARTReady= false;
+volatile bool uartACKToMove= false;
 
 // DT stands for Drying Time . Drying time for the different thicknesses. The value is the amount in SECONDS.
 enum DT{

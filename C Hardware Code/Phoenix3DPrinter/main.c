@@ -11,7 +11,16 @@
  * main.c
  */
 
+//When the comman 'c1' is received through UART, this function is triggered to advance the motor to print the next layer.
+void move(){
+    turnUVOff();
+    
 
+    motorStep(steps, UP);
+
+    currentLayer++;
+    turnUVOn();
+}
 
 void stopPrintJob() {
 	jobStatus = done_printing;
@@ -407,11 +416,28 @@ __interrupt void TIMER0_B0_VECTOR_ISR(void) {
 __interrupt void USCI_A1_ISR(void){
 
 
+    if('c' == UCA1RXBUF) // Check for the first character that signals the micro to move
+    {
+        uartACKToMove = true;
+        return;
+    }
+    
+    if(uartACKToMove)
+    {
+        if (UCA1RXBUF == '1') { // Filter the uart data to move the micro.
+            move();
+            uartACKToMove = false;
+            return;
+        }
+        uartACKToMove = false;
+    }
+    
 	if('<' == UCA1RXBUF) // Verify if a legitimate transaction is about to start
 	{
 		uartACK = true;
 		return;
 	}
+    
 
 	if(uartACK)
 	{

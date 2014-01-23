@@ -249,7 +249,7 @@ public class PrintButtonAction implements ActionListener{
 		}
 				String programName = prefix + "serialport" + suffix;
 				String programLocation = System.getProperty("user.dir") + File.separator + "resources" + File.separator + "SerialComm" + File.separator;
-				String information = "!!a"+"`";
+				String information = "c1"+"`"; // c = command, 1 = move
 
 
 		
